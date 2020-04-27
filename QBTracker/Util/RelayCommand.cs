@@ -7,17 +7,10 @@ namespace QBTracker.Util
     {
         readonly Action<object> _execute = null;
         readonly Func<object, bool> _canExecute = null;
-        public RelayCommand(Action<object> execute)
-            : this(execute, null)
-        {
-        }
 
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute)
+        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
         {
-            if (execute == null)
-                throw new ArgumentNullException("execute");
-
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
@@ -28,8 +21,8 @@ namespace QBTracker.Util
 
         public event EventHandler CanExecuteChanged
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
         public void Execute(object parameter)

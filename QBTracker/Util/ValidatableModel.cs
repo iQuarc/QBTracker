@@ -41,7 +41,7 @@ namespace QBTracker.Util
 
         public void OnErrorsChanged(string propertyName)
         {
-            ErrorsChanged?.BeginInvoke(this, new DataErrorsChangedEventArgs(propertyName), null, null);
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
         public virtual IEnumerable GetErrors(string propertyName)

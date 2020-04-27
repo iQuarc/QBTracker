@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:QBTracker"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:vm="clr-namespace:QBTracker.ViewModels"
+        xmlns:views="clr-namespace:QBTracker.Views"
         x:Class="QBTracker.MainWindow"
         mc:Ignorable="d"
         Title="QBTracker" Height="694" Width="410"
@@ -16,50 +17,18 @@
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}" 
         WindowStartupLocation="Manual"
-        Loaded="MainWindow_OnLoaded">
-    <Window.DataContext>
-        <vm:MainWindowViewModel/>
-    </Window.DataContext>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100*"/>
-            <ColumnDefinition Width="100*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <ComboBox
-                Grid.Column="0"
-                Margin="10,0,40,10"
-                ItemsSource="{Binding Projects}"
-                SelectedItem="{Binding SelectedProject}"
-                DisplayMemberPath="Name"
-                materialDesign:HintAssist.Hint="Search"
-                materialDesign:TextFieldAssist.HasClearButton="True"
-                IsEditable="True"
-                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
-                materialDesign:HintAssist.HelperText="Active Project"/>
-        <Button
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="10"
-            Height="24"
-            Width="24"
-            Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
-            HorizontalAlignment="Right"
-            ToolTip="MaterialDesignFloatingActionMiniDarkButton">
-            <materialDesign:PackIcon
-                Kind="AddThick"
-                Height="20"
-                Width="20" />
-        </Button>
-        <DatePicker
-            Grid.Row="0"
-            Grid.Column="1"
-            SelectedDate="{Binding SelectedDate}"
-            Width="100"
-            materialDesign:HintAssist.Hint="Pick Date"
-            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Margin="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="35" />
-    </Grid>
+        Loaded="MainWindow_OnLoaded" 
+        Closed="MainWindow_OnClosed"
+        Closing="MainWindow_OnClosing"
+        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=False}">
+    <materialDesign:Transitioner x:Name="Transitioner" SelectedIndex="{Binding SelectedTransitionIndex}" AutoApplyTransitionOrigins="True">
+        <materialDesign:TransitionerSlide>
+            <views:MainView />
+        </materialDesign:TransitionerSlide>
+        <materialDesign:TransitionerSlide>
+            <views:ProjectView DataContext="{Binding CreatedProject}" />
+        </materialDesign:TransitionerSlide>
+    </materialDesign:Transitioner>
+
+    
 </Window>
