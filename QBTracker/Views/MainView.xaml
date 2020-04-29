@@ -104,6 +104,13 @@
                     </UserControl>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
         </ItemsControl>
 
         <Grid Grid.Row="2" Grid.IsEnabled="{Binding IsNotRecording}">
