@@ -63,9 +63,10 @@ namespace QBTracker.ViewModels
             }
         }
 
-        public string Duration => EndTime.HasValue 
-            ? (EndTime.Value - StarTime).ToString(@"hh\:mm\:ss") 
-            : (DateTime.Now - StarTime).ToString(@"hh\:mm\:ss");
+        public string DurationText => Duration.Humanize();
+        public TimeSpan Duration => EndTime.HasValue
+            ? (EndTime.Value - StarTime)
+            : (DateTime.Now - StarTime);
 
 
         public RelayCommand DeleteCommand { get; }

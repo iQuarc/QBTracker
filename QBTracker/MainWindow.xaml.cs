@@ -43,6 +43,8 @@ namespace QBTracker
         private void RestoreWindowCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             this.WindowState = WindowState.Normal;
+            this.Activate();
+            this.Focus();
         }
 
         private void CloseWindowCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
