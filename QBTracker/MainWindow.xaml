@@ -7,28 +7,59 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:vm="clr-namespace:QBTracker.ViewModels"
         xmlns:views="clr-namespace:QBTracker.Views"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         x:Class="QBTracker.MainWindow"
         mc:Ignorable="d"
         Title="QBTracker" Height="694" Width="410"
         WindowStyle="ToolWindow"
+        WindowStartupLocation="Manual"
+        ResizeMode="CanMinimize"
+        ShowInTaskbar="False"
+        ShowActivated="True"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}" 
-        WindowStartupLocation="Manual"
         Loaded="MainWindow_OnLoaded" 
         Closed="MainWindow_OnClosed"
         Closing="MainWindow_OnClosing"
-        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=False}">
-    <materialDesign:Transitioner x:Name="Transitioner" SelectedIndex="{Binding SelectedTransitionIndex}" AutoApplyTransitionOrigins="True">
-        <materialDesign:TransitionerSlide>
-            <views:MainView />
-        </materialDesign:TransitionerSlide>
-        <materialDesign:TransitionerSlide>
-            <views:ProjectView DataContext="{Binding CreatedProject}" />
-        </materialDesign:TransitionerSlide>
-    </materialDesign:Transitioner>
-
-    
+        d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
+        x:Name="MainWindowEl">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ContextMenu x:Key="TrayMenu">
+                <MenuItem Header="E_xit"  Click="MenuItem_OnClick" />
+            </ContextMenu>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static SystemCommands.RestoreWindowCommand}" Executed="RestoreWindowCommand_OnExecuted"></CommandBinding>
+        <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" Executed="CloseWindowCommand_OnExecuted"></CommandBinding>
+    </Window.CommandBindings>
+    <Grid>
+    <tb:TaskbarIcon 
+        Visibility="Visible"
+        ToolTipText="Fallback ToolTip for Windows xp"
+        IconSource="/Images/pngfuel.ico"
+        ContextMenu="{StaticResource TrayMenu}"
+        MenuActivation="LeftOrRightClick"
+        PopupActivation="DoubleClick"
+        LeftClickCommand="{x:Static SystemCommands.RestoreWindowCommand}"
+        LeftClickCommandTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+    />
+    <materialDesign:DialogHost>
+        <materialDesign:Transitioner x:Name="Transitioner" SelectedIndex="{Binding SelectedTransitionIndex}" AutoApplyTransitionOrigins="True">
+            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                <views:MainView />
+            </materialDesign:TransitionerSlide>
+            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                <views:ProjectView DataContext="{Binding CreatedProject}" />
+            </materialDesign:TransitionerSlide>
+            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                <views:TaskView DataContext="{Binding CreatedTask}" />
+            </materialDesign:TransitionerSlide>
+        </materialDesign:Transitioner>
+    </materialDesign:DialogHost>
+    </Grid>
 </Window>

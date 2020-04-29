@@ -5,15 +5,96 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:QBTracker.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewModels="clr-namespace:QBTracker.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="694" d:DesignWidth="410">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
         <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="100*"/>
+            </Grid.ColumnDefinitions>
+            <DatePicker
+                Grid.Row="0"
+                Grid.Column="0"
+                SelectedDate="{Binding SelectedDate}"
+                Width="120"
+                materialDesign:HintAssist.Hint="Pick Date"
+                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Margin="10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Height="35" 
+            />
+        </Grid>
+
+        <ItemsControl
+            Grid.Row="1"
+            ItemsSource="{Binding TimeRecords}"
+            Grid.IsSharedSizeScope="True"
+            Margin="10">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type viewModels:TimeRecordViewModel}">
+                    <UserControl>
+                        <Border x:Name="Border" Padding="8" Background="{DynamicResource MaterialDesignDivider}">
+                            <Grid>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup Name="CommonStates">
+                                        <VisualStateGroup.Transitions>
+                                            <VisualTransition GeneratedDuration="0:0:0.3" To="Normal">
+                                                <VisualTransition.GeneratedEasingFunction>
+                                                    <CircleEase EasingMode="EaseOut"/>
+                                                </VisualTransition.GeneratedEasingFunction>
+                                            </VisualTransition>
+                                        </VisualStateGroup.Transitions>
+                                        <VisualState Name="Normal"/>
+                                        <VisualState Name="MouseOver">
+                                            <Storyboard>
+                                                <DoubleAnimation Storyboard.TargetName="DeleteButton"
+                                                             Storyboard.TargetProperty="Opacity"
+                                                             To="1" Duration="0"/>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState Name="Disabled"/>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition SharedSizeGroup="DeleteButton" Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel HorizontalAlignment="Stretch"
+                                        Margin="8 0 0 0"
+                                        Grid.Column="0">
+                                    <TextBlock FontWeight="Bold" Text="{Binding TimeRecord.ProjectName}" />
+                                    <TextBlock Text="{Binding TimeRecord.TaskName}" />
+                                </StackPanel>
+                                <StackPanel HorizontalAlignment="Stretch"
+                                        Margin="8 0 0 0"
+                                        Grid.Column="1">
+                                    <TextBlock FontWeight="Bold" Text="{Binding StarTime, StringFormat={}{0:HH:mm}}" />
+                                    <TextBlock Text="{Binding Duration}" />
+                                </StackPanel>
+                                <Button x:Name="DeleteButton" Grid.Column="2" Margin="2" Width="20" Height="20"
+                                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                    ToolTip="MaterialDesignFloatingActionMiniAccentButton" 
+                                    Command="{Binding DeleteCommand}"
+                                    Opacity="0">
+                                    <materialDesign:PackIcon
+                                        Kind="Delete"
+                                        Height="16"
+                                        Width="16" />
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </UserControl>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Grid Grid.Row="2" Grid.IsEnabled="{Binding IsNotRecording}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100*"/>
                 <ColumnDefinition Width="100*"/>
@@ -22,16 +103,16 @@
                 Grid.Column="0"
                 Margin="10,0,40,10"
                 ItemsSource="{Binding Projects}"
-                SelectedItem="{Binding SelectedProject}"
+                SelectedValue="{Binding SelectedProjectId}"
                 DisplayMemberPath="Project.Name"
                 SelectedValuePath="Project.Id"
                 materialDesign:HintAssist.Hint="Search"
                 materialDesign:TextFieldAssist.HasClearButton="True"
+                materialDesign:TextFieldAssist.HasFilledTextField="False"
                 IsEditable="True"
                 Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                 materialDesign:HintAssist.HelperText="Active Project"/>
             <Button
-                Grid.Row="0"
                 Grid.Column="0"
                 Margin="10"
                 Height="24"
@@ -41,39 +122,61 @@
                 ToolTip="MaterialDesignFloatingActionMiniDarkButton"
                 Command="{Binding CreateNewProject}">
                 <materialDesign:PackIcon
-                    Kind="AddThick"
+                    Kind="DotsHorizontal"
                     Height="20"
                     Width="20" HorizontalAlignment="Center" />
             </Button>
-            <DatePicker
-                Grid.Row="0"
+            <ComboBox
                 Grid.Column="1"
-                SelectedDate="{Binding SelectedDate}"
-                Width="120"
-                materialDesign:HintAssist.Hint="Pick Date"
-                Style="{StaticResource MaterialDesignFloatingHintDatePicker}" Margin="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="35" 
-            />
-        </Grid>
-        <!--<Button Grid.Row="2"
-            Style="{StaticResource MaterialDesignFloatingActionDarkButton}"
-            ToolTip="MaterialDesignFloatingActionDarkButton">
-            <materialDesign:PackIcon
-                Kind="Alarm"
+                Margin="10,0,40,10"
+                ItemsSource="{Binding Tasks}"
+                SelectedValue="{Binding SelectedTaskId}"
+                DisplayMemberPath="Task.Name"
+                SelectedValuePath="Task.Id"
+                materialDesign:HintAssist.Hint="Search"
+                materialDesign:TextFieldAssist.HasClearButton="True"
+                materialDesign:TextFieldAssist.HasFilledTextField="False"
+                IsEditable="True"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                materialDesign:HintAssist.HelperText="Active Task"/>
+            <Button
+                Grid.Column="1"
+                Margin="10"
                 Height="24"
-                Width="24" />
-        </Button>-->
-        <Button
-            Grid.Row="2"
-            Style="{StaticResource MaterialDesignFloatingActionButton}"
-            materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsRecording}"
-            materialDesign:ButtonProgressAssist.Value="-1"
-            materialDesign:ButtonProgressAssist.IsIndeterminate="True"
-            Command="{Binding StartStopRecording}">
-            <materialDesign:PackIcon
-                Kind="Alarm"
-                Height="44"
-                Width="44" />
-        </Button>
-        
+                Width="24"
+                Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                HorizontalAlignment="Right"
+                ToolTip="MaterialDesignFloatingActionMiniDarkButton"
+                Command="{Binding CreateNewTask}">
+                <materialDesign:PackIcon
+                    Kind="DotsHorizontal"
+                    Height="20"
+                    Width="20" HorizontalAlignment="Center" />
+            </Button>
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="10,0,0,0" FontSize="12">Current task time</TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="10" TextAlignment="Center" VerticalAlignment="Center" FontSize="22" Text="{Binding CurrentTimeRecord.Duration, Mode=OneWay}" />
+            <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
+                    Style="{StaticResource MaterialDesignFloatingActionButton}"
+                    materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsRecording}"
+                    materialDesign:ButtonProgressAssist.Value="-1"
+                    materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                    Command="{Binding StartStopRecording}" Margin="10,12,10,12" >
+                <materialDesign:PackIcon Kind="Alarm" Height="44" Width="44" />
+            </Button>
+        </Grid>
+        <TextBlock Grid.Row="3" Text="{Binding Elapsed, StringFormat={}{0:hh:mm:ss}}" HorizontalAlignment="Left" Margin="5,0,0,0" Foreground="{StaticResource SecondaryAccentBrush}"
+                   Style="{StaticResource MaterialDesignHeadline4TextBlock}" VerticalAlignment="Center">
+        </TextBlock>
     </Grid>
 </UserControl>

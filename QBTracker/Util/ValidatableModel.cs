@@ -17,7 +17,7 @@ namespace QBTracker.Util
 
         private readonly ConcurrentDictionary<string, byte> touchedProperties = new ConcurrentDictionary<string, byte>();
 
-        protected virtual void NotifyOfPropertyChange([CallerMemberName]string propertyName = null)
+        protected virtual void NotifyOfPropertyChange([CallerMemberName] string propertyName = null)
         {
             if (propertyName == null)
                 throw new ArgumentNullException(nameof(propertyName));
@@ -74,6 +74,15 @@ namespace QBTracker.Util
         public virtual void Validate()
         {
             ValidateCore(false);
+        }
+
+        public void ClearErrors()
+        {
+            foreach (var kv in errors.ToList())
+            {
+                errors.TryRemove(kv.Key, out _);
+                OnErrorsChanged(kv.Key);
+            }
         }
 
         private void ValidateCore(bool touched)

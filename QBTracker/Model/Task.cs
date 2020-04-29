@@ -1,17 +1,11 @@
-﻿using System;
-
-namespace QBTracker.Model
+﻿namespace QBTracker.Model
 {
-    public class Project
+    public class Task
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int ProjectId { get; set; }
         public bool IsDeleted { get; set; }
         public Stats Stats { get; set; }
-    }
-
-    public class Stats
-    {
-        public TimeSpan RecordedTime { get; set; }
     }
 }

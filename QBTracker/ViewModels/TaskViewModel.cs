@@ -10,36 +10,36 @@ using System.ComponentModel.DataAnnotations;
 
 namespace QBTracker.ViewModels
 {
-    public class ProjectViewModel : ValidatableModel
+    public class TaskViewModel : ValidatableModel
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
 
-        public ProjectViewModel(Project project, MainWindowViewModel mainWindowViewModel)
+        public TaskViewModel(Task task, MainWindowViewModel mainWindowViewModel)
         {
             _mainWindowViewModel = mainWindowViewModel;
             Save = new RelayCommand(ExecuteSave, CanExecuteSave);
             GoBack = new RelayCommand(ExecuteGoBack);
             DeleteCommand = new RelayCommand(ExecuteDelete);
-            Project = project;
+            Task = task;
             ClearTouched();
         }
 
-        public Project Project { get; }
+        public Task Task { get; }
 
         [Required]
-        [DisplayName("Project Name")]
-        [StringLength(40)]
+        [DisplayName("Task Name")]
+        [StringLength(400)]
         public string Name
         {
-            get => Project.Name;
+            get => Task.Name;
             set
             {
-                Project.Name = value;
+                Task.Name = value;
                 NotifyOfPropertyChange();
             }
         }
 
-        public IEnumerable<ProjectViewModel> Projects => _mainWindowViewModel.Projects;
+        public IEnumerable<TaskViewModel> Tasks => _mainWindowViewModel.Tasks;
 
         public RelayCommand Save { get; }
 
@@ -48,10 +48,10 @@ namespace QBTracker.ViewModels
             Validate();
             if (HasErrors)
                 return;
-            _mainWindowViewModel.Repository.AddProject(Project);
-            _mainWindowViewModel.Projects.Add(this);
+            _mainWindowViewModel.Repository.AddTask(Task);
+            _mainWindowViewModel.Tasks.Add(this);
             _mainWindowViewModel.Show();
-            _mainWindowViewModel.SelectedProjectId = this.Project.Id;
+            _mainWindowViewModel.SelectedTaskId = this.Task.Id;
         }
 
         private bool CanExecuteSave(object o)
@@ -75,9 +75,9 @@ namespace QBTracker.ViewModels
                 DataContext = "Are you sure?"
             }))
             {
-                this.Project.IsDeleted = true;
-                this._mainWindowViewModel.Repository.UpdateProject(this.Project);
-                this._mainWindowViewModel.Projects.Remove(this);
+                this.Task.IsDeleted = true;
+                this._mainWindowViewModel.Repository.UpdateTask(this.Task);
+                this._mainWindowViewModel.Tasks.Remove(this);
             }
         }
     }

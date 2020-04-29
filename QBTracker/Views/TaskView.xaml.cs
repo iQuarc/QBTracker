@@ -3,11 +3,11 @@
 namespace QBTracker.Views
 {
     /// <summary>
-    /// Interaction logic for MainView.xaml
+    /// Interaction logic for ProjectView.xaml
     /// </summary>
-    public partial class MainView : UserControl
+    public partial class TaskView : UserControl
     {
-        public MainView()
+        public TaskView()
         {
             InitializeComponent();
         }

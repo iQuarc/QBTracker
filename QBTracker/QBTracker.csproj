@@ -4,15 +4,37 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>pngfuel.ico</ApplicationIcon>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishSingleFile>true</PublishSingleFile>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\pngfuel.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.10" />
+    <PackageReference Include="Humanizer.Core" Version="2.8.2" />
     <PackageReference Include="LiteDB" Version="5.0.7" />
     <PackageReference Include="MaterialDesignThemes" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Util\" />
+    <Resource Include="Images\pngfuel.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\TaskView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\TaskView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

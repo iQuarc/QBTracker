@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="QBTracker.Views.ProjectView"
+﻿<UserControl x:Class="QBTracker.Views.TaskView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -18,16 +18,15 @@
         <TextBlock
             Margin="10" Foreground="{StaticResource MaterialDesignBody}"
             Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
-            Manage projects
+            Manage tasks
         </TextBlock>
         <TextBox
             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
             Grid.Row="1"
             Margin="10,10,10,15"
-            x:Name="ProjectBox"
             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-            materialDesign:HintAssist.Hint="Project Name"
-            materialDesign:HintAssist.HelperText="Insert your project name here" />
+            materialDesign:HintAssist.Hint="Task Name"
+            materialDesign:HintAssist.HelperText="Insert your task name here" />
         <Button
             Grid.Row="2"
             Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
@@ -47,7 +46,7 @@
         </Button>
         <ItemsControl
             Grid.Row="3"
-            ItemsSource="{Binding Projects}"
+            ItemsSource="{Binding Tasks}"
             Grid.IsSharedSizeScope="True"
             Margin="10">
             <ItemsControl.ItemTemplate>

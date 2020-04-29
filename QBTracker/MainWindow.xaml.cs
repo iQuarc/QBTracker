@@ -1,7 +1,9 @@
-﻿using System;
+﻿using QBTracker.ViewModels;
+
+using System;
 using System.ComponentModel;
 using System.Windows;
-using QBTracker.ViewModels;
+using System.Windows.Input;
 
 namespace QBTracker
 {
@@ -36,6 +38,21 @@ namespace QBTracker
         {
             e.Cancel = true;
             this.WindowState = WindowState.Minimized;
+        }
+
+        private void RestoreWindowCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Normal;
+        }
+
+        private void CloseWindowCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

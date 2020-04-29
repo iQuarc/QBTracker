@@ -3,11 +3,11 @@
 namespace QBTracker.Views
 {
     /// <summary>
-    /// Interaction logic for MainView.xaml
+    /// Interaction logic for ConfirmDialog.xaml
     /// </summary>
-    public partial class MainView : UserControl
+    public partial class ConfirmDialog : UserControl
     {
-        public MainView()
+        public ConfirmDialog()
         {
             InitializeComponent();
         }
