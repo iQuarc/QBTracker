@@ -98,7 +98,7 @@
                                     Orientation="Horizontal"
                                     Margin="8 0 0 0">
                                     <TextBlock FontWeight="Bold" Text="{Binding StarTime, StringFormat={}{0:HH:mm}}" />
-                                    <TextBlock Margin="5 0 0 0" FontWeight="Light" Text="{Binding Duration, StringFormat={}{0:hh\\:mm}}" />
+                                    <TextBlock Margin="5 0 0 0" FontWeight="Light" Text="{Binding Duration, StringFormat={}{0:h\\hmm\\m}}" />
                                 </StackPanel>
                                 <Button x:Name="EditButton"
                                         Grid.Row="0"
@@ -213,7 +213,7 @@
             </Button>
             <TextBlock Grid.Row="0" Grid.Column="2" Margin="10,0,0,0" FontSize="12">Day total time</TextBlock>
             <TextBlock Grid.Row="1" Grid.Column="2" Margin="10" TextAlignment="Center" VerticalAlignment="Center"
-                       FontSize="22" Text="{Binding TotalDayDuration, Mode=OneWay, StringFormat=hh\\:mm}" />
+                       FontSize="22" Text="{Binding TotalDayDuration, Mode=OneWay, StringFormat={}{0:h\\hmm\\m}}" />
         </Grid>
     </Grid>
 </UserControl>
