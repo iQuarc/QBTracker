@@ -107,7 +107,7 @@
             </ItemsControl.ItemTemplate>
             <ItemsControl.Template>
                 <ControlTemplate>
-                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}">
+                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="Auto">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>
@@ -195,9 +195,6 @@
                     Command="{Binding StartStopRecording}" Margin="10,12,10,12">
                 <materialDesign:PackIcon Kind="Alarm" Height="44" Width="44" />
             </Button>
-            <!--<TextBlock Grid.Column="2" Grid.Row="1" Text="{Binding Elapsed, StringFormat={}{0:hh:mm:ss}}" HorizontalAlignment="Left"
-                       Margin="5,0,0,0" Foreground="{StaticResource SecondaryAccentBrush}"
-                       Style="{StaticResource MaterialDesignHeadline4TextBlock}" VerticalAlignment="Center" />-->
         </Grid>
     </Grid>
 </UserControl>

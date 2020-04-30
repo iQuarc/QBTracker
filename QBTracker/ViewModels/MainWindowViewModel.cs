@@ -183,9 +183,10 @@ namespace QBTracker.ViewModels
             CreatedTask = new TaskViewModel(new Task {ProjectId = SelectedProjectId.Value}, this);
             CreatedTask.OnSave = () =>
             {
-                Tasks.Add(CreatedTask);
+                Tasks.Insert(0, CreatedTask);
                 SelectedTaskId = CreatedTask.Task.Id;
             };
+            CreatedTask.OnRemove = x => Tasks.Remove(x);
             SelectedTransitionIndex = Pages.CreateTask;
         }
 
@@ -213,8 +214,9 @@ namespace QBTracker.ViewModels
             {
                 var record = CurrentTimeRecord;
                 CurrentTimeRecord = null;
-                record.EndTime = DateTime.UtcNow;
+                record.TimeRecord.EndTime = DateTime.UtcNow;
                 Repository.UpdateTimeRecord(record.TimeRecord);
+                record.NotifyOfPropertyChange();
             }
         }
 

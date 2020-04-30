@@ -27,6 +27,7 @@ namespace QBTracker.DataAccess
         {
             return Db.Query<Project>("Projects")
                 .Where(x => !x.IsDeleted)
+                .OrderBy(x => x.Name)
                 .ToList();
         }
 
@@ -50,6 +51,7 @@ namespace QBTracker.DataAccess
         {
             return Db.Query<Task>("Tasks")
                 .Where(x => x.ProjectId == projectId && !x.IsDeleted)
+                .OrderByDescending(x => x.Id)
                 .ToList();
         }
 
@@ -74,6 +76,7 @@ namespace QBTracker.DataAccess
             var end = start.AddDays(1).AddTicks(-1);
             return Db.Query<TimeRecord>("TimeRecords")
                 .Where(x => x.StartTime >= start && x.StartTime <= end)
+                .OrderBy(x => x.StartTime)
                 .ToList();
         }
 

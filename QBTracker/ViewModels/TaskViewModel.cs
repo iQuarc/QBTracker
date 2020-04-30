@@ -94,6 +94,7 @@ namespace QBTracker.ViewModels
                 this.Task.IsDeleted = true;
                 this.mainVm.Repository.UpdateTask(this.Task);
                 this.mainVm.Tasks.Remove(this);
+                this.mainVm.CreatedTask.Tasks.Remove(this);
                 this.OnRemove?.Invoke(this);
             }
         }

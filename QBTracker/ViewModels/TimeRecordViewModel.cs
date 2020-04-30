@@ -62,7 +62,7 @@ namespace QBTracker.ViewModels
 
         public DateTime? EndTime
         {
-            get => TimeRecord.EndTime;
+            get => TimeRecord.EndTime != null ? TimeRecord.EndTime.Value.ToLocalTime() : (DateTime?) null;
             set
             {
                 if (value == null)
@@ -190,11 +190,11 @@ namespace QBTracker.ViewModels
             mainVm.CreatedTask = new TaskViewModel(new Task { ProjectId = SelectedProjectId.Value }, this.MainVm);
             mainVm.CreatedTask.OnSave = () =>
             {
-                this.Tasks.Add(mainVm.CreatedTask);
+                this.Tasks.Insert(0, mainVm.CreatedTask);
                 this.SelectedTaskId = mainVm.CreatedTask.Task.Id;
                 if (mainVm.SelectedProjectId == mainVm.CreatedTask.Task.ProjectId)
                 {
-                    mainVm.Tasks.Add(mainVm.CreatedTask);
+                    mainVm.Tasks.Insert(0, mainVm.CreatedTask);
                 }
             };
             mainVm.CreatedTask.OnRemove = x => this.Tasks.Remove(x);

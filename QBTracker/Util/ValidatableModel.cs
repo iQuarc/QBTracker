@@ -17,7 +17,7 @@ namespace QBTracker.Util
 
         private readonly ConcurrentDictionary<string, byte> touchedProperties = new ConcurrentDictionary<string, byte>();
 
-        protected virtual void NotifyOfPropertyChange([CallerMemberName] string propertyName = null)
+        public virtual void NotifyOfPropertyChange([CallerMemberName] string propertyName = "")
         {
             if (propertyName == null)
                 throw new ArgumentNullException(nameof(propertyName));
@@ -39,7 +39,7 @@ namespace QBTracker.Util
             OnErrorsChanged(key);
         }
 
-        public void OnErrorsChanged(string propertyName)
+        protected void OnErrorsChanged(string propertyName)
         {
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }

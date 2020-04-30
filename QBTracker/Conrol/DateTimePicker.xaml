@@ -9,7 +9,7 @@
     <Grid>
         <StackPanel Orientation="Horizontal">
             <TextBlock
-                Text="{Binding DateValue, ElementName=DateTimePickerControl, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                Text="{Binding DateValue, ElementName=DateTimePickerControl, StringFormat={}{0:yyyy MMMM dd - ddd  HH:mm}}"
                 VerticalAlignment="Center"
                 FontSize="12" MinWidth="20" />
             <Button
