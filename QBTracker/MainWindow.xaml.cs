@@ -56,5 +56,15 @@ namespace QBTracker
         {
             Application.Current.Shutdown();
         }
+
+        private void MainWindow_OnLocationChanged(object? sender, EventArgs e)
+        {
+            var desktopWorkingArea = SystemParameters.WorkArea;
+            var snapMargin = 25;
+            var newLeft = desktopWorkingArea.Right - Width;
+            var newTop = desktopWorkingArea.Bottom - Height;
+            if (Math.Abs(Left - newLeft) <= snapMargin) Left = newLeft;
+            if (Math.Abs(Top - newTop) <= snapMargin) Top = newTop;
+        }
     }
 }
