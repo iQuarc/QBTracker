@@ -13,11 +13,11 @@ namespace QBTracker.ViewModels
 {
     public class ProjectViewModel : ValidatableModel
     {
-        private readonly MainWindowViewModel _mainWindowViewModel;
+        private readonly MainWindowViewModel mainVm;
 
         public ProjectViewModel(Project project, MainWindowViewModel mainWindowViewModel)
         {
-            _mainWindowViewModel = mainWindowViewModel;
+            mainVm = mainWindowViewModel;
             Save = new RelayCommand(ExecuteSave, CanExecuteSave);
             GoBack = new RelayCommand(ExecuteGoBack);
             DeleteCommand = new RelayCommand(ExecuteDelete);
@@ -42,7 +42,7 @@ namespace QBTracker.ViewModels
 
         public bool IsFocused { get; set; } = true;
 
-        public IEnumerable<ProjectViewModel> Projects => _mainWindowViewModel.Projects;
+        public IEnumerable<ProjectViewModel> Projects => mainVm.Projects;
 
         public RelayCommand Save { get; }
 
@@ -53,8 +53,8 @@ namespace QBTracker.ViewModels
             Validate();
             if (HasErrors)
                 return;
-            _mainWindowViewModel.Repository.AddProject(Project);
-            _mainWindowViewModel.GoBack();
+            mainVm.Repository.AddProject(Project);
+            mainVm.GoBack();
             OnSave?.Invoke();
         }
 
@@ -67,8 +67,8 @@ namespace QBTracker.ViewModels
         public RelayCommand GoBack { get; }
         private void ExecuteGoBack(object o)
         {
-            _mainWindowViewModel.CreatedProject = null;
-            _mainWindowViewModel.GoBack();
+            mainVm.CreatedProject = null;
+            mainVm.GoBack();
         }
 
         public RelayCommand DeleteCommand { get; }
@@ -80,8 +80,8 @@ namespace QBTracker.ViewModels
             }))
             {
                 this.Project.IsDeleted = true;
-                this._mainWindowViewModel.Repository.UpdateProject(this.Project);
-                this._mainWindowViewModel.Projects.Remove(this);
+                this.mainVm.Repository.UpdateProject(this.Project);
+                this.mainVm.Projects.Remove(this);
             }
         }
     }

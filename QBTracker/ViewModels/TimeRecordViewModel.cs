@@ -37,7 +37,6 @@ namespace QBTracker.ViewModels
                 timer.Interval += TimeSpan.FromSeconds(1);
                 timer.Start();
             }
-            LoadTasks();
         }
 
         private void TimerOnTick(object sender, EventArgs e)
@@ -73,7 +72,7 @@ namespace QBTracker.ViewModels
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(nameof(Duration));
                 NotifyOfPropertyChange(nameof(DurationText));
-                NotifyOfPropertyChange(nameof(EndTime));
+                NotifyOfPropertyChange(nameof(IsEndTimeEnabled));
             }
         }
 
@@ -82,7 +81,7 @@ namespace QBTracker.ViewModels
         public RelayCommand GoBack { get; }
         private void ExecuteGoBack(object o)
         {
-            mainVm.CreatedTask = null;
+            tasks = null;
             mainVm.GoBack();
         }
 
@@ -141,6 +140,12 @@ namespace QBTracker.ViewModels
                 }
                 return tasks;
             }
+            private set 
+            { 
+                tasks = value;
+                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(SelectedTaskId));
+            }
         }
 
         public RelayCommand DeleteCommand { get; }
@@ -161,6 +166,7 @@ namespace QBTracker.ViewModels
         private void ExecuteEdit(object o)
         {
             mainVm.TimeRecordInEdit = this;
+            mainVm.TimeRecordInEdit.Tasks = null;
             mainVm.SelectedTransitionIndex = Pages.EditTimeRecord;
         }
 
@@ -170,8 +176,8 @@ namespace QBTracker.ViewModels
             mainVm.CreatedProject = new ProjectViewModel(new Project(), this.mainVm);
             mainVm.CreatedProject.OnSave = () =>
             {
-                this.SelectedProjectId = MainVm.CreatedProject.Project.Id;
                 this.MainVm.Projects.Add(MainVm.CreatedProject);
+                this.SelectedProjectId = MainVm.CreatedProject.Project.Id;
             };
             MainVm.SelectedTransitionIndex = Pages.CreateProject;
         }
@@ -184,13 +190,14 @@ namespace QBTracker.ViewModels
             mainVm.CreatedTask = new TaskViewModel(new Task { ProjectId = SelectedProjectId.Value }, this.MainVm);
             mainVm.CreatedTask.OnSave = () =>
             {
-                this.SelectedTaskId = mainVm.CreatedTask.Task.Id;
                 this.Tasks.Add(mainVm.CreatedTask);
+                this.SelectedTaskId = mainVm.CreatedTask.Task.Id;
                 if (mainVm.SelectedProjectId == mainVm.CreatedTask.Task.ProjectId)
                 {
                     mainVm.Tasks.Add(mainVm.CreatedTask);
                 }
             };
+            mainVm.CreatedTask.OnRemove = x => this.Tasks.Remove(x);
             MainVm.SelectedTransitionIndex = Pages.CreateTask;
         }
 

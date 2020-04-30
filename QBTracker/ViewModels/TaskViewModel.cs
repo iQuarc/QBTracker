@@ -13,11 +13,11 @@ namespace QBTracker.ViewModels
 {
     public class TaskViewModel : ValidatableModel
     {
-        private readonly MainWindowViewModel _mainWindowViewModel;
+        private readonly MainWindowViewModel mainVm;
 
         public TaskViewModel(Task task, MainWindowViewModel mainWindowViewModel)
         {
-            _mainWindowViewModel = mainWindowViewModel;
+            mainVm = mainWindowViewModel;
             Save = new RelayCommand(ExecuteSave, CanExecuteSave);
             GoBack = new RelayCommand(ExecuteGoBack);
             DeleteCommand = new RelayCommand(ExecuteDelete);
@@ -42,17 +42,18 @@ namespace QBTracker.ViewModels
 
         public bool IsFocused { get; set; } = true;
 
-        public IEnumerable<TaskViewModel> Tasks => _mainWindowViewModel.Tasks;
+        public IEnumerable<TaskViewModel> Tasks => mainVm.Tasks;
 
         public RelayCommand Save { get; }
         public Action OnSave { get; set; }
+        public Action<TaskViewModel> OnRemove { get; set; }
         private void ExecuteSave(object o)
         {
             Validate();
             if (HasErrors)
                 return;
-            _mainWindowViewModel.Repository.AddTask(Task);
-            _mainWindowViewModel.GoBack();
+            mainVm.Repository.AddTask(Task);
+            mainVm.GoBack();
             OnSave?.Invoke();
         }
 
@@ -65,8 +66,8 @@ namespace QBTracker.ViewModels
         public RelayCommand GoBack { get; }
         private void ExecuteGoBack(object o)
         {
-            _mainWindowViewModel.CreatedTask = null;
-            _mainWindowViewModel.GoBack();
+            mainVm.CreatedTask = null;
+            mainVm.GoBack();
         }
 
         public RelayCommand DeleteCommand { get; }
@@ -78,8 +79,9 @@ namespace QBTracker.ViewModels
             }))
             {
                 this.Task.IsDeleted = true;
-                this._mainWindowViewModel.Repository.UpdateTask(this.Task);
-                this._mainWindowViewModel.Tasks.Remove(this);
+                this.mainVm.Repository.UpdateTask(this.Task);
+                this.mainVm.Tasks.Remove(this);
+                this.OnRemove?.Invoke(this);
             }
         }
     }

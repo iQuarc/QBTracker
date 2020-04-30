@@ -49,7 +49,7 @@ namespace QBTracker.DataAccess
         public List<Task> GetTasks(int projectId)
         {
             return Db.Query<Task>("Tasks")
-                .Where(x => x.ProjectId == projectId)
+                .Where(x => x.ProjectId == projectId && !x.IsDeleted)
                 .ToList();
         }
 

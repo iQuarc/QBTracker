@@ -170,8 +170,8 @@ namespace QBTracker.ViewModels
             CreatedProject = new ProjectViewModel(new Project(), this);
             CreatedProject.OnSave = () =>
             {
-                SelectedProjectId = CreatedProject.Project.Id;
                 Projects.Add(CreatedProject);
+                SelectedProjectId = CreatedProject.Project.Id;
             };
             SelectedTransitionIndex = Pages.CreateProject;
         }
@@ -183,8 +183,8 @@ namespace QBTracker.ViewModels
             CreatedTask = new TaskViewModel(new Task {ProjectId = SelectedProjectId.Value}, this);
             CreatedTask.OnSave = () =>
             {
-                SelectedTaskId = CreatedTask.Task.Id;
                 Tasks.Add(CreatedTask);
+                SelectedTaskId = CreatedTask.Task.Id;
             };
             SelectedTransitionIndex = Pages.CreateTask;
         }
