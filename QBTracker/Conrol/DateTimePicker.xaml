@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="QBTracker.Conrol.DateTimePicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="30" d:DesignWidth="160" x:Name="DateTimePickerControl">
+    <Grid>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock
+                Text="{Binding DateValue, ElementName=DateTimePickerControl, StringFormat={}{0:yyyy-MM-dd HH:mm}}"
+                VerticalAlignment="Center"
+                FontSize="12" MinWidth="20" />
+            <Button
+                Margin="8,0,0,0" Width="26" Height="26"
+                md:DialogHost.DialogOpenedAttached="CombinedDialogOpenedEventHandler"
+                md:DialogHost.DialogClosingAttached="CombinedDialogClosingEventHandler"
+                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                Command="{x:Static md:DialogHost.OpenDialogCommand}">
+                <Button.CommandParameter>
+                    <Grid
+                        Margin="-1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition
+                                Height="*" />
+                            <RowDefinition
+                                Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel
+                            Grid.Row="0"
+                            Orientation="Horizontal">
+                            <Calendar
+                                x:Name="CombinedCalendar"
+                                Margin="-1 -4 -1 0" />
+                            <md:Clock
+                                x:Name="CombinedClock"
+                                DisplayAutomation="Cycle"
+                                Is24Hours="True" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="1"
+                            Margin="8"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                            <Button
+                                Command="{x:Static md:DialogHost.CloseDialogCommand}"
+                                CommandParameter="0"
+                                IsCancel="True"
+                                Style="{DynamicResource MaterialDesignFlatButton}">
+                                CANCEL
+                            </Button>
+                            <Button
+                                Command="{x:Static md:DialogHost.CloseDialogCommand}"
+                                CommandParameter="1"
+                                IsDefault="True"
+                                Style="{DynamicResource MaterialDesignFlatButton}">
+                                OK
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Button.CommandParameter>
+                <Button.Content>
+                    <md:PackIcon
+                        Kind="CalendarClock"
+                        Height="22"
+                        Width="22" />
+                </Button.Content>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

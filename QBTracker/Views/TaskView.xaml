@@ -6,8 +6,10 @@
              xmlns:local="clr-namespace:QBTracker.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:QBTracker.ViewModels"
+             xmlns:util="clr-namespace:QBTracker.Util"
              mc:Ignorable="d"
-             d:DesignHeight="694" d:DesignWidth="410">
+             d:DesignHeight="694" d:DesignWidth="410"
+             FocusManager.FocusedElement="{Binding ElementName=TaskBox}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
@@ -21,7 +23,9 @@
             Manage tasks
         </TextBlock>
         <TextBox
+            x:Name="TaskBox"
             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+            util:FocusExtension.IsFocused="{Binding IsFocused}"
             Grid.Row="1"
             Margin="10,10,10,15"
             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
@@ -32,6 +36,7 @@
             Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
             Command="{Binding GoBack}"
             VerticalAlignment="Center" HorizontalAlignment="Left"
+            IsCancel="True"
             Margin="10">
             <materialDesign:PackIcon Kind="StepBackward" />
         </Button>
@@ -41,6 +46,7 @@
             VerticalAlignment="Center" HorizontalAlignment="Right"
             ToolTip="MaterialDesignFlatAccentBackgroundButton"
             Margin="10"
+            IsDefault="True"
             Command="{Binding Save}">
             Add
         </Button>

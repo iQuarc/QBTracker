@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:QBTracker.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:QBTracker.ViewModels"
+             xmlns:util="clr-namespace:QBTracker.Util"
              mc:Ignorable="d"
              d:DesignHeight="694" d:DesignWidth="410">
     <Grid>
@@ -25,6 +26,7 @@
             Grid.Row="1"
             Margin="10,10,10,15"
             x:Name="ProjectBox"
+            util:FocusExtension.IsFocused="{Binding IsFocused}"
             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
             materialDesign:HintAssist.Hint="Project Name"
             materialDesign:HintAssist.HelperText="Insert your project name here" />
@@ -32,6 +34,7 @@
             Grid.Row="2"
             Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
             Command="{Binding GoBack}"
+            IsCancel="True"
             VerticalAlignment="Center" HorizontalAlignment="Left"
             Margin="10">
             <materialDesign:PackIcon Kind="StepBackward" />
@@ -42,6 +45,7 @@
             VerticalAlignment="Center" HorizontalAlignment="Right"
             ToolTip="MaterialDesignFlatAccentBackgroundButton"
             Margin="10"
+            IsDefault="True"
             Command="{Binding Save}">
             Add
         </Button>

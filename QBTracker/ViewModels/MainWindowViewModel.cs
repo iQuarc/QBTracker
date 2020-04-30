@@ -1,42 +1,47 @@
-﻿using QBTracker.DataAccess;
-using QBTracker.Model;
-using QBTracker.Util;
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using MaterialDesignThemes.Wpf.Transitions;
+using QBTracker.DataAccess;
+using QBTracker.Model;
+using QBTracker.Util;
 
 namespace QBTracker.ViewModels
 {
     public class MainWindowViewModel : ValidatableModel
     {
-        private DateTime? _selectedDate;
-        private int? _selectedProjectId;
-        private int _selectedTransitionIndex;
-
-        public IRepository Repository;
+        private readonly Stack<int> NavigationHistory = new Stack<int>();
         private ProjectViewModel _createdProject;
-        private Task _selectedTask;
-        private int? _selectedTaskId;
         private TaskViewModel _createdTask;
         private TimeRecordViewModel _currentTimeRecord;
+        private DateTime? _selectedDate;
+        private int? _selectedProjectId;
+        private int? _selectedTaskId;
+        private int _selectedTransitionIndex;
+        private TimeRecordViewModel _timeRecordInEdit;
+
+        public readonly IRepository Repository;
 
         public MainWindowViewModel()
         {
             Repository = new Repository();
             CreateNewProject = new RelayCommand(ExecuteCreateNewProject);
-            StartStopRecording = new RelayCommand(ExecuteStartStopRecording, _ => SelectedProjectId.HasValue && SelectedTaskId.HasValue);
             CreateNewTask = new RelayCommand(ExecuteCreateNewTask, _ => SelectedProjectId != null);
+            StartStopRecording = new RelayCommand(ExecuteStartStopRecording,
+                _ => SelectedProjectId.HasValue && SelectedTaskId.HasValue);
             LoadProjects();
             SelectedDate = DateTime.Today;
             var tr = Repository.GetLastTimeRecord();
             if (tr != null && tr.EndTime == null)
             {
-                var trVm = TimeRecords.FirstOrDefault(x => x.TimeRecord.Id == tr.Id) ?? new TimeRecordViewModel(tr, this);
-                this.SelectedProjectId = tr.ProjectId;
-                this.SelectedTaskId = tr.TaskId;
-                this.CurrentTimeRecord = trVm;
+                var trVm = TimeRecords.FirstOrDefault(x => x.TimeRecord.Id == tr.Id) ??
+                           new TimeRecordViewModel(tr, this);
+                SelectedProjectId = tr.ProjectId;
+                SelectedTaskId = tr.TaskId;
+                CurrentTimeRecord = trVm;
             }
         }
 
@@ -45,6 +50,9 @@ namespace QBTracker.ViewModels
             get => _selectedTransitionIndex;
             set
             {
+                if (_selectedTransitionIndex == value)
+                    return;
+                NavigationHistory.Push(_selectedTransitionIndex);
                 _selectedTransitionIndex = value;
                 NotifyOfPropertyChange();
             }
@@ -84,25 +92,9 @@ namespace QBTracker.ViewModels
             }
         }
 
-        public Task SelectedTask
-        {
-            get => _selectedTask;
-            set
-            {
-                _selectedTask = value;
-                NotifyOfPropertyChange();
-            }
-        }
+        public bool IsRecording => CurrentTimeRecord != null;
 
-        public bool IsRecording
-        {
-            get => CurrentTimeRecord != null;
-        }
-
-        public bool IsNotRecording
-        {
-            get => CurrentTimeRecord == null;
-        }
+        public bool IsNotRecording => CurrentTimeRecord == null;
 
         public ProjectViewModel CreatedProject
         {
@@ -124,9 +116,13 @@ namespace QBTracker.ViewModels
             }
         }
 
-        public ObservableRangeCollection<ProjectViewModel> Projects { get; } = new ObservableRangeCollection<ProjectViewModel>();
+        public ObservableRangeCollection<ProjectViewModel> Projects { get; } =
+            new ObservableRangeCollection<ProjectViewModel>();
+
         public ObservableRangeCollection<TaskViewModel> Tasks { get; } = new ObservableRangeCollection<TaskViewModel>();
-        public ObservableRangeCollection<TimeRecordViewModel> TimeRecords { get; } = new ObservableRangeCollection<TimeRecordViewModel>();
+
+        public ObservableRangeCollection<TimeRecordViewModel> TimeRecords { get; } =
+            new ObservableRangeCollection<TimeRecordViewModel>();
 
         public TimeRecordViewModel CurrentTimeRecord
         {
@@ -143,13 +139,56 @@ namespace QBTracker.ViewModels
         }
 
         public RelayCommand CreateNewProject { get; }
+
+        public RelayCommand CreateNewTask { get; }
+
+        public RelayCommand StartStopRecording { get; }
+
+        public TimeRecordViewModel TimeRecordInEdit
+        {
+            get => _timeRecordInEdit;
+            set
+            {
+                _timeRecordInEdit = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+
+        public void GoBack()
+        {
+            if (NavigationHistory.TryPop(out var index))
+                _selectedTransitionIndex = index;
+            else
+                _selectedTransitionIndex = Pages.MainView;
+
+            NotifyOfPropertyChange(nameof(SelectedTransitionIndex));
+        }
+
         private void ExecuteCreateNewProject(object obj)
         {
             CreatedProject = new ProjectViewModel(new Project(), this);
+            CreatedProject.OnSave = () =>
+            {
+                SelectedProjectId = CreatedProject.Project.Id;
+                Projects.Add(CreatedProject);
+            };
             SelectedTransitionIndex = Pages.CreateProject;
         }
 
-        public RelayCommand StartStopRecording { get; }
+        private void ExecuteCreateNewTask(object obj)
+        {
+            if (SelectedProjectId == null)
+                return;
+            CreatedTask = new TaskViewModel(new Task {ProjectId = SelectedProjectId.Value}, this);
+            CreatedTask.OnSave = () =>
+            {
+                SelectedTaskId = CreatedTask.Task.Id;
+                Tasks.Add(CreatedTask);
+            };
+            SelectedTransitionIndex = Pages.CreateTask;
+        }
+
         private void ExecuteStartStopRecording(object obj)
         {
             if (SelectedProjectId == null || SelectedTaskId == null)
@@ -164,14 +203,11 @@ namespace QBTracker.ViewModels
                     ProjectName = project.Name,
                     ProjectId = project.Id,
                     TaskName = task.Name,
-                    TaskId = task.Id,
+                    TaskId = task.Id
                 };
                 Repository.AddTimeRecord(timeRecord);
                 CurrentTimeRecord = new TimeRecordViewModel(timeRecord, this);
-                if (SelectedDate?.Date == DateTime.Today)
-                {
-                    TimeRecords.Add(CurrentTimeRecord);
-                }
+                if (SelectedDate?.Date == DateTime.Today) TimeRecords.Add(CurrentTimeRecord);
             }
             else
             {
@@ -182,19 +218,6 @@ namespace QBTracker.ViewModels
             }
         }
 
-        public RelayCommand CreateNewTask { get; }
-        private void ExecuteCreateNewTask(object obj)
-        {
-            if (SelectedProjectId == null)
-                return;
-            CreatedTask = new TaskViewModel(new Task() { ProjectId = SelectedProjectId.Value }, this);
-            SelectedTransitionIndex = Pages.CreateTask;
-        }
-
-        public void Show()
-        {
-            SelectedTransitionIndex = Pages.MainView;
-        }
 
         private void LoadProjects()
         {
@@ -215,7 +238,12 @@ namespace QBTracker.ViewModels
             TimeRecords.Clear();
             if (SelectedDate != null)
                 TimeRecords.AddRange(Repository.GetTimeRecords(SelectedDate.Value)
-                    .Select(x => new TimeRecordViewModel(x, this)));
+                    .Select(x =>
+                    {
+                        if (CurrentTimeRecord?.TimeRecord?.Id == x.Id)
+                            return CurrentTimeRecord;
+                        return new TimeRecordViewModel(x, this);
+                    }));
         }
     }
 }

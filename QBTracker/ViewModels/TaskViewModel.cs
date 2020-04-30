@@ -1,4 +1,5 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using System;
+using MaterialDesignThemes.Wpf;
 
 using QBTracker.Model;
 using QBTracker.Util;
@@ -39,19 +40,20 @@ namespace QBTracker.ViewModels
             }
         }
 
+        public bool IsFocused { get; set; } = true;
+
         public IEnumerable<TaskViewModel> Tasks => _mainWindowViewModel.Tasks;
 
         public RelayCommand Save { get; }
-
+        public Action OnSave { get; set; }
         private void ExecuteSave(object o)
         {
             Validate();
             if (HasErrors)
                 return;
             _mainWindowViewModel.Repository.AddTask(Task);
-            _mainWindowViewModel.Tasks.Add(this);
-            _mainWindowViewModel.Show();
-            _mainWindowViewModel.SelectedTaskId = this.Task.Id;
+            _mainWindowViewModel.GoBack();
+            OnSave?.Invoke();
         }
 
         private bool CanExecuteSave(object o)
@@ -63,8 +65,8 @@ namespace QBTracker.ViewModels
         public RelayCommand GoBack { get; }
         private void ExecuteGoBack(object o)
         {
-            _mainWindowViewModel.CreatedProject = null;
-            _mainWindowViewModel.Show();
+            _mainWindowViewModel.CreatedTask = null;
+            _mainWindowViewModel.GoBack();
         }
 
         public RelayCommand DeleteCommand { get; }

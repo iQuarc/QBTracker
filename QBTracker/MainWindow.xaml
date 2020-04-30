@@ -38,7 +38,7 @@
         <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" Executed="CloseWindowCommand_OnExecuted"></CommandBinding>
     </Window.CommandBindings>
     <Grid>
-    <tb:TaskbarIcon 
+        <tb:TaskbarIcon 
         Visibility="Visible"
         ToolTipText="Fallback ToolTip for Windows xp"
         IconSource="/Images/pngfuel.ico"
@@ -48,18 +48,21 @@
         LeftClickCommand="{x:Static SystemCommands.RestoreWindowCommand}"
         LeftClickCommandTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
     />
-    <materialDesign:DialogHost>
-        <materialDesign:Transitioner x:Name="Transitioner" SelectedIndex="{Binding SelectedTransitionIndex}" AutoApplyTransitionOrigins="True">
-            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
-                <views:MainView />
-            </materialDesign:TransitionerSlide>
-            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
-                <views:ProjectView DataContext="{Binding CreatedProject}" />
-            </materialDesign:TransitionerSlide>
-            <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
-                <views:TaskView DataContext="{Binding CreatedTask}" />
-            </materialDesign:TransitionerSlide>
-        </materialDesign:Transitioner>
-    </materialDesign:DialogHost>
+        <materialDesign:DialogHost>
+            <materialDesign:Transitioner x:Name="Transitioner" SelectedIndex="{Binding SelectedTransitionIndex}" AutoApplyTransitionOrigins="True">
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                    <views:MainView />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                    <views:ProjectView DataContext="{Binding CreatedProject}" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                    <views:TaskView DataContext="{Binding CreatedTask}" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                    <views:TimeRecordView DataContext="{Binding TimeRecordInEdit}" />
+                </materialDesign:TransitionerSlide>
+            </materialDesign:Transitioner>
+        </materialDesign:DialogHost>
     </Grid>
 </Window>

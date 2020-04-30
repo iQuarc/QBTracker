@@ -17,6 +17,7 @@ namespace QBTracker.DataAccess
             if (!Directory.Exists(Path.GetDirectoryName(file)))
                 Directory.CreateDirectory(Path.GetDirectoryName(file));
             Db = new LiteRepository(file);
+            CheckDbVersion();
             EnsureIndexes();
         }
 
@@ -110,6 +111,15 @@ namespace QBTracker.DataAccess
 
             var timeRecords = Db.Database.GetCollection<TimeRecord>("TimeRecords");
             timeRecords.EnsureIndex(x => x.StartTime);
+        }
+
+        private void CheckDbVersion()
+        {
+            //if (Db.Database.UserVersion == 0)
+            //{
+            //    // Schema migration goes here
+            //    Db.Database.UserVersion = 1;
+            //}
         }
     }
 }
