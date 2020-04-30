@@ -8,12 +8,14 @@ using QBTracker.Views;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace QBTracker.ViewModels
 {
     public class TaskViewModel : ValidatableModel
     {
         private readonly MainWindowViewModel mainVm;
+        private ObservableRangeCollection<TaskViewModel> tasks;
 
         public TaskViewModel(Task task, MainWindowViewModel mainWindowViewModel)
         {
@@ -42,7 +44,18 @@ namespace QBTracker.ViewModels
 
         public bool IsFocused { get; set; } = true;
 
-        public IEnumerable<TaskViewModel> Tasks => mainVm.Tasks;
+        public ObservableRangeCollection<TaskViewModel> Tasks
+        {
+            get
+            {
+                if (tasks == null)
+                {
+                    tasks = new ObservableRangeCollection<TaskViewModel>();
+                    LoadTasks();
+                }
+                return tasks;
+            }
+        }
 
         public RelayCommand Save { get; }
         public Action OnSave { get; set; }
@@ -83,6 +96,13 @@ namespace QBTracker.ViewModels
                 this.mainVm.Tasks.Remove(this);
                 this.OnRemove?.Invoke(this);
             }
+        }
+
+        private void LoadTasks()
+        {
+            Tasks.Clear();
+            Tasks.AddRange(mainVm.Repository.GetTasks(this.Task.ProjectId)
+                    .Select(x => new TaskViewModel(x, this.mainVm)));
         }
     }
 }
