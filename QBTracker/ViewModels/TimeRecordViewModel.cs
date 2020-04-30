@@ -42,6 +42,7 @@ namespace QBTracker.ViewModels
         private void TimerOnTick(object sender, EventArgs e)
         {
             NotifyOfPropertyChange(nameof(Duration));
+            MainVm.AddDayDuration(Duration);
         }
 
         public TimeRecord TimeRecord { get; }

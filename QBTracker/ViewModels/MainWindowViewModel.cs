@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
-using MaterialDesignThemes.Wpf.Transitions;
+using System.Windows.Forms.VisualStyles;
 using QBTracker.DataAccess;
 using QBTracker.Model;
 using QBTracker.Util;
@@ -14,16 +13,18 @@ namespace QBTracker.ViewModels
     public class MainWindowViewModel : ValidatableModel
     {
         private readonly Stack<int> NavigationHistory = new Stack<int>();
+
+        public readonly IRepository Repository;
         private ProjectViewModel _createdProject;
         private TaskViewModel _createdTask;
         private TimeRecordViewModel _currentTimeRecord;
-        private DateTime? _selectedDate;
+        private DateTime _selectedDate;
         private int? _selectedProjectId;
         private int? _selectedTaskId;
         private int _selectedTransitionIndex;
         private TimeRecordViewModel _timeRecordInEdit;
-
-        public readonly IRepository Repository;
+        private TimeSpan? closedDayDuration;
+        private TimeSpan? totalDayDuration;
 
         public MainWindowViewModel()
         {
@@ -32,6 +33,8 @@ namespace QBTracker.ViewModels
             CreateNewTask = new RelayCommand(ExecuteCreateNewTask, _ => SelectedProjectId != null);
             StartStopRecording = new RelayCommand(ExecuteStartStopRecording,
                 _ => SelectedProjectId.HasValue && SelectedTaskId.HasValue);
+            DateStepBack = new RelayCommand(ExecuteDateStepBack);
+            DateStepForward = new RelayCommand(ExecuteDateStepForward);
             LoadProjects();
             SelectedDate = DateTime.Today;
             var tr = Repository.GetLastTimeRecord();
@@ -60,7 +63,7 @@ namespace QBTracker.ViewModels
 
         [Required]
         [DisplayName("Selected Date")]
-        public DateTime? SelectedDate
+        public DateTime SelectedDate
         {
             get => _selectedDate;
             set
@@ -139,10 +142,10 @@ namespace QBTracker.ViewModels
         }
 
         public RelayCommand CreateNewProject { get; }
-
         public RelayCommand CreateNewTask { get; }
-
         public RelayCommand StartStopRecording { get; }
+        public RelayCommand DateStepBack { get; }
+        public RelayCommand DateStepForward { get; }
 
         public TimeRecordViewModel TimeRecordInEdit
         {
@@ -152,6 +155,16 @@ namespace QBTracker.ViewModels
                 _timeRecordInEdit = value;
                 NotifyOfPropertyChange();
             }
+        }
+
+        private void ExecuteDateStepBack(object obj)
+        {
+            SelectedDate = SelectedDate.AddDays(-1);
+        }
+
+        private void ExecuteDateStepForward(object obj)
+        {
+            SelectedDate = SelectedDate.AddDays(1);
         }
 
 
@@ -208,7 +221,7 @@ namespace QBTracker.ViewModels
                 };
                 Repository.AddTimeRecord(timeRecord);
                 CurrentTimeRecord = new TimeRecordViewModel(timeRecord, this);
-                if (SelectedDate?.Date == DateTime.Today) TimeRecords.Add(CurrentTimeRecord);
+                if (SelectedDate.Date == DateTime.Today) TimeRecords.Add(CurrentTimeRecord);
             }
             else
             {
@@ -220,6 +233,24 @@ namespace QBTracker.ViewModels
             }
         }
 
+
+        public TimeSpan? TotalDayDuration
+        {
+            get => totalDayDuration;
+            private set
+            {
+                totalDayDuration = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public void AddDayDuration(TimeSpan duration)
+        {
+            if (SelectedDate == DateTime.Today)
+            {
+                TotalDayDuration = (closedDayDuration ?? TimeSpan.Zero) + duration;
+            }
+        }
 
         private void LoadProjects()
         {
@@ -237,15 +268,21 @@ namespace QBTracker.ViewModels
 
         private void LoadTimeRecords()
         {
+            closedDayDuration = null;
+            TotalDayDuration = null;
             TimeRecords.Clear();
-            if (SelectedDate != null)
-                TimeRecords.AddRange(Repository.GetTimeRecords(SelectedDate.Value)
-                    .Select(x =>
+            TimeRecords.AddRange(Repository.GetTimeRecords(SelectedDate)
+                .Select(x =>
+                {
+                    if (x.EndTime != null)
                     {
-                        if (CurrentTimeRecord?.TimeRecord?.Id == x.Id)
-                            return CurrentTimeRecord;
-                        return new TimeRecordViewModel(x, this);
-                    }));
+                        closedDayDuration = (closedDayDuration ?? TimeSpan.Zero) + (x.EndTime - x.StartTime);
+                    }
+                    if (CurrentTimeRecord?.TimeRecord?.Id == x.Id)
+                        return CurrentTimeRecord;
+                    return new TimeRecordViewModel(x, this);
+                }));
+            TotalDayDuration = closedDayDuration;
         }
     }
 }
