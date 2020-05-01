@@ -5,6 +5,7 @@ using QBTracker.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace QBTracker.DataAccess
 {
@@ -12,8 +13,12 @@ namespace QBTracker.DataAccess
     {
         public Repository()
         {
+#if DEBUG
+            var file = @"App_Data\QBData.db";
+#else
             var appDAta = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var file = Path.Combine(appDAta, @"QBTracker\QBData.db");
+            var file = Path.Combine(appDAta, @"QBTracker\QBData.db"); 
+#endif
             if (!Directory.Exists(Path.GetDirectoryName(file)))
                 Directory.CreateDirectory(Path.GetDirectoryName(file));
             Db = new LiteRepository(file);
