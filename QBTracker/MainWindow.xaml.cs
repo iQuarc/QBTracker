@@ -37,14 +37,12 @@ namespace QBTracker
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
             e.Cancel = true;
-            this.WindowState = WindowState.Minimized;
+            HideWindow();
         }
 
         private void RestoreWindowCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
         {
-            this.WindowState = WindowState.Normal;
-            this.Activate();
-            this.Focus();
+            ShowWindow();
         }
 
         private void CloseWindowCommand_OnExecuted(object sender, ExecutedRoutedEventArgs e)
@@ -52,9 +50,28 @@ namespace QBTracker
             Application.Current.Shutdown();
         }
 
-        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        private void MenuItemExit_OnClick(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void MenuItemShow_OnClick(object sender, RoutedEventArgs e)
+        {
+            ShowWindow();
+        }
+
+        private void ShowWindow()
+        {
+            this.WindowState = WindowState.Normal;
+            this.ShowInTaskbar = true;
+            this.Activate();
+            this.Focus();
+        }
+
+        private void HideWindow()
+        {
+            this.WindowState = WindowState.Minimized;
+            this.ShowInTaskbar = false;
         }
     }
 }

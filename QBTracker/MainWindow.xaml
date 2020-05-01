@@ -11,7 +11,7 @@
         x:Class="QBTracker.MainWindow"
         mc:Ignorable="d"
         Title="QBTracker" Height="694" Width="410"
-        WindowStyle="ToolWindow"
+        WindowStyle="SingleBorderWindow"
         WindowStartupLocation="Manual"
         ResizeMode="CanMinimize"
         ShowInTaskbar="False"
@@ -29,7 +29,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <ContextMenu x:Key="TrayMenu">
-                <MenuItem Header="E_xit"  Click="MenuItem_OnClick" />
+                <MenuItem Header="S_how"  Click="MenuItemShow_OnClick" />
+                <MenuItem Header="E_xit"  Click="MenuItemExit_OnClick" />
             </ContextMenu>
         </ResourceDictionary>
     </Window.Resources>
