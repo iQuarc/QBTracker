@@ -43,7 +43,7 @@
             Grid.Row="2"
             Style="{StaticResource MaterialDesignFlatAccentBgButton}"
             VerticalAlignment="Center" HorizontalAlignment="Right"
-            ToolTip="MaterialDesignFlatAccentBackgroundButton"
+            ToolTip="Add Project"
             Margin="10"
             IsDefault="True"
             Command="{Binding Save}">
@@ -73,7 +73,7 @@
                             </StackPanel>
                             <Button Grid.Column="1" Margin="1" Width="20" Height="20"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    ToolTip="MaterialDesignFloatingActionMiniAccentButton" 
+                                    ToolTip="Delete Project" 
                                     Command="{Binding DeleteCommand}">
                                 <materialDesign:PackIcon
                                     Kind="Delete"

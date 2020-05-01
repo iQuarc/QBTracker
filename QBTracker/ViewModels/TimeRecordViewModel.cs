@@ -55,6 +55,7 @@ namespace QBTracker.ViewModels
             set
             {
                 TimeRecord.StartTime = value.ToUniversalTime();
+                MainVm.Repository.UpdateTimeRecord(this.TimeRecord);
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(nameof(Duration));
                 NotifyOfPropertyChange(nameof(DurationText));
@@ -70,6 +71,7 @@ namespace QBTracker.ViewModels
                     return;
                 TimeRecord.EndTime = value.Value.ToUniversalTime();
                 timer?.Stop();
+                MainVm.Repository.UpdateTimeRecord(this.TimeRecord);
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(nameof(Duration));
                 NotifyOfPropertyChange(nameof(DurationText));

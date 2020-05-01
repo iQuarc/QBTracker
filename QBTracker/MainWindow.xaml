@@ -41,7 +41,7 @@
     <Grid>
         <tb:TaskbarIcon 
         Visibility="Visible"
-        ToolTipText="Fallback ToolTip for Windows xp"
+        ToolTipText="QB Tracker"
         IconSource="/Images/pngfuel.ico"
         ContextMenu="{StaticResource TrayMenu}"
         MenuActivation="LeftOrRightClick"
@@ -62,6 +62,9 @@
                 </materialDesign:TransitionerSlide>
                 <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
                     <views:TimeRecordView DataContext="{Binding TimeRecordInEdit}" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                    <views:ExportView DataContext="{Binding ExportViewModel}" />
                 </materialDesign:TransitionerSlide>
             </materialDesign:Transitioner>
         </materialDesign:DialogHost>

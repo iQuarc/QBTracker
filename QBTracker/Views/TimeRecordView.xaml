@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:QBTracker.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:conrol="clr-namespace:QBTracker.Conrol"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="694" d:DesignWidth="410">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -34,7 +34,7 @@
                 VerticalAlignment="Center"
                 HorizontalAlignment="Right"
                 Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                ToolTip="MaterialDesignFloatingActionMiniAccentButton" 
+                ToolTip="Delete Time Record" 
                 Command="{Binding DeleteCommand}">
             <materialDesign:PackIcon Kind="Delete"/>
         </Button>
@@ -68,7 +68,7 @@
                 Width="24"
                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                 HorizontalAlignment="Right"
-                ToolTip="MaterialDesignFloatingActionMiniDarkButton"
+                ToolTip="Add or edit Project"
                 Command="{Binding CreateNewProject}">
                 <materialDesign:PackIcon
                     Kind="DotsHorizontal"
@@ -95,7 +95,7 @@
                 Width="24"
                 Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
                 HorizontalAlignment="Right"
-                ToolTip="MaterialDesignFloatingActionMiniDarkButton"
+                ToolTip="Add or edit Task"
                 Command="{Binding CreateNewTask}">
                 <materialDesign:PackIcon
                     Kind="DotsHorizontal"

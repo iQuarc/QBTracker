@@ -12,7 +12,7 @@ namespace QBTracker.ViewModels
 {
     public class MainWindowViewModel : ValidatableModel
     {
-        private readonly Stack<int> NavigationHistory = new Stack<int>();
+        private readonly Stack<int> navigationHistory = new Stack<int>();
 
         public readonly IRepository Repository;
         private ProjectViewModel _createdProject;
@@ -35,6 +35,9 @@ namespace QBTracker.ViewModels
                 _ => SelectedProjectId.HasValue && SelectedTaskId.HasValue);
             DateStepBack = new RelayCommand(ExecuteDateStepBack);
             DateStepForward = new RelayCommand(ExecuteDateStepForward);
+            SelectToday = new RelayCommand(_ => SelectedDate = DateTime.Today, _ => SelectedDate != DateTime.Today);
+            ExportCommand = new RelayCommand(_ => SelectedTransitionIndex = Pages.ExportToExcel);
+            ExportViewModel = new ExportViewModel(this);
             LoadProjects();
             SelectedDate = DateTime.Today;
             var tr = Repository.GetLastTimeRecord();
@@ -55,7 +58,7 @@ namespace QBTracker.ViewModels
             {
                 if (_selectedTransitionIndex == value)
                     return;
-                NavigationHistory.Push(_selectedTransitionIndex);
+                navigationHistory.Push(_selectedTransitionIndex);
                 _selectedTransitionIndex = value;
                 NotifyOfPropertyChange();
             }
@@ -146,6 +149,8 @@ namespace QBTracker.ViewModels
         public RelayCommand StartStopRecording { get; }
         public RelayCommand DateStepBack { get; }
         public RelayCommand DateStepForward { get; }
+        public RelayCommand SelectToday { get; }
+        public RelayCommand ExportCommand { get; }
 
         public TimeRecordViewModel TimeRecordInEdit
         {
@@ -157,6 +162,8 @@ namespace QBTracker.ViewModels
             }
         }
 
+        public ExportViewModel ExportViewModel { get; }
+
         private void ExecuteDateStepBack(object obj)
         {
             SelectedDate = SelectedDate.AddDays(-1);
@@ -167,15 +174,15 @@ namespace QBTracker.ViewModels
             SelectedDate = SelectedDate.AddDays(1);
         }
 
-
         public void GoBack()
         {
-            if (NavigationHistory.TryPop(out var index))
+            if (navigationHistory.TryPop(out var index))
                 _selectedTransitionIndex = index;
             else
                 _selectedTransitionIndex = Pages.MainView;
-
             NotifyOfPropertyChange(nameof(SelectedTransitionIndex));
+            if (SelectedTransitionIndex == Pages.MainView)
+                LoadTimeRecords();
         }
 
         private void ExecuteCreateNewProject(object obj)

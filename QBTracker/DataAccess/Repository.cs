@@ -11,9 +11,11 @@ namespace QBTracker.DataAccess
 {
     public class Repository : IRepository
     {
+        private ExportSettings settingsCache;
+
         public Repository()
         {
-#if DEBUG
+#if !DEBUG
             var file = @"App_Data\QBData.db";
 #else
             var appDAta = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
@@ -105,6 +107,27 @@ namespace QBTracker.DataAccess
         public void DeleteTimeRecord(int timeRecordId)
         {
             Db.Delete<TimeRecord>(timeRecordId, "TimeRecords");
+        }
+
+        public ExportSettings GetExportSettings()
+        {
+            if (this.settingsCache == null)
+            {
+                this.settingsCache = Db.SingleOrDefault<ExportSettings>(x => x.Id == 1, "Settings");
+                if (this.settingsCache == null)
+                {
+                    this.settingsCache = new ExportSettings();
+                    Db.Insert(settingsCache, "Settings");
+                }
+            }
+
+            return settingsCache;
+        }
+
+        public void UpdateExportSettings()
+        {
+            if (settingsCache != null)
+                Db.Update(settingsCache, "Settings");
         }
 
         public void Dispose()
