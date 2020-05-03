@@ -24,7 +24,7 @@ namespace QBTracker.ViewModels
             this.mainVm = mainVm;
             this.ExportCommand = new RelayCommand(ExecuteExport);
             this.GoBack = new RelayCommand(_=> mainVm.GoBack());
-            this.ExportSettings = mainVm.Repository.GetExportSettings();
+            this.ExportSettings = mainVm.Repository.GetSettings();
             this.StartDate = new DateTime(DateTime.Today.Year, 1, 1);
             this.EndDate = DateTime.Today;
         }
@@ -51,7 +51,7 @@ namespace QBTracker.ViewModels
 
         public RelayCommand ExportCommand { get; }
         public RelayCommand GoBack { get; }
-        public ExportSettings ExportSettings { get; }
+        public Settings ExportSettings { get; }
 
         private void ExecuteExport(object o)
         {
@@ -66,7 +66,7 @@ namespace QBTracker.ViewModels
                 ExportData(sfd.FileName);
                 ExportSettings.ExportFolder = Path.GetDirectoryName(sfd.FileName);
                 ExportSettings.ExportFileName = Path.GetFileName(sfd.FileName);
-                mainVm.Repository.UpdateExportSettings();
+                mainVm.Repository.UpdateSettings();
             }
         }
 

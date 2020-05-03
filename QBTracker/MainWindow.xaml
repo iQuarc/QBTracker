@@ -66,6 +66,10 @@
                 <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
                     <views:ExportView DataContext="{Binding ExportViewModel}" />
                 </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                    <views:SettingsView DataContext="{Binding SettingsViewModel}" />
+                </materialDesign:TransitionerSlide>
+                
             </materialDesign:Transitioner>
         </materialDesign:DialogHost>
     </Grid>

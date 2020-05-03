@@ -38,7 +38,9 @@ namespace QBTracker.ViewModels
             DateStepForward = new RelayCommand(ExecuteDateStepForward);
             SelectToday = new RelayCommand(_ => SelectedDate = DateTime.Today, _ => SelectedDate != DateTime.Today);
             ExportCommand = new RelayCommand(_ => SelectedTransitionIndex = Pages.ExportToExcel);
+            SettingsCommand = new RelayCommand(_ => SelectedTransitionIndex = Pages.Settings);
             ExportViewModel = new ExportViewModel(this);
+            SettingsViewModel = new SettingsViewModel(this);
             LoadProjects();
             SelectedDate = DateTime.Today;
             var tr = Repository.GetLastTimeRecord();
@@ -154,6 +156,7 @@ namespace QBTracker.ViewModels
         public RelayCommand DateStepForward { get; }
         public RelayCommand SelectToday { get; }
         public RelayCommand ExportCommand { get; }
+        public RelayCommand SettingsCommand { get; }
 
         public TimeRecordViewModel TimeRecordInEdit
         {
@@ -166,6 +169,7 @@ namespace QBTracker.ViewModels
         }
 
         public ExportViewModel ExportViewModel { get; }
+        public SettingsViewModel SettingsViewModel { get; }
 
         private void ExecuteDateStepBack(object obj)
         {

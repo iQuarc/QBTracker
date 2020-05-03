@@ -11,7 +11,7 @@ namespace QBTracker.DataAccess
 {
     public class Repository : IRepository
     {
-        private ExportSettings settingsCache;
+        private Settings settingsCache;
 
         public Repository()
         {
@@ -109,14 +109,14 @@ namespace QBTracker.DataAccess
             Db.Delete<TimeRecord>(timeRecordId, "TimeRecords");
         }
 
-        public ExportSettings GetExportSettings()
+        public Settings GetSettings()
         {
             if (this.settingsCache == null)
             {
-                this.settingsCache = Db.SingleOrDefault<ExportSettings>(x => x.Id == 1, "Settings");
+                this.settingsCache = Db.SingleOrDefault<Settings>(x => x.Id == 1, "Settings");
                 if (this.settingsCache == null)
                 {
-                    this.settingsCache = new ExportSettings();
+                    this.settingsCache = new Settings();
                     Db.Insert(settingsCache, "Settings");
                 }
             }
@@ -124,7 +124,7 @@ namespace QBTracker.DataAccess
             return settingsCache;
         }
 
-        public void UpdateExportSettings()
+        public void UpdateSettings()
         {
             if (settingsCache != null)
                 Db.Update(settingsCache, "Settings");

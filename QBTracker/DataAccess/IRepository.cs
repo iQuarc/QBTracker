@@ -20,7 +20,7 @@ namespace QBTracker.DataAccess
         void AddTimeRecord(TimeRecord record);
         void UpdateTimeRecord(TimeRecord record);
         void DeleteTimeRecord(int timeRecordId);
-        ExportSettings GetExportSettings();
-        void UpdateExportSettings();
+        Settings GetSettings();
+        void UpdateSettings();
     }
 }

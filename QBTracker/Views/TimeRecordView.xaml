@@ -39,7 +39,7 @@
             <materialDesign:PackIcon Kind="Delete"/>
         </Button>
         <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                   Margin="60,0" Foreground="{StaticResource MaterialDesignBody}"
+                   Margin="60,0" Foreground="{DynamicResource MaterialDesignBody}"
                    Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center" HorizontalAlignment="Center">
             Manage time record
         </TextBlock>
