@@ -29,6 +29,11 @@
             Margin="10">
             <materialDesign:PackIcon Kind="StepBackward" />
         </Button>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+            Margin="60,0" Foreground="{StaticResource MaterialDesignBody}"
+            Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center" HorizontalAlignment="Center">
+            Export to Excel
+        </TextBlock>
         <Button Grid.Row="0" Grid.Column="1"
                 Margin="10"
                 VerticalAlignment="Center"

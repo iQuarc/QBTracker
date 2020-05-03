@@ -11,14 +11,23 @@
              d:DesignHeight="694" d:DesignWidth="410">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="80" />
             <RowDefinition Height="60" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock
-            Margin="10" Foreground="{StaticResource MaterialDesignBody}"
-            Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+        <Button
+            Grid.Row="0"
+            Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
+            Command="{Binding GoBack}"
+            IsCancel="True"
+            VerticalAlignment="Center" HorizontalAlignment="Left"
+            Margin="10">
+            <materialDesign:PackIcon Kind="StepBackward" />
+        </Button>
+        <TextBlock Grid.Row="0" Grid.Column="0"
+                   Margin="60,0" Foreground="{StaticResource MaterialDesignBody}"
+                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center" HorizontalAlignment="Center">
             Manage projects
         </TextBlock>
         <TextBox
@@ -28,17 +37,8 @@
             x:Name="ProjectBox"
             util:FocusExtension.IsFocused="{Binding IsFocused}"
             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-            materialDesign:HintAssist.Hint="Project Name"
+            materialDesign:HintAssist.Hint="New Project Name"
             materialDesign:HintAssist.HelperText="Insert your project name here" />
-        <Button
-            Grid.Row="2"
-            Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
-            Command="{Binding GoBack}"
-            IsCancel="True"
-            VerticalAlignment="Center" HorizontalAlignment="Left"
-            Margin="10">
-            <materialDesign:PackIcon Kind="StepBackward" />
-        </Button>
         <Button
             Grid.Row="2"
             Style="{StaticResource MaterialDesignFlatAccentBgButton}"

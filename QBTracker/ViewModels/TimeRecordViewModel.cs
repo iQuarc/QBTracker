@@ -145,6 +145,21 @@ namespace QBTracker.ViewModels
             ? (EndTime.Value - StarTime)
             : (DateTime.Now - StarTime);
 
+        public string ToolTip
+        {
+            get
+            {
+                if (EndTime == null)
+                    if (StarTime.Date == DateTime.Today)
+                        return $"St: {StarTime:HH:mm}";
+                    else
+                        return $"St: {StarTime:F}";
+                if (StarTime.Date == DateTime.Today && EndTime.Value.Date == DateTime.Today)
+                    return $"St: {StarTime:HH:mm} - Et: {EndTime:HH:mm}";
+                return $"St: {StarTime:F} - Et: {EndTime:F}";
+            }
+        }
+
         public ObservableRangeCollection<TaskViewModel> Tasks
         {
             get

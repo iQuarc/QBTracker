@@ -12,14 +12,23 @@
              FocusManager.FocusedElement="{Binding ElementName=TaskBox}">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
+            <RowDefinition Height="60" />
             <RowDefinition Height="80" />
             <RowDefinition Height="60" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock
-            Margin="10" Foreground="{StaticResource MaterialDesignBody}"
-            Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+        <Button
+            Grid.Row="0"
+            Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
+            Command="{Binding GoBack}"
+            IsCancel="True"
+            VerticalAlignment="Center" HorizontalAlignment="Left"
+            Margin="10">
+            <materialDesign:PackIcon Kind="StepBackward" />
+        </Button>
+        <TextBlock Grid.Row="0" Grid.Column="0"
+                   Margin="60,0" Foreground="{StaticResource MaterialDesignBody}"
+                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center" HorizontalAlignment="Center">
             Manage tasks
         </TextBlock>
         <TextBox
@@ -29,17 +38,8 @@
             Grid.Row="1"
             Margin="10,10,10,15"
             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-            materialDesign:HintAssist.Hint="Task Name"
+            materialDesign:HintAssist.Hint="New Task Name"
             materialDesign:HintAssist.HelperText="Insert your task name here" />
-        <Button
-            Grid.Row="2"
-            Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
-            Command="{Binding GoBack}"
-            VerticalAlignment="Center" HorizontalAlignment="Left"
-            IsCancel="True"
-            Margin="10">
-            <materialDesign:PackIcon Kind="StepBackward" />
-        </Button>
         <Button
             Grid.Row="2"
             Style="{StaticResource MaterialDesignFlatAccentBgButton}"

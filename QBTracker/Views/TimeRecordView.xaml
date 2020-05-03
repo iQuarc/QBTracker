@@ -38,9 +38,9 @@
                 Command="{Binding DeleteCommand}">
             <materialDesign:PackIcon Kind="Delete"/>
         </Button>
-        <TextBlock Grid.Column="1"
-            Margin="10,10,55,10" Foreground="{StaticResource MaterialDesignBody}"
-            Style="{StaticResource MaterialDesignSubtitle1TextBlock}">
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                   Margin="60,0" Foreground="{StaticResource MaterialDesignBody}"
+                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center" HorizontalAlignment="Center">
             Manage time record
         </TextBlock>
         <Grid Grid.Row="1" Grid.ColumnSpan="2" Grid.IsEnabled="{Binding IsNotRecording}" Margin="0,1,0,59" Grid.RowSpan="2">

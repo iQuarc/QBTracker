@@ -109,12 +109,12 @@
                                 <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="8 0 0 0" FontWeight="Light"
                                            Text="{Binding TimeRecord.TaskName}" TextTrimming="CharacterEllipsis" />
 
-                                <StackPanel
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Stretch"
-                                    Orientation="Horizontal"
-                                    Margin="8 0 0 0">
+                                <StackPanel ToolTip="{Binding ToolTip}"
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Stretch"
+                                            Orientation="Horizontal"
+                                            Margin="8 0 0 0">
                                     <TextBlock FontWeight="Bold" Text="{Binding StarTime, StringFormat={}{0:HH:mm}}" />
                                     <TextBlock Margin="5 0 0 0" FontWeight="Light" Text="{Binding Duration, StringFormat={}{0:h\\h\\ m\\m}}" />
                                 </StackPanel>
