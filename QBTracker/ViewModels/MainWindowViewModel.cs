@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms.VisualStyles;
 using QBTracker.DataAccess;
 using QBTracker.Model;
@@ -143,6 +144,8 @@ namespace QBTracker.ViewModels
                 NotifyOfPropertyChange(nameof(IsNotRecording));
             }
         }
+
+        public string VersionString => $"QBTracker {Assembly.GetExecutingAssembly().GetName().Version}";
 
         public RelayCommand CreateNewProject { get; }
         public RelayCommand CreateNewTask { get; }

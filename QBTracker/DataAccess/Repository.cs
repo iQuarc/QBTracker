@@ -15,7 +15,7 @@ namespace QBTracker.DataAccess
 
         public Repository()
         {
-#if !DEBUG
+#if DEBUG
             var file = @"App_Data\QBData.db";
 #else
             var appDAta = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

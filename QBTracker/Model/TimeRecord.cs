@@ -9,6 +9,7 @@ namespace QBTracker.Model
         public string ProjectName { get; set; }
         public int TaskId { get; set; }
         public string TaskName { get; set; }
+        public string Notes { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime? EndTime { get; set; }
     }

@@ -6,6 +6,6 @@
              xmlns:local="clr-namespace:QBTracker.Views"
              mc:Ignorable="d">
     <Grid>
-            <Calendar   />
+            <Calendar  />
     </Grid>
 </UserControl>

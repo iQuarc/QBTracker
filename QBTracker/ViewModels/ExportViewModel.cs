@@ -57,12 +57,15 @@ namespace QBTracker.ViewModels
         {
             var sfd = new SaveFileDialog();
             sfd.Filter = "Excel Files | *.xlsx";
-            if (ExportSettings.ExportFolder == null)
-                sfd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            sfd.InitialDirectory = ExportSettings.ExportFolder 
+                                   ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            sfd.FileName = ExportSettings.ExportFileName;
+
             if (sfd.ShowDialog() == true)
             {
                 ExportData(sfd.FileName);
                 ExportSettings.ExportFolder = Path.GetDirectoryName(sfd.FileName);
+                ExportSettings.ExportFileName = Path.GetFileName(sfd.FileName);
                 mainVm.Repository.UpdateExportSettings();
             }
         }
@@ -84,6 +87,8 @@ namespace QBTracker.ViewModels
                     ws.Cells["C1"].Style.Font.Bold = true;
                     ws.Cells["D1"].Value = "Hours";
                     ws.Cells["D1"].Style.Font.Bold = true;
+                    ws.Cells["E1"].Value = "Notes";
+                    ws.Cells["E1"].Style.Font.Bold = true;
                     var date = StartDate;
                     int row = 2;
                     while (date <= EndDate)
@@ -94,10 +99,13 @@ namespace QBTracker.ViewModels
                                 continue;
                             var duration = (timeRecord.EndTime - timeRecord.StartTime).Value;
 
-                            ws.Cells[$"A{row}"].Value = date.ToString("d", CultureInfo.CurrentCulture);
+                            ws.Cells[$"A{row}"].Value = date;
+                            ws.Cells[$"A{row}"].Style.Numberformat.Format = "mm-dd-yy"; // In Excel speak this means Date field that will be displayed with Region format
                             ws.Cells[$"B{row}"].Value = timeRecord.ProjectName;
                             ws.Cells[$"C{row}"].Value = timeRecord.TaskName;
-                            ws.Cells[$"D{row}"].Value = Round(duration.TotalHours).ToString("0.##", CultureInfo.CurrentCulture);
+                            ws.Cells[$"D{row}"].Value = Round(duration.TotalHours);
+                            ws.Cells[$"D{row}"].Style.Numberformat.Format = "0.##";
+                            ws.Cells[$"E{row}"].Value = timeRecord.Notes;
                             row++;
                         }
                         date = date.AddDays(1);

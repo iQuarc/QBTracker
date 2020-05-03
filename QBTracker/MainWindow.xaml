@@ -25,7 +25,7 @@
         Closed="MainWindow_OnClosed"
         Closing="MainWindow_OnClosing"
         d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
-        x:Name="MainWindowEl">
+        x:Name="MainWindowEl" ToolTip="{Binding VersionString, Mode=OneTime}">
     <Window.Resources>
         <ResourceDictionary>
             <ContextMenu x:Key="TrayMenu">

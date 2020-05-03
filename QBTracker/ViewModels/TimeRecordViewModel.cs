@@ -127,6 +127,19 @@ namespace QBTracker.ViewModels
             }
         }
 
+        public string Notes
+        {
+            get => TimeRecord.Notes;
+            set
+            {
+                if (TimeRecord.Notes == value) 
+                    return;
+                TimeRecord.Notes = value;
+                MainVm.Repository.UpdateTimeRecord(TimeRecord);
+                NotifyOfPropertyChange();
+            }
+        }
+
         public string DurationText => Duration.Humanize();
         public TimeSpan Duration => EndTime.HasValue
             ? (EndTime.Value - StarTime)
