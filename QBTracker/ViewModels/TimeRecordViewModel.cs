@@ -17,7 +17,6 @@ namespace QBTracker.ViewModels
     public class TimeRecordViewModel : ValidatableModel
     {
         private readonly MainWindowViewModel mainVm;
-        private readonly DispatcherTimer timer;
         private ObservableRangeCollection<TaskViewModel> tasks;
 
         public TimeRecordViewModel(TimeRecord timeRecord, MainWindowViewModel mainWindowViewModel)
@@ -32,17 +31,8 @@ namespace QBTracker.ViewModels
 
             if (!EndTime.HasValue)
             {
-                timer = new DispatcherTimer();
-                timer.Tick += TimerOnTick;
-                timer.Interval += TimeSpan.FromSeconds(1);
-                timer.Start();
-            }
-        }
 
-        private void TimerOnTick(object sender, EventArgs e)
-        {
-            NotifyOfPropertyChange(nameof(Duration));
-            MainVm.AddDayDuration(Duration);
+            }
         }
 
         public TimeRecord TimeRecord { get; }
@@ -70,7 +60,6 @@ namespace QBTracker.ViewModels
                 if (value == null)
                     return;
                 TimeRecord.EndTime = value.Value.ToUniversalTime();
-                timer?.Stop();
                 MainVm.Repository.UpdateTimeRecord(this.TimeRecord);
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(nameof(Duration));

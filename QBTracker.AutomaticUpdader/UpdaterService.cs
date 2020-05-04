@@ -129,10 +129,22 @@ namespace QBTracker.AutomaticUpdader
             }
             catch (Exception ex)
             {
-                liteRepository.Insert(new LogEntry { Category = Category.Error, Message = ex.Message, Details = ex.ToString(), Date = DateTime.UtcNow });
+                LogException(ex);
                 return false;
             }
             return false;
+        }
+
+        public void LogMessage(string message)
+        {
+            liteRepository.Insert(new LogEntry
+                { Category = Category.Info, Message = message, Date = DateTime.UtcNow }, "Logs");
+        }
+
+        public void LogException(Exception ex)
+        {
+            liteRepository.Insert(new LogEntry
+                {Category = Category.Error, Message = ex.Message, Details = ex.ToString(), Date = DateTime.UtcNow}, "Logs");
         }
 
         private void EnsureUpdateEntry()
@@ -195,19 +207,20 @@ namespace QBTracker.AutomaticUpdader
             }
             catch (Exception ex)
             {
-                liteRepository.Insert(new LogEntry { Category = Category.Error, Message = ex.Message, Details = ex.ToString(), Date = DateTime.UtcNow });
+                LogException(ex);
                 return false;
             }
         }
 
         public void StartUpdater()
         {
-            Process.Start(new ProcessStartInfo(Path.Combine(TempAssembliesFolder, "QBTracker.AutomaticUpdader.exe"), "--updateAndRestart")
+            var p = Process.Start(new ProcessStartInfo(Path.Combine(TempAssembliesFolder, "QBTracker.AutomaticUpdader.exe"), "--updateAndRestart")
             {
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden
             });
+            Debug.WriteLine($"AutoUpdaterHandle:{p.Handle}");
         }
 
         internal void PerformUpdateSwap(bool restart)
@@ -233,7 +246,8 @@ namespace QBTracker.AutomaticUpdader
                 }
                 catch (Exception ex)
                 {
-                    liteRepository.Insert(new LogEntry { Category = Category.Error, Message = ex.Message, Details = ex.ToString(), Date = DateTime.UtcNow });
+                    Debugger.Launch();
+                    LogException(ex);
                 }
             }
             if (restart)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -30,22 +31,34 @@ namespace QBTracker.AutomaticUpdader
                 return;
             }
 
-            const string mutexName = @"Global\QBTracker";
-            mutex = new Mutex(false, mutexName, out var createdNew);
-            if (!createdNew)
-                if (!mutex.WaitOne(TimeSpan.FromSeconds(60)))
-                    return;
-
-            if (args[0] == "--updateAndRestart")
+            try
             {
-                var srv = new UpdaterService();
-                srv.PerformUpdateSwap(true);
+                const string mutexName = @"Global\QBTracker";
+                mutex = new Mutex(true, mutexName, out var createdNew);
+                if (!createdNew)
+                    if (!mutex.WaitOne(TimeSpan.FromSeconds(60)))
+                    {
+                        new UpdaterService().LogMessage("why did I exit here?");
+                        return;
+                    }
+
+                if (args[0] == "--updateAndRestart")
+                {
+                    var srv = new UpdaterService();
+                    srv.PerformUpdateSwap(true);
+                }
+
+                if (args[0] == "--updateOnly")
+                {
+                    var srv = new UpdaterService();
+                    srv.PerformUpdateSwap(false);
+                }
             }
-
-            if (args[0] == "--updateOnly")
+            catch (Exception ex)
             {
-                var srv = new UpdaterService();
-                srv.PerformUpdateSwap(false);
+                File.WriteAllText("dump.log", ex.ToString());
+                new UpdaterService().LogException(ex);
+                Debugger.Launch();
             }
         }
     }

@@ -68,7 +68,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
-        <TextBox Grid.Row="3" Grid.Column="0" Margin="10"
+        <TextBox Grid.Row="3" Grid.Column="0" Margin="10" Visibility="Collapsed"
                  Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
                  Text="{Binding Debug, Mode=OneWay}"
                  IsReadOnly="True"

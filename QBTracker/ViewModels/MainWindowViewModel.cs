@@ -5,7 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms.VisualStyles;
+using System.Windows.Threading;
 using QBTracker.AutomaticUpdader;
 using QBTracker.DataAccess;
 using QBTracker.Model;
@@ -28,6 +30,7 @@ namespace QBTracker.ViewModels
         private TimeRecordViewModel _timeRecordInEdit;
         private TimeSpan? closedDayDuration;
         private TimeSpan? totalDayDuration;
+        private readonly DispatcherTimer timer;
 
         public MainWindowViewModel()
         {
@@ -46,6 +49,11 @@ namespace QBTracker.ViewModels
             LoadProjects();
             SelectedDate = DateTime.Today;
             var tr = Repository.GetLastTimeRecord();
+
+            timer = new DispatcherTimer();
+            timer.Tick += TimerOnTick;
+            timer.Interval += TimeSpan.FromSeconds(1);
+
             if (tr != null && tr.EndTime == null)
             {
                 var trVm = TimeRecords.FirstOrDefault(x => x.TimeRecord.Id == tr.Id) ??
@@ -60,6 +68,13 @@ namespace QBTracker.ViewModels
 
         public string Title => $"QBTracker {Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}";
 
+
+
+        private void TimerOnTick(object sender, EventArgs e)
+        {
+            CurrentTimeRecord.NotifyOfPropertyChange(nameof(Duration));
+            AddDayDuration(CurrentTimeRecord.Duration);
+        }
 
         public int SelectedTransitionIndex
         {
@@ -151,6 +166,14 @@ namespace QBTracker.ViewModels
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(nameof(IsRecording));
                 NotifyOfPropertyChange(nameof(IsNotRecording));
+                if (CurrentTimeRecord != null)
+                {
+                    timer.Start();
+                }
+                else
+                {
+                    timer.Stop();
+                }
             }
         }
 
