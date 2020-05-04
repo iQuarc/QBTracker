@@ -4,17 +4,19 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
+using QBTracker.AutomaticUpdader;
 using QBTracker.DataAccess;
 using QBTracker.Model;
 using QBTracker.Util;
+using Task = QBTracker.Model.Task;
 
 namespace QBTracker.ViewModels
 {
     public class MainWindowViewModel : ValidatableModel
     {
         private readonly Stack<int> navigationHistory = new Stack<int>();
-
         public readonly IRepository Repository;
         private ProjectViewModel _createdProject;
         private TaskViewModel _createdTask;
@@ -52,7 +54,12 @@ namespace QBTracker.ViewModels
                 SelectedTaskId = tr.TaskId;
                 CurrentTimeRecord = trVm;
             }
+
+            _ = SettingsViewModel.CheckForUpdateSequence();
         }
+
+        public string Title => $"QBTracker {Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}";
+
 
         public int SelectedTransitionIndex
         {

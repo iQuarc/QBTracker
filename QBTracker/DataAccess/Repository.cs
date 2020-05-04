@@ -130,6 +130,11 @@ namespace QBTracker.DataAccess
                 Db.Update(settingsCache, "Settings");
         }
 
+        public ILiteRepository GetLiteRepository()
+        {
+            return Db;
+        }
+
         public void Dispose()
         {
             Db?.Dispose();

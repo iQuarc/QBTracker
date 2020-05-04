@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "QBTracker.AutomaticUpdader": {
+      "commandName": "Project",
+      "commandLineArgs": "--debug"
+    }
+  }
+}

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Windows;
 using MaterialDesignThemes.Wpf;
 using QBTracker.DataAccess;
@@ -10,8 +12,16 @@ namespace QBTracker
     /// </summary>
     public partial class App : Application
     {
+        private Mutex mutex;
+
         protected override void OnStartup(StartupEventArgs e)
         {
+            const string mutexName = @"Global\QBTracker";
+
+            mutex = new Mutex(true, mutexName, out var createdNew);
+            if (!createdNew)
+                Environment.Exit(0);
+
             var repository = new Repository();
             var settings = repository.GetSettings();
             if (settings.IsDark.HasValue && settings.PrimaryColor.HasValue && settings.SecondaryColor.HasValue)
@@ -22,6 +32,11 @@ namespace QBTracker
                 bundle.SecondaryColor = settings.SecondaryColor.Value;
             }
             base.OnStartup(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            mutex.ReleaseMutex();
         }
     }
 }

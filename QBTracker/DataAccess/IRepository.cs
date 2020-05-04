@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using LiteDB;
 
 namespace QBTracker.DataAccess
 {
@@ -22,5 +23,6 @@ namespace QBTracker.DataAccess
         void DeleteTimeRecord(int timeRecordId);
         Settings GetSettings();
         void UpdateSettings();
+        ILiteRepository GetLiteRepository();
     }
 }

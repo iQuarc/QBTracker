@@ -10,7 +10,8 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         x:Class="QBTracker.MainWindow"
         mc:Ignorable="d"
-        Title="QBTracker" Height="694" Width="410"
+        Title="{Binding Title, Mode=OneTime}" 
+        Height="694" Width="410"
         WindowStyle="SingleBorderWindow"
         WindowStartupLocation="Manual"
         ResizeMode="CanMinimize"
@@ -25,7 +26,7 @@
         Closed="MainWindow_OnClosed"
         Closing="MainWindow_OnClosing"
         d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
-        x:Name="MainWindowEl" ToolTip="{Binding VersionString, Mode=OneTime}">
+        x:Name="MainWindowEl" >
     <Window.Resources>
         <ResourceDictionary>
             <ContextMenu x:Key="TrayMenu">
@@ -41,7 +42,7 @@
     <Grid>
         <tb:TaskbarIcon 
         Visibility="Visible"
-        ToolTipText="QB Tracker"
+        ToolTip="{Binding VersionString, Mode=OneTime}"
         IconSource="/Images/pngfuel.ico"
         ContextMenu="{StaticResource TrayMenu}"
         MenuActivation="LeftOrRightClick"
