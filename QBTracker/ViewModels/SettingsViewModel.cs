@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -65,6 +67,20 @@ namespace QBTracker.ViewModels
         public IEnumerable<SecondaryColor> SecondaryColors => (SecondaryColor[])Enum.GetValues(typeof(SecondaryColor));
         public BundledTheme BundledTheme { get; }
         public RelayCommand GoBack { get; }
+
+        public string Debug
+        {
+            get
+            {
+                var s = $@"Exe: {Application.Current.StartupUri}
+CodeBase: {Assembly.GetExecutingAssembly().GetName().CodeBase}
+BaseDirectory: {AppDomain.CurrentDomain.BaseDirectory}
+Process: {Process.GetCurrentProcess().MainModule?.FileName}
+Environment: {Environment.CurrentDirectory}
+";
+return s;
+            }
+        }
     }
 
     public class MaterialColorConverter : IValueConverter

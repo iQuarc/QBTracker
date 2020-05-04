@@ -68,5 +68,17 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
+        <TextBox Grid.Row="3" Grid.Column="0" Margin="10"
+                 Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                 Text="{Binding Debug, Mode=OneWay}"
+                 IsReadOnly="True"
+                 VerticalAlignment="Top"
+                 AcceptsReturn="True"
+                 TextWrapping="NoWrap"
+                 MaxWidth="400"
+                 MinHeight="200"
+                 materialDesign:HintAssist.Hint="Debug"
+                 VerticalScrollBarVisibility="Auto" 
+                 HorizontalScrollBarVisibility="Auto"/>
     </Grid>
 </UserControl>

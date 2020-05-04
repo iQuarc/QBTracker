@@ -26,6 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\QBTracker.AutomaticUpdader\QBTracker.AutomaticUpdader.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Images\pngfuel.ico" />
   </ItemGroup>
 
