@@ -9,4 +9,6 @@ A minimal desktop Time tracker with the following features:
 - Theming support wiht Ligth/Dark base themes
 - Automatic updating
 
+Download from [Releases](https://github.com/iQuarc/QBTracker/releases). Single Exe file.
+
 ![QBTracker Screen Capture](https://github.com/iQuarc/QBTracker/blob/master/Assets/Capture.PNG?raw=true)
