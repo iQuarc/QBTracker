@@ -5,10 +5,9 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("ConsoleApp1")]
-[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyTitle("QBTracker")]
 [assembly: AssemblyCompany("iQuarc")]
-[assembly: AssemblyProduct("QB")]
+[assembly: AssemblyProduct("QBTracker")]
 [assembly: AssemblyCopyright("Copyright © iQuarc 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
