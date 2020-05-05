@@ -271,7 +271,7 @@ namespace QBTracker.ViewModels
             {
                 var record = CurrentTimeRecord;
                 CurrentTimeRecord = null;
-                record.TimeRecord.EndTime = DateTime.UtcNow;
+                record.EndTime = DateTime.Now;
                 Repository.UpdateTimeRecord(record.TimeRecord);
                 record.NotifyOfPropertyChange();
             }

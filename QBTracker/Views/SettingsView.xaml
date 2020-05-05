@@ -6,11 +6,9 @@
              xmlns:local="clr-namespace:QBTracker.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:QBTracker.ViewModels"
+             xmlns:converters="clr-namespace:QBTracker.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="694" d:DesignWidth="410">
-    <UserControl.Resources>
-        <viewModels:MaterialColorConverter x:Key="MaterialColorConverter" />
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>

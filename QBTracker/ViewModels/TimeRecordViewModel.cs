@@ -9,6 +9,7 @@ using QBTracker.Views;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Threading;
 using QBTracker.DataAccess;
 
@@ -62,13 +63,16 @@ namespace QBTracker.ViewModels
                 TimeRecord.EndTime = value.Value.ToUniversalTime();
                 MainVm.Repository.UpdateTimeRecord(this.TimeRecord);
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange(nameof(TimeRecord));
                 NotifyOfPropertyChange(nameof(Duration));
                 NotifyOfPropertyChange(nameof(DurationText));
                 NotifyOfPropertyChange(nameof(IsEndTimeEnabled));
+                NotifyOfPropertyChange(nameof(IsRecordingTime));
             }
         }
 
         public bool IsEndTimeEnabled => EndTime != null;
+        public bool IsRecordingTime => EndTime == null;
 
         public RelayCommand GoBack { get; }
         private void ExecuteGoBack(object o)
@@ -129,7 +133,7 @@ namespace QBTracker.ViewModels
             }
         }
 
-        public string DurationText => Duration.Humanize();
+        public string DurationText => EndTime.HasValue ? Duration.ToString(@"h\h\ m\m") : "...";
         public TimeSpan Duration => EndTime.HasValue
             ? (EndTime.Value - StarTime)
             : (DateTime.Now - StarTime);

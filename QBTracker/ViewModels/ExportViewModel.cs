@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
-using System.Windows.Data;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 
@@ -77,7 +75,7 @@ namespace QBTracker.ViewModels
             {
                 using (var p = new ExcelPackage())
                 {
-                    //A workbook must have at least on cell, so lets add one... 
+                    //A workbook must have at least one cell, so lets add one... 
                     var ws = p.Workbook.Worksheets.Add("TimeSheet");
                     //To set values in the spreadsheet use the Cells indexer.
                     ws.Cells["A1"].Value = "Date";
@@ -147,24 +145,6 @@ namespace QBTracker.ViewModels
                 return rounded;
             }
             return hours;
-        }
-    }
-
-    public class InverterConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is bool b)
-            {
-                return !b;
-            }
-
-            return value == null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotSupportedException();
         }
     }
 }
