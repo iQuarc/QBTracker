@@ -136,7 +136,7 @@ namespace QBTracker.ViewModels
         public async Task<bool> CheckForUpdateSequence()
         {
             await Task.Delay(TimeSpan.FromSeconds(3));
-            if (await UpdaterService.CheckForUpdate())
+            if (await UpdaterService.CheckForUpdate(true))
             {
                 this.UpdateAvailable = true;
                 return true;
@@ -180,7 +180,7 @@ namespace QBTracker.ViewModels
             }
             else
             {
-                registryKey.DeleteValue("QBTracker");
+                registryKey.DeleteValue("QBTracker", false);
             }
         }
 

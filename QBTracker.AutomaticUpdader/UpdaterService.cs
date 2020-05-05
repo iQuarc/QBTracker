@@ -64,6 +64,8 @@ namespace QBTracker.AutomaticUpdader
         public async Task<bool> CheckForUpdate(bool force = false)
         {
             EnsureUpdateEntry();
+            if (updateEntry.LastCheck == DateTime.Today && !force)
+                return false;
             try
             {
                 using (var cl = new HttpClient())
@@ -132,6 +134,8 @@ namespace QBTracker.AutomaticUpdader
                 LogException(ex);
                 return false;
             }
+            updateEntry.LastCheck = DateTime.Today;
+            SaveUpdateEntry();
             return false;
         }
 
@@ -181,9 +185,10 @@ namespace QBTracker.AutomaticUpdader
                 fileUri = fileUri.Replace("/tag/", "/download/");
                 using (var cl = new HttpClient())
                 {
-                    var downloadedFile = Path.Combine(TempAssembliesFolder, $"QBTracker.exe.{release.ParsedVersion}.download");
-                    if (!File.Exists(downloadedFile))
-                        await using (var fs = File.Create(downloadedFile))
+                    var downloadedFile = new FileInfo(Path.Combine(TempAssembliesFolder, $"QBTracker.exe.{release.ParsedVersion}.download"));
+                    if (!downloadedFile.Exists || downloadedFile.CreationTimeUtc != release.Updated)
+                    {
+                        await using (var fs = downloadedFile.Create())
                         {
                             var result = await cl.GetAsync(fileUri);
                             result.EnsureSuccessStatusCode();
@@ -199,8 +204,11 @@ namespace QBTracker.AutomaticUpdader
                                 progressCallback?.Invoke(totalRead / stream.Length);
                             }
                         }
+
+                        downloadedFile.CreationTimeUtc = release.Updated;
+                    }
                     this.UpdateReady = true;
-                    updateEntry.UpdateFile = downloadedFile;
+                    updateEntry.UpdateFile = downloadedFile.FullName;
                     SaveUpdateEntry();
                     return true;
                 }
