@@ -7,5 +7,6 @@ A minimal desktop Time tracker with the following features:
 - Stopwatch for tasks
 - Export to Excel with rounding
 - Theming support wiht Ligth/Dark base themes
+- Automatic updating
 
 ![QBTracker Screen Capture](https://github.com/iQuarc/QBTracker/blob/master/Assets/Capture.PNG?raw=true)
