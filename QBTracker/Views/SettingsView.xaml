@@ -66,17 +66,27 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Margin="10" VerticalAlignment="Center">Automatically start QBTracker with Windows</TextBlock>
+            <ToggleButton Grid.Column="1" Margin="0,10,10,10"
+                          Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
+                          IsChecked="{Binding AutomaticallyStart}" />
+        </Grid>
         <TextBox Grid.Row="3" Grid.Column="0" Margin="10" Visibility="Collapsed"
-                 Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-                 Text="{Binding Debug, Mode=OneWay}"
-                 IsReadOnly="True"
-                 VerticalAlignment="Top"
-                 AcceptsReturn="True"
-                 TextWrapping="NoWrap"
-                 MaxWidth="400"
-                 MinHeight="200"
-                 materialDesign:HintAssist.Hint="Debug"
-                 VerticalScrollBarVisibility="Auto" 
-                 HorizontalScrollBarVisibility="Auto"/>
+             Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+             Text="{Binding Debug, Mode=OneWay}"
+             IsReadOnly="True"
+             VerticalAlignment="Top"
+             AcceptsReturn="True"
+             TextWrapping="NoWrap"
+             MaxWidth="400"
+             MinHeight="200"
+             materialDesign:HintAssist.Hint="Debug"
+             VerticalScrollBarVisibility="Auto" 
+             HorizontalScrollBarVisibility="Auto"/>
     </Grid>
 </UserControl>

@@ -10,8 +10,11 @@ using System.Windows;
 using System.Windows.Input;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
+using Microsoft.Win32;
 using QBTracker.AutomaticUpdader;
+using QBTracker.Model;
 using QBTracker.Util;
+using Task = System.Threading.Tasks.Task;
 
 namespace QBTracker.ViewModels
 {
@@ -26,12 +29,14 @@ namespace QBTracker.ViewModels
         public SettingsViewModel(MainWindowViewModel mainVm)
         {
             this.mainVm = mainVm;
+            this.Settings = mainVm.Repository.GetSettings();
             BundledTheme = Application.Current.Resources.MergedDictionaries.OfType<BundledTheme>().First();
             UpdaterService = new UpdaterService(this.mainVm.Repository.GetLiteRepository());
             GoBack = new RelayCommand(_ => mainVm.GoBack());
             DownloadUpdate = new RelayCommand(ExecuteDownloadUpdate);
-
         }
+
+        public Settings Settings { get; }
 
         private async void ExecuteDownloadUpdate(object o)
         {
@@ -149,6 +154,33 @@ namespace QBTracker.ViewModels
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(nameof(CanDownload));
                 NotifyOfPropertyChange(nameof(UpdateVersion));
+            }
+        }
+
+        public bool AutomaticallyStart
+        {
+            get => Settings.StartWithWindows;
+            set
+            {
+                Settings.StartWithWindows = value;
+                RegisterInStartup(value);
+                NotifyOfPropertyChange();
+            }
+        }
+
+        private void RegisterInStartup(bool isChecked)
+        {
+            var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+            var processModule = Process.GetCurrentProcess().MainModule;
+            if (registryKey == null || processModule == null)
+                return;
+            if (isChecked)
+            {
+                registryKey.SetValue("QBTracker", processModule.FileName);
+            }
+            else
+            {
+                registryKey.DeleteValue("QBTracker");
             }
         }
 

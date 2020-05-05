@@ -15,5 +15,6 @@ namespace QBTracker.Model
         public bool? IsDark { get; set; }
         public PrimaryColor? PrimaryColor { get; set; }
         public SecondaryColor? SecondaryColor { get; set; }
+        public bool StartWithWindows { get; set; }
     }
 }
