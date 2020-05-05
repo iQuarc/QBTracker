@@ -5,8 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:QBTracker.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:viewModels="clr-namespace:QBTracker.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="694" d:DesignWidth="410">
+    <UserControl.Resources>
+        <viewModels:InverterConverter x:Key="InverterConverter" />
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -16,7 +20,7 @@
             <RowDefinition Height="60"/>
             <RowDefinition Height="60"/>
             <RowDefinition Height="42"/>
-            <RowDefinition Height="18"/>
+            <RowDefinition Height="42"/>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -72,6 +76,20 @@
                 Margin="10"
                 IsChecked="{Binding ExportSettings.Rounding30Min}"
                 Content="Round to 30 min" />
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
+                    Orientation="Horizontal" 
+                    IsEnabled="{Binding ExportSettings.NoRounding, Converter={StaticResource InverterConverter}}">
+            <RadioButton
+                Style="{StaticResource MaterialDesignDarkRadioButton}"
+                Margin="10"
+                IsChecked="{Binding ExportSettings.MidPointRounding}"
+                Content="Midpoint Rounding" />
+            <RadioButton
+                Style="{StaticResource MaterialDesignDarkRadioButton}"
+                Margin="10"
+                IsChecked="{Binding ExportSettings.CeilingRounding}"
+                Content="Ceiling Rounding" />
         </StackPanel>
     </Grid>
 </UserControl>

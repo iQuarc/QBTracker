@@ -8,8 +8,10 @@ namespace QBTracker.Model
         public string ExportFolder { get; set; }
         public string ExportFileName { get; set; }
         public bool NoRounding { get; set; } = true;
-        public bool Rounding15Min { get; set; }
+        public bool Rounding15Min { get; set; } = true;
         public bool Rounding30Min { get; set; }
+        public bool MidPointRounding { get; set; } = true;
+        public bool CeilingRounding { get; set; }
         public bool? IsDark { get; set; }
         public PrimaryColor? PrimaryColor { get; set; }
         public SecondaryColor? SecondaryColor { get; set; }

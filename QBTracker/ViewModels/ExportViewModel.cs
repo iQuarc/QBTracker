@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Windows.Data;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 
@@ -125,10 +126,10 @@ namespace QBTracker.ViewModels
         private double Round(in double hours)
         {
             if (ExportSettings.Rounding15Min)
-                return RoundF(hours, 4);
+                return ExportSettings.MidPointRounding ? RoundF(hours, 4) : CeilingF(hours, 4);
 
             if (ExportSettings.Rounding30Min)
-                return RoundF(hours, 2);
+                return ExportSettings.MidPointRounding ? RoundF(hours, 2) : CeilingF(hours, 2);
 
             static double RoundF(in double hours, double factor)
             {
@@ -137,7 +138,33 @@ namespace QBTracker.ViewModels
                     return 1 / factor;
                 return rounded;
             }
+
+            static double CeilingF(in double hours, double factor)
+            {
+                var rounded = Math.Ceiling(hours * factor) / factor;
+                if (Math.Abs(rounded) < 0.001)
+                    return 1 / factor;
+                return rounded;
+            }
             return hours;
+        }
+    }
+
+    public class InverterConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool b)
+            {
+                return !b;
+            }
+
+            return value == null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
         }
     }
 }
