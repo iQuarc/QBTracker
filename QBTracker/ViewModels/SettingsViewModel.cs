@@ -174,6 +174,7 @@ namespace QBTracker.ViewModels
             {
                 Settings.StartWithWindows = value;
                 RegisterInStartup(value);
+                mainVm.Repository.UpdateSettings();
                 NotifyOfPropertyChange();
             }
         }
