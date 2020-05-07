@@ -1,50 +1,55 @@
 ﻿<UserControl x:Class="QBTracker.Views.ExportView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QBTracker.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:QBTracker.ViewModels"
              xmlns:converters="clr-namespace:QBTracker.Converters"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="694" d:DesignWidth="410">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="42"/>
-            <RowDefinition Height="42"/>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="42" />
+            <RowDefinition Height="42" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Button
-            Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
-            Command="{Binding GoBack}"
-            VerticalAlignment="Center" HorizontalAlignment="Left"
-            IsCancel="True"
-            Margin="10">
-            <materialDesign:PackIcon Kind="StepBackward" />
-        </Button>
-        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-            Margin="60,0" Foreground="{StaticResource MaterialDesignBody}"
-            Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center" HorizontalAlignment="Center">
-            Export to Excel
-        </TextBlock>
-        <Button Grid.Row="0" Grid.Column="1"
-                Margin="10"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Right"
-                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                ToolTip="Export to Excel" 
-                Command="{Binding ExportCommand}" >
-            <materialDesign:PackIcon Kind="TableExport" Width="22" Height="22"/>
-        </Button>
+        <Border Grid.Row="0" Grid.Column="0" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 0 0 1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button
+                    Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
+                    Command="{Binding GoBack}"
+                    VerticalAlignment="Center" HorizontalAlignment="Left"
+                    IsCancel="True"
+                    Margin="10">
+                    <materialDesign:PackIcon Kind="StepBackward" />
+                </Button>
+                <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                           Margin="60,0" Foreground="{StaticResource MaterialDesignBody}"
+                           Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center"
+                           HorizontalAlignment="Center">
+                    Export to Excel
+                </TextBlock>
+                <Button Grid.Row="0" Grid.Column="1"
+                        Margin="10"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                        ToolTip="Export to Excel"
+                        Command="{Binding ExportCommand}">
+                    <materialDesign:PackIcon Kind="TableExport" Width="22" Height="22" />
+                </Button>
+            </Grid>
+        </Border>
         <DatePicker Grid.Row="1" Grid.Column="0" Margin="10,0,0,0"
                     Width="140"
                     HorizontalAlignment="Left"
@@ -58,7 +63,7 @@
                     SelectedDate="{Binding EndDate}"
                     Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-            Orientation="Horizontal">
+                    Orientation="Horizontal">
             <RadioButton
                 Style="{StaticResource MaterialDesignDarkRadioButton}"
                 Margin="10"
@@ -76,7 +81,7 @@
                 Content="Round to 30 min" />
         </StackPanel>
         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"
-                    Orientation="Horizontal" 
+                    Orientation="Horizontal"
                     IsEnabled="{Binding ExportSettings.NoRounding, Converter={StaticResource InverterConverter}}">
             <RadioButton
                 Style="{StaticResource MaterialDesignDarkRadioButton}"

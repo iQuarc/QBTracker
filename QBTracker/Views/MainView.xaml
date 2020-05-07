@@ -17,61 +17,56 @@
             <RowDefinition Height="80" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100*" />
-            </Grid.ColumnDefinitions>
-            <Grid
-                Grid.Row="0"
-                Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0"
+        <Border Grid.Row="0" Grid.Column="0" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 0 0 1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
                         Style="{StaticResource MaterialDesignIconButton}"
                         ToolTip="Select today"
                         Command="{Binding SelectToday}">
-                    <materialDesign:PackIcon Kind="CalendarToday" />
-                </Button>
-                <Button Grid.Column="1"
+                        <materialDesign:PackIcon Kind="CalendarToday" />
+                    </Button>
+                    <Button Grid.Column="1"
                         Style="{StaticResource MaterialDesignIconButton}"
                         ToolTip="Select previous day"
                         Command="{Binding DateStepBack}">
-                    <materialDesign:PackIcon Kind="StepBackward" />
-                </Button>
-                <DatePicker Grid.Column="2"
+                        <materialDesign:PackIcon Kind="StepBackward" />
+                    </Button>
+                    <DatePicker Grid.Column="2"
                             SelectedDate="{Binding SelectedDate}"
                             Width="120"
                             materialDesign:HintAssist.Hint="Pick Date"
                             Style="{StaticResource MaterialDesignFloatingHintDatePicker}" VerticalAlignment="Center"
                             HorizontalAlignment="Center" Height="35" />
-                <Button Grid.Column="3"
+                    <Button Grid.Column="3"
                         Style="{StaticResource MaterialDesignIconButton}"
                         ToolTip="Select next day"
                         Command="{Binding DateStepForward}">
-                    <materialDesign:PackIcon Kind="StepForward" />
-                </Button>
-                <Button Grid.Column="6"
+                        <materialDesign:PackIcon Kind="StepForward" />
+                    </Button>
+                    <Button Grid.Column="6"
                         Style="{StaticResource MaterialDesignIconButton}"
                         ToolTip="Export to Excel"
                         Command="{Binding ExportCommand}" HorizontalAlignment="Right">
-                    <materialDesign:PackIcon Kind="TableExport" />
-                </Button>
-                <Button Grid.Column="7"
+                        <materialDesign:PackIcon Kind="TableExport" />
+                    </Button>
+                    <Button Grid.Column="7"
                         Style="{StaticResource MaterialDesignIconButton}"
                         ToolTip="Settings"
                         Command="{Binding SettingsCommand}" HorizontalAlignment="Right">
-                    <materialDesign:PackIcon Kind="Settings" />
-                </Button>
-            </Grid>
-        </Grid>
+                        <materialDesign:PackIcon Kind="Settings" />
+                    </Button>
+                </Grid>
+        </Border>
 
         <ItemsControl
             Grid.Row="1"

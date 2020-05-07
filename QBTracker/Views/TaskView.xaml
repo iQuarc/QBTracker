@@ -17,20 +17,25 @@
             <RowDefinition Height="60" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button
-            Grid.Row="0"
-            Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
-            Command="{Binding GoBack}"
-            IsCancel="True"
-            VerticalAlignment="Center" HorizontalAlignment="Left"
-            Margin="10">
-            <materialDesign:PackIcon Kind="StepBackward" />
-        </Button>
-        <TextBlock Grid.Row="0" Grid.Column="0"
-                   Margin="60,0" Foreground="{StaticResource MaterialDesignBody}"
-                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center" HorizontalAlignment="Center">
-            Manage tasks
-        </TextBlock>
+        <Border Grid.Row="0" Grid.Column="0" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 0 0 1">
+            <Grid>
+                <Button
+                    Grid.Row="0"
+                    Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
+                    Command="{Binding GoBack}"
+                    IsCancel="True"
+                    VerticalAlignment="Center" HorizontalAlignment="Left"
+                    Margin="10">
+                    <materialDesign:PackIcon Kind="StepBackward" />
+                </Button>
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Margin="60,0" Foreground="{StaticResource MaterialDesignBody}"
+                           Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center"
+                           HorizontalAlignment="Center">
+                    Manage tasks
+                </TextBlock>
+            </Grid>
+        </Border>
         <TextBox
             x:Name="TaskBox"
             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
@@ -67,14 +72,14 @@
                                 <ColumnDefinition SharedSizeGroup="DeleteButton" Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <StackPanel HorizontalAlignment="Stretch"
-                                Margin="8 0 0 0"
-                                Grid.Column="0">
+                                        Margin="8 0 0 0"
+                                        Grid.Column="0">
                                 <TextBlock FontWeight="Bold" Text="{Binding Name}" />
                                 <TextBlock Text="{Binding Stats}" />
                             </StackPanel>
                             <Button Grid.Column="1" Margin="1" Width="20" Height="20"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                    ToolTip="Delete Task" 
+                                    ToolTip="Delete Task"
                                     Command="{Binding DeleteCommand}">
                                 <materialDesign:PackIcon
                                     Kind="Delete"
@@ -87,7 +92,8 @@
             </ItemsControl.ItemTemplate>
             <ItemsControl.Template>
                 <ControlTemplate>
-                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}" VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer x:Name="ScrollViewer" Padding="{TemplateBinding Padding}"
+                                  VerticalScrollBarVisibility="Auto">
                         <ItemsPresenter />
                     </ScrollViewer>
                 </ControlTemplate>

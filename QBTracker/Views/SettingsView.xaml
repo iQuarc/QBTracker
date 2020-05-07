@@ -1,35 +1,40 @@
 ﻿<UserControl x:Class="QBTracker.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:QBTracker.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:QBTracker.ViewModels"
              xmlns:converters="clr-namespace:QBTracker.Converters"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="694" d:DesignWidth="410">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="80"/>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="80" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button
-            Grid.Row="0"
-            Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
-            Command="{Binding GoBack}"
-            IsCancel="True"
-            VerticalAlignment="Center" HorizontalAlignment="Left"
-            Margin="10">
-            <materialDesign:PackIcon Kind="StepBackward" />
-        </Button>
-        <TextBlock Grid.Row="0" Grid.Column="0"
-                   Margin="60,0" Foreground="{StaticResource MaterialDesignBody}"
-                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center" HorizontalAlignment="Center">
-            Settings
-        </TextBlock>
+        <Border Grid.Row="0" Grid.Column="0" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 0 0 1">
+            <Grid>
+                <Button
+                    Grid.Row="0"
+                    Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
+                    Command="{Binding GoBack}"
+                    IsCancel="True"
+                    VerticalAlignment="Center" HorizontalAlignment="Left"
+                    Margin="10">
+                    <materialDesign:PackIcon Kind="StepBackward" />
+                </Button>
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Margin="60,0" Foreground="{StaticResource MaterialDesignBody}"
+                           Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center"
+                           HorizontalAlignment="Center">
+                    Settings
+                </TextBlock>
+            </Grid>
+        </Border>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -41,27 +46,31 @@
                 <ToggleButton Margin="8 0 8 0" IsChecked="{Binding IsDark}" />
                 <TextBlock VerticalAlignment="Center">Dark</TextBlock>
             </StackPanel>
-            <ComboBox Grid.Column="1" Margin="2"  
+            <ComboBox Grid.Column="1" Margin="2"
                       Foreground="{Binding PrimaryColor, Converter={StaticResource MaterialColorConverter}}"
                       Style="{StaticResource MaterialDesignFilledComboBox}"
                       materialDesign:HintAssist.Hint="Primary Color"
-                      ItemsSource="{Binding PrimaryColors}" SelectedItem="{Binding PrimaryColor}" VerticalAlignment="Center"
+                      ItemsSource="{Binding PrimaryColors}" SelectedItem="{Binding PrimaryColor}"
+                      VerticalAlignment="Center"
                       materialDesign:ComboBoxAssist.ShowSelectedItem="true">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{Binding Converter={StaticResource MaterialColorConverter}}"/>
+                        <TextBlock Text="{Binding}"
+                                   Foreground="{Binding Converter={StaticResource MaterialColorConverter}}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <ComboBox Grid.Column="2" Margin="2" 
+            <ComboBox Grid.Column="2" Margin="2"
                       Foreground="{Binding SecondaryColor, Converter={StaticResource MaterialColorConverter}}"
                       Style="{StaticResource MaterialDesignFilledComboBox}"
                       materialDesign:HintAssist.Hint="Secondary color"
-                      ItemsSource="{Binding SecondaryColors}" SelectedItem="{Binding SecondaryColor}" VerticalAlignment="Center"
+                      ItemsSource="{Binding SecondaryColors}" SelectedItem="{Binding SecondaryColor}"
+                      VerticalAlignment="Center"
                       materialDesign:ComboBoxAssist.ShowSelectedItem="true">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Foreground="{Binding Converter={StaticResource MaterialColorConverter}}"/>
+                        <TextBlock Text="{Binding}"
+                                   Foreground="{Binding Converter={StaticResource MaterialColorConverter}}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
@@ -77,16 +86,16 @@
                           IsChecked="{Binding AutomaticallyStart}" />
         </Grid>
         <TextBox Grid.Row="3" Grid.Column="0" Margin="10" Visibility="Collapsed"
-             Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
-             Text="{Binding Debug, Mode=OneWay}"
-             IsReadOnly="True"
-             VerticalAlignment="Top"
-             AcceptsReturn="True"
-             TextWrapping="NoWrap"
-             MaxWidth="400"
-             MinHeight="200"
-             materialDesign:HintAssist.Hint="Debug"
-             VerticalScrollBarVisibility="Auto" 
-             HorizontalScrollBarVisibility="Auto"/>
+                 Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                 Text="{Binding Debug, Mode=OneWay}"
+                 IsReadOnly="True"
+                 VerticalAlignment="Top"
+                 AcceptsReturn="True"
+                 TextWrapping="NoWrap"
+                 MaxWidth="400"
+                 MinHeight="200"
+                 materialDesign:HintAssist.Hint="Debug"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Auto" />
     </Grid>
 </UserControl>

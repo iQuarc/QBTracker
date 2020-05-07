@@ -47,6 +47,8 @@
         ContextMenu="{StaticResource TrayMenu}"
         MenuActivation="LeftOrRightClick"
         PopupActivation="DoubleClick"
+        DoubleClickCommand="{x:Static SystemCommands.RestoreWindowCommand}"
+        DoubleClickCommandTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
         LeftClickCommand="{x:Static SystemCommands.RestoreWindowCommand}"
         LeftClickCommandTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
     />
