@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Threading;
+
 using QBTracker.AutomaticUpdader;
 using QBTracker.DataAccess;
 using QBTracker.Model;
 using QBTracker.Util;
+
 using Task = QBTracker.Model.Task;
 
 namespace QBTracker.ViewModels
@@ -237,7 +239,7 @@ namespace QBTracker.ViewModels
         {
             if (SelectedProjectId == null)
                 return;
-            CreatedTask = new TaskViewModel(new Task {ProjectId = SelectedProjectId.Value}, this);
+            CreatedTask = new TaskViewModel(new Task { ProjectId = SelectedProjectId.Value }, this);
             CreatedTask.OnSave = () =>
             {
                 Tasks.Insert(0, CreatedTask);
@@ -265,7 +267,9 @@ namespace QBTracker.ViewModels
                 };
                 Repository.AddTimeRecord(timeRecord);
                 CurrentTimeRecord = new TimeRecordViewModel(timeRecord, this);
-                if (SelectedDate.Date == DateTime.Today) TimeRecords.Add(CurrentTimeRecord);
+                if (SelectedDate.Date != DateTime.Today)
+                    SelectedDate = DateTime.Today;
+                TimeRecords.Add(CurrentTimeRecord);
             }
             else
             {
