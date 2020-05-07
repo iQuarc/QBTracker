@@ -255,6 +255,8 @@ namespace QBTracker.ViewModels
                 return;
             if (!IsRecording)
             {
+                if (SelectedDate.Date != DateTime.Today)
+                    SelectedDate = DateTime.Today;
                 var project = Repository.GetProjectById(SelectedProjectId.Value);
                 var task = Repository.GetTaskById(SelectedTaskId.Value);
                 var timeRecord = new TimeRecord
@@ -267,8 +269,6 @@ namespace QBTracker.ViewModels
                 };
                 Repository.AddTimeRecord(timeRecord);
                 CurrentTimeRecord = new TimeRecordViewModel(timeRecord, this);
-                if (SelectedDate.Date != DateTime.Today)
-                    SelectedDate = DateTime.Today;
                 TimeRecords.Add(CurrentTimeRecord);
             }
             else
