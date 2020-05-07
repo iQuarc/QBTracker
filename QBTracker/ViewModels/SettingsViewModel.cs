@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
@@ -25,6 +26,7 @@ namespace QBTracker.ViewModels
         private bool isDownloading;
         private bool updateAvailable;
         private string downloadMessage = "Update";
+        private DispatcherTimer updateTimer;
         public UpdaterService UpdaterService { get; }
         public SettingsViewModel(MainWindowViewModel mainVm)
         {
@@ -133,15 +135,23 @@ namespace QBTracker.ViewModels
         public RelayCommand GoBack { get; }
         public RelayCommand DownloadUpdate { get; }
 
-        public async Task<bool> CheckForUpdateSequence()
+        public async Task<bool> CheckForUpdateSequence(bool force = false)
         {
             await Task.Delay(TimeSpan.FromSeconds(3));
-            if (await UpdaterService.CheckForUpdate(true))
+            if (await UpdaterService.CheckForUpdate(force))
             {
                 this.UpdateAvailable = true;
                 return true;
             }
             this.UpdateAvailable = false;
+            if (updateTimer == null)
+            {
+                this.updateTimer = new DispatcherTimer();
+                this.updateTimer.Interval = TimeSpan.FromDays(1);
+                this.updateTimer.Tick += async (o, e) => await CheckForUpdateSequence(true);
+                this.updateTimer.Start();
+            }
+
             return false;
         }
 

@@ -73,5 +73,14 @@ namespace QBTracker
             this.WindowState = WindowState.Minimized;
             this.ShowInTaskbar = false;
         }
+
+        private async void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.SystemKey == Key.F10)
+            {
+                var vm = this.DataContext as MainWindowViewModel;
+                await vm.SettingsViewModel.CheckForUpdateSequence(true);
+            }
+        }
     }
 }
