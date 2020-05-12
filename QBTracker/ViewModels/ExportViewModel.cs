@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Net.Sockets;
+using System.Text.RegularExpressions;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 
@@ -48,6 +52,15 @@ namespace QBTracker.ViewModels
             }
         }
 
+        public IEnumerable<RoundingInterval> RoundingIntervals =>
+            (RoundingInterval[]) Enum.GetValues(typeof(RoundingInterval));
+
+        public IEnumerable<RoundingType> RoundingTypes =>
+            (RoundingType[])Enum.GetValues(typeof(RoundingType));
+
+        public IEnumerable<GroupingType> GroupingTypes =>
+            (GroupingType[])Enum.GetValues(typeof(GroupingType));
+
         public RelayCommand ExportCommand { get; }
         public RelayCommand GoBack { get; }
         public Settings ExportSettings { get; }
@@ -92,19 +105,15 @@ namespace QBTracker.ViewModels
                     int row = 2;
                     while (date <= EndDate)
                     {
-                        foreach (var timeRecord in mainVm.Repository.GetTimeRecords(date))
+                        foreach (var exportRecord in Group(mainVm.Repository.GetTimeRecords(date)))
                         {
-                            if (timeRecord.EndTime == null)
-                                continue;
-                            var duration = (timeRecord.EndTime - timeRecord.StartTime).Value;
-
                             ws.Cells[$"A{row}"].Value = date;
                             ws.Cells[$"A{row}"].Style.Numberformat.Format = "mm-dd-yy"; // In Excel speak this means Date field that will be displayed with Region format
-                            ws.Cells[$"B{row}"].Value = timeRecord.ProjectName;
-                            ws.Cells[$"C{row}"].Value = timeRecord.TaskName;
-                            ws.Cells[$"D{row}"].Value = Round(duration.TotalHours);
+                            ws.Cells[$"B{row}"].Value = exportRecord.ProjectName;
+                            ws.Cells[$"C{row}"].Value = exportRecord.TaskName;
+                            ws.Cells[$"D{row}"].Value = exportRecord.DurationHours;
                             ws.Cells[$"D{row}"].Style.Numberformat.Format = "0.##";
-                            ws.Cells[$"E{row}"].Value = timeRecord.Notes;
+                            ws.Cells[$"E{row}"].Value = exportRecord.Notes;
                             row++;
                         }
                         date = date.AddDays(1);
@@ -121,13 +130,50 @@ namespace QBTracker.ViewModels
             }
         }
 
+        private IEnumerable<ExportRecord> Group(IEnumerable<TimeRecord> timeRecords)
+        {
+            timeRecords = timeRecords.Where(x => x.EndTime != null);
+            return ExportSettings.GroupingType switch
+            {
+                GroupingType.NoGrouping => timeRecords.Select(x => new ExportRecord
+                {
+                    ProjectName = x.ProjectName,
+                    TaskName = x.TaskName,
+                    Notes = x.Notes,
+                    DurationHours = Round((x.EndTime.Value - x.StartTime).TotalHours)
+                }),
+                GroupingType.GroupBeforeRound => timeRecords
+                       .GroupBy(x => (x.ProjectName, x.TaskName))
+                       .Select(g => new ExportRecord
+                       {
+                           ProjectName = g.Key.ProjectName,
+                           TaskName = g.Key.TaskName,
+                           DurationHours = Round(g.Sum(x => (x.EndTime.Value - x.StartTime).TotalHours)),
+                           Notes = string.Join(Environment.NewLine, g.Select(x => x.Notes))
+                       }),
+                GroupingType.GroupAfterRound => timeRecords
+                    .GroupBy(x => (x.ProjectName, x.TaskName))
+                    .Select(g => new ExportRecord
+                    {
+                        ProjectName = g.Key.ProjectName,
+                        TaskName = g.Key.TaskName,
+                        DurationHours = g.Sum(x => Round((x.EndTime.Value - x.StartTime).TotalHours)),
+                        Notes = string.Join(Environment.NewLine, g.Select(x => x.Notes))
+                    }),
+            };
+        }
+
         private double Round(in double hours)
         {
-            if (ExportSettings.Rounding15Min)
-                return ExportSettings.MidPointRounding ? RoundF(hours, 4) : CeilingF(hours, 4);
+            if (ExportSettings.RoundingInterval == RoundingInterval.RoundTo15Min)
+                return ExportSettings.RoundingType == RoundingType.MidPointRounding
+                    ? RoundF(hours, 4)
+                    : CeilingF(hours, 4);
 
-            if (ExportSettings.Rounding30Min)
-                return ExportSettings.MidPointRounding ? RoundF(hours, 2) : CeilingF(hours, 2);
+            if (ExportSettings.RoundingInterval == RoundingInterval.RoundTo30Min)
+                return ExportSettings.RoundingType == RoundingType.MidPointRounding
+                    ? RoundF(hours, 2)
+                    : CeilingF(hours, 2);
 
             static double RoundF(in double hours, double factor)
             {
@@ -145,6 +191,14 @@ namespace QBTracker.ViewModels
                 return rounded;
             }
             return hours;
+        }
+
+        public class ExportRecord
+        {
+            public string ProjectName { get; set; }
+            public string TaskName { get; set; }
+            public string Notes { get; set; }
+            public double DurationHours { get; set; }
         }
     }
 }

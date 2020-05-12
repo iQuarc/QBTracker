@@ -10,11 +10,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="Cyan" SecondaryColor="LightGreen" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="Resources/Resources.xaml"/>
                 <ResourceDictionary Source="Resources/QBCalendarStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"></converters:BoolToVisibilityConverter>
-            <converters:InverterConverter x:Key="InverterConverter" />
-            <converters:MaterialColorConverter x:Key="MaterialColorConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
