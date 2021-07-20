@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>pngfuel.ico</ApplicationIcon>
     <Authors>Catalin Pop</Authors>
@@ -18,10 +18,10 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="4.5.3.3" />
-    <PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.10" />
-    <PackageReference Include="Humanizer.Core" Version="2.8.2" />
-    <PackageReference Include="LiteDB" Version="5.0.7" />
-    <PackageReference Include="MaterialDesignThemes" Version="3.1.0" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.18" />
+    <PackageReference Include="Humanizer.Core" Version="2.8.26" />
+    <PackageReference Include="LiteDB" Version="5.0.10" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>

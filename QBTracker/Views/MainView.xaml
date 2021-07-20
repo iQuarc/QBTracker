@@ -43,10 +43,10 @@
                     </Button>
                     <DatePicker Grid.Column="2"
                             SelectedDate="{Binding SelectedDate}"
-                            Width="120"
+                            Width="100"
                             materialDesign:HintAssist.Hint="Pick Date"
                             Style="{StaticResource MaterialDesignFloatingHintDatePicker}" VerticalAlignment="Center"
-                            HorizontalAlignment="Center" Height="35" />
+                            HorizontalAlignment="Center" />
                     <Button Grid.Column="3"
                         Style="{StaticResource MaterialDesignIconButton}"
                         ToolTip="Select next day"
@@ -54,9 +54,9 @@
                         <materialDesign:PackIcon Kind="StepForward" />
                     </Button>
                     <Button Grid.Column="6"
-                        Style="{StaticResource MaterialDesignIconButton}"
-                        ToolTip="Export to Excel"
-                        Command="{Binding ExportCommand}" HorizontalAlignment="Right">
+                            Style="{StaticResource MaterialDesignIconButton}"
+                            ToolTip="Export to Excel"
+                            Command="{Binding ExportCommand}" HorizontalAlignment="Right">
                         <materialDesign:PackIcon Kind="TableExport" />
                     </Button>
                     <Button Grid.Column="7"
@@ -165,6 +165,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100*" />
                 <ColumnDefinition Width="100*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <ComboBox
                 Grid.Column="0"
@@ -184,7 +185,7 @@
                 Margin="10"
                 Height="24"
                 Width="24"
-                Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                 HorizontalAlignment="Right"
                 ToolTip="Add or edit Project"
                 Command="{Binding CreateNewProject}">
@@ -211,7 +212,7 @@
                 Margin="10"
                 Height="24"
                 Width="24"
-                Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
                 HorizontalAlignment="Right"
                 ToolTip="Add or edit Task"
                 Command="{Binding CreateNewTask}">
@@ -219,6 +220,13 @@
                     Kind="DotsHorizontal"
                     Height="20"
                     Width="20" HorizontalAlignment="Center" />
+            </Button>
+            <Button Grid.Column="2"
+                    Style="{StaticResource MaterialDesignIconButton}"
+                    ToolTip="Quick Add"
+                    Command="{Binding QuickAdd}"
+                    Foreground="{DynamicResource SecondaryAccentBrush}">
+                <materialDesign:PackIcon Kind="TimelinePlusOutline" />
             </Button>
         </Grid>
         <Grid Grid.Row="3">

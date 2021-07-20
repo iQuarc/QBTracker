@@ -119,14 +119,14 @@
                    Grid.Column="1" VerticalAlignment="Center" Margin="10"
                    Foreground="{DynamicResource SecondaryHueLightBrush}" />
         <TextBlock Text="Start time" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10" />
-        <conrol:DateTimePicker Grid.Row="3" Grid.Column="1" Width="200" Height="32" DateValue="{Binding StarTime}"
+        <conrol:DateTimePicker Grid.Row="3" Grid.Column="1" Width="220" Height="32" DateValue="{Binding StarTime}"
                                HorizontalAlignment="Left" VerticalAlignment="Center" />
         <TextBlock Text="End time" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="10" />
-        <conrol:DateTimePicker Grid.Row="4" Grid.Column="1" Width="200" Height="32" DateValue="{Binding EndTime}"
+        <conrol:DateTimePicker Grid.Row="4" Grid.Column="1" Width="220" Height="32" DateValue="{Binding EndTime}"
                                HorizontalAlignment="Left" VerticalAlignment="Center"
                                IsEnabled="{Binding IsEndTimeEnabled, Mode=OneWay}" />
         <TextBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="10"
-                 Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
                  Text="{Binding Notes}"
                  VerticalAlignment="Top"
                  AcceptsReturn="True"

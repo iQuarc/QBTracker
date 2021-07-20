@@ -1,0 +1,113 @@
+﻿<UserControl x:Class="QBTracker.Views.QuickAddView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:QBTracker.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="380">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="42" />
+            <RowDefinition Height="42" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0"
+                   Margin="60,0" Foreground="{DynamicResource MaterialDesignBody}"
+                   Style="{StaticResource MaterialDesignSubtitle1TextBlock}" VerticalAlignment="Center"
+                   HorizontalAlignment="Center">
+            Quick Add Time Record
+        </TextBlock>
+        <Grid Grid.Row="1" IsEnabled="{Binding IsNotRecording}" Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100*" />
+                <ColumnDefinition Width="100*" />
+            </Grid.ColumnDefinitions>
+            <ComboBox
+                Grid.Column="0"
+                Margin="10,0,40,10"
+                ItemsSource="{Binding MainVm.Projects}"
+                SelectedValue="{Binding SelectedProjectId}"
+                DisplayMemberPath="Project.Name"
+                SelectedValuePath="Project.Id"
+                materialDesign:HintAssist.Hint="Search"
+                materialDesign:TextFieldAssist.HasClearButton="False"
+                materialDesign:TextFieldAssist.HasFilledTextField="False"
+                IsEditable="True"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                materialDesign:HintAssist.HelperText="Project" />
+            <ComboBox
+                Grid.Column="1"
+                Margin="10,0,40,10"
+                ItemsSource="{Binding Tasks}"
+                SelectedValue="{Binding SelectedTaskId}"
+                DisplayMemberPath="Task.Name"
+                SelectedValuePath="Task.Id"
+                materialDesign:HintAssist.Hint="Search"
+                materialDesign:TextFieldAssist.HasClearButton="False"
+                materialDesign:TextFieldAssist.HasFilledTextField="False"
+                IsEditable="True"
+                Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                materialDesign:HintAssist.HelperText="Task" />
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Start time" Grid.Column="0" VerticalAlignment="Center" Margin="10" />
+            <materialDesign:TimePicker
+                Is24Hours="True"
+                SelectedTime="{Binding StartTime}"
+                Grid.Column="1"
+                Width="100"/>
+            <TextBlock Text="End time" Grid.Column="2" VerticalAlignment="Center" Margin="10" />
+            <materialDesign:TimePicker
+                Is24Hours="True"
+                SelectedTime="{Binding EndTime}"
+                Grid.Column="3"
+                Width="100"/>
+        </Grid>
+        <Slider
+            Grid.Row="3"
+            Orientation="Horizontal"
+            TickPlacement="BottomRight"
+            TickFrequency="4"
+            Minimum="1"
+            Maximum="32"
+            Value="4"
+            Margin="10"
+            IsSelectionRangeEnabled="True" />
+
+        <TextBlock Text="Duration" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="10" />
+        <TextBlock FontSize="18" Text="{Binding Duration, Mode=OneWay, StringFormat={}{0:h\\h\\ m\\m}}" Grid.Row="4"
+                   Grid.Column="1" VerticalAlignment="Center" Margin="10"
+                   Foreground="{DynamicResource SecondaryHueLightBrush}" />
+
+        <StackPanel Orientation="Horizontal" Grid.Row="5"
+                    Margin="0 16 0 0">
+            <Button IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}"
+                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                <Button.CommandParameter>
+                    <system:Boolean>True</system:Boolean>
+                </Button.CommandParameter>
+                CONFIRM
+            </Button>
+            <Button IsCancel="True" Margin="8 0 0 0" Style="{DynamicResource MaterialDesignFlatButton}"
+                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                <Button.CommandParameter>
+                    <system:Boolean>False</system:Boolean>
+                </Button.CommandParameter>
+                CANCEL
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -41,7 +41,6 @@ namespace QBTracker.AutomaticUpdader
                         new UpdaterService().LogMessage("why did I exit here?");
                         return;
                     }
-
                 if (args[0] == "--updateAndRestart")
                 {
                     var srv = new UpdaterService();
@@ -56,7 +55,7 @@ namespace QBTracker.AutomaticUpdader
             }
             catch (Exception ex)
             {
-                File.WriteAllText("dump.log", ex.ToString());
+                await File.WriteAllTextAsync("dump.log", ex.ToString());
                 new UpdaterService().LogException(ex);
                 Debugger.Launch();
             }

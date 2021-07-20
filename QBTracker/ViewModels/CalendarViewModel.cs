@@ -1,7 +1,15 @@
-﻿namespace QBTracker.ViewModels
+﻿using QBTracker.Util;
+
+namespace QBTracker.ViewModels
 {
-    public class CalendarViewModel
+    public class CalendarViewModel : ValidatableModel
     {
-        
+        private readonly MainWindowViewModel mainVm;
+        public CalendarViewModel(MainWindowViewModel mainVm)
+        {
+            this.mainVm = mainVm;
+        }
+
+
     }
 }

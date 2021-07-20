@@ -25,6 +25,7 @@
         Loaded="MainWindow_OnLoaded" 
         Closed="MainWindow_OnClosed"
         Closing="MainWindow_OnClosing"
+        StateChanged="MainWindow_OnStateChanged"
         d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel, IsDesignTimeCreatable=False}"
         x:Name="MainWindowEl" PreviewKeyDown="MainWindow_OnPreviewKeyDown" >
     <Window.Resources>
@@ -41,7 +42,7 @@
     </Window.CommandBindings>
     <Grid>
         <tb:TaskbarIcon 
-        Visibility="Visible"
+        Visibility="Visible" VerticalAlignment="Top" HorizontalAlignment="Left"
         ToolTip="{Binding VersionString, Mode=OneTime}"
         IconSource="/Images/pngfuel.ico"
         ContextMenu="{StaticResource TrayMenu}"
@@ -52,8 +53,8 @@
         LeftClickCommand="{x:Static SystemCommands.RestoreWindowCommand}"
         LeftClickCommandTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
     />
-        <materialDesign:DialogHost>
-            <materialDesign:Transitioner x:Name="Transitioner" SelectedIndex="{Binding SelectedTransitionIndex}" AutoApplyTransitionOrigins="True">
+        <materialDesign:DialogHost VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <materialDesign:Transitioner x:Name="Transitioner" SelectedIndex="{Binding SelectedTransitionIndex}" AutoApplyTransitionOrigins="True" >
                 <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
                     <views:MainView />
                 </materialDesign:TransitionerSlide>
@@ -72,7 +73,6 @@
                 <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
                     <views:SettingsView DataContext="{Binding SettingsViewModel}" />
                 </materialDesign:TransitionerSlide>
-                
             </materialDesign:Transitioner>
         </materialDesign:DialogHost>
     </Grid>

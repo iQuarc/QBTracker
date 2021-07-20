@@ -10,6 +10,8 @@ namespace QBTracker.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value == null)
+                return null;
             var color = SwatchHelper.Lookup[(MaterialDesignColor)(int) value];
             return new SolidColorBrush(color);
         }

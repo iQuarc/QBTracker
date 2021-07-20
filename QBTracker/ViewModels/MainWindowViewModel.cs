@@ -6,14 +6,14 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Threading;
-
+using MaterialDesignThemes.Wpf;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
 using QBTracker.AutomaticUpdader;
 using QBTracker.DataAccess;
 using QBTracker.Model;
 using QBTracker.Util;
-
+using QBTracker.Views;
 using Task = QBTracker.Model.Task;
 
 namespace QBTracker.ViewModels
@@ -46,6 +46,7 @@ namespace QBTracker.ViewModels
             SelectToday = new RelayCommand(_ => SelectedDate = DateTime.Today, _ => SelectedDate != DateTime.Today);
             ExportCommand = new RelayCommand(_ => SelectedTransitionIndex = Pages.ExportToExcel);
             SettingsCommand = new RelayCommand(_ => SelectedTransitionIndex = Pages.Settings);
+            QuickAdd = new RelayCommand(ExecuteQuickAdd, _ => SelectedProjectId.HasValue && SelectedTaskId.HasValue);
             ExportViewModel = new ExportViewModel(this);
             SettingsViewModel = new SettingsViewModel(this);
             LoadProjects();
@@ -189,6 +190,7 @@ namespace QBTracker.ViewModels
         public RelayCommand SelectToday { get; }
         public RelayCommand ExportCommand { get; }
         public RelayCommand SettingsCommand { get; }
+        public RelayCommand QuickAdd { get; }
 
         public TimeRecordViewModel TimeRecordInEdit
         {
@@ -278,6 +280,17 @@ namespace QBTracker.ViewModels
                 record.EndTime = DateTime.Now;
                 Repository.UpdateTimeRecord(record.TimeRecord);
                 record.NotifyOfPropertyChange();
+            }
+        }
+
+        private async void ExecuteQuickAdd(object o)
+        {
+            if ((bool)await DialogHost.Show(new QuickAddView
+            {
+                DataContext = new QuickAddViewModel(this)
+            }))
+            {
+                
             }
         }
 

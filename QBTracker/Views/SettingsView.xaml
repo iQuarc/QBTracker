@@ -48,7 +48,8 @@
             </StackPanel>
             <ComboBox Grid.Column="1" Margin="2"
                       Foreground="{Binding PrimaryColor, Converter={StaticResource MaterialColorConverter}}"
-                      Style="{StaticResource MaterialDesignFilledComboBox}"
+                      Background="Transparent"
+                      materialDesign:HintAssist.IsFloating="True"
                       materialDesign:HintAssist.Hint="Primary Color"
                       ItemsSource="{Binding PrimaryColors}" SelectedItem="{Binding PrimaryColor}"
                       VerticalAlignment="Center"
@@ -62,14 +63,14 @@
             </ComboBox>
             <ComboBox Grid.Column="2" Margin="2"
                       Foreground="{Binding SecondaryColor, Converter={StaticResource MaterialColorConverter}}"
-                      Style="{StaticResource MaterialDesignFilledComboBox}"
+                      materialDesign:HintAssist.IsFloating="True"
                       materialDesign:HintAssist.Hint="Secondary color"
                       ItemsSource="{Binding SecondaryColors}" SelectedItem="{Binding SecondaryColor}"
                       VerticalAlignment="Center"
                       materialDesign:ComboBoxAssist.ShowSelectedItem="true">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}"
+                        <TextBlock Text="{Binding}" 
                                    Foreground="{Binding Converter={StaticResource MaterialColorConverter}}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -85,8 +86,8 @@
                           Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
                           IsChecked="{Binding AutomaticallyStart}" />
         </Grid>
-        <TextBox Grid.Row="3" Grid.Column="0" Margin="10" Visibility="Collapsed"
-                 Style="{StaticResource MaterialDesignOutlinedTextFieldTextBox}"
+        <TextBox Grid.Row="3" Grid.Column="0" Margin="10" Visibility="Visible"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
                  Text="{Binding Debug, Mode=OneWay}"
                  IsReadOnly="True"
                  VerticalAlignment="Top"

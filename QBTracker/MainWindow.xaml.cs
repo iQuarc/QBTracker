@@ -63,7 +63,6 @@ namespace QBTracker
         private void ShowWindow()
         {
             this.WindowState = WindowState.Normal;
-            this.ShowInTaskbar = true;
             this.Activate();
             this.Focus();
         }
@@ -71,7 +70,6 @@ namespace QBTracker
         private void HideWindow()
         {
             this.WindowState = WindowState.Minimized;
-            this.ShowInTaskbar = false;
         }
 
         private async void MainWindow_OnPreviewKeyDown(object sender, KeyEventArgs e)
@@ -80,6 +78,20 @@ namespace QBTracker
             {
                 var vm = this.DataContext as MainWindowViewModel;
                 await vm.SettingsViewModel.CheckForUpdateSequence(true);
+            }
+        }
+
+        private void MainWindow_OnStateChanged(object? sender, EventArgs e)
+        {
+            switch (this.WindowState)
+            {
+                case WindowState.Minimized:
+                    this.ShowInTaskbar = false;
+                    break;
+                case WindowState.Normal:
+                case WindowState.Maximized:
+                    this.ShowInTaskbar = true;
+                    break;
             }
         }
     }
