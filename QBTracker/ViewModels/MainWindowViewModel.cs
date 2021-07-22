@@ -285,12 +285,14 @@ namespace QBTracker.ViewModels
 
         private async void ExecuteQuickAdd(object o)
         {
+            var vm = new QuickAddViewModel(this);
             if ((bool)await DialogHost.Show(new QuickAddView
             {
-                DataContext = new QuickAddViewModel(this)
+                DataContext = vm
             }))
             {
-                
+                Repository.AddTimeRecord(vm.TimeRecord);
+                LoadTimeRecords();
             }
         }
 

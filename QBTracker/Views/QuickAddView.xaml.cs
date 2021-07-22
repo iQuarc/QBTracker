@@ -1,4 +1,6 @@
-﻿using System;
+﻿using QBTracker.ViewModels;
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -21,6 +23,14 @@ namespace QBTracker.Views
         public QuickAddView()
         {
             InitializeComponent();
+        }
+
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (this.DataContext is QuickAddViewModel vm)
+            {
+                e.CanExecute = vm.CanSave;
+            }
         }
     }
 }

@@ -224,8 +224,7 @@
             <Button Grid.Column="2"
                     Style="{StaticResource MaterialDesignIconButton}"
                     ToolTip="Quick Add"
-                    Command="{Binding QuickAdd}"
-                    Foreground="{DynamicResource SecondaryAccentBrush}">
+                    Command="{Binding QuickAdd}">
                 <materialDesign:PackIcon Kind="TimelinePlusOutline" />
             </Button>
         </Grid>

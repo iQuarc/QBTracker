@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <OutputType>exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <AssemblyVersion>0.0.5.0</AssemblyVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -11,21 +12,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>D:\Work\QBTracker\QBTracker\bin\Debug\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="QBTracker.AutomaticUpdader.runtimeconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="..\QBTracker\Properties\AssemblyInfo.cs" Link="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="QBTracker.AutomaticUpdader.runtimeconfig.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 
   <ItemGroup>

@@ -5,4 +5,5 @@
     <converters:InverterConverter x:Key="InverterConverter" />
     <converters:MaterialColorConverter x:Key="MaterialColorConverter" />
     <converters:EnumHumanizerConverter x:Key="EnumHumanizerConverter" />
+    <converters:NotNullToBoolConverter x:Key="NotNullToBoolConverter" />
 </ResourceDictionary>

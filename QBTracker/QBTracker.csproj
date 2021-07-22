@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>pngfuel.ico</ApplicationIcon>
     <Authors>Catalin Pop</Authors>
@@ -10,6 +11,7 @@
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
   </PropertyGroup>
 
   <ItemGroup>
