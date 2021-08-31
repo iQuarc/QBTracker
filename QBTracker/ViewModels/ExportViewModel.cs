@@ -5,7 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
+
 using MaterialDesignThemes.Wpf;
+
 using Microsoft.Win32;
 
 using OfficeOpenXml;
@@ -26,7 +28,7 @@ namespace QBTracker.ViewModels
         {
             this.mainVm = mainVm;
             this.ExportCommand = new RelayCommand(ExecuteExport);
-            this.GoBack = new RelayCommand(_=> mainVm.GoBack());
+            this.GoBack = new RelayCommand(_ => mainVm.GoBack());
             this.ExportSettings = mainVm.Repository.GetSettings();
             this.StartDate = new DateTime(DateTime.Today.Year, 1, 1);
             this.EndDate = DateTime.Today;
@@ -52,14 +54,11 @@ namespace QBTracker.ViewModels
             }
         }
 
-        public IEnumerable<RoundingInterval> RoundingIntervals =>
-            (RoundingInterval[]) Enum.GetValues(typeof(RoundingInterval));
-
-        public IEnumerable<RoundingType> RoundingTypes =>
-            (RoundingType[])Enum.GetValues(typeof(RoundingType));
-
-        public IEnumerable<GroupingType> GroupingTypes =>
-            (GroupingType[])Enum.GetValues(typeof(GroupingType));
+        public IEnumerable<RoundingInterval> RoundingIntervals => Enum.GetValues<RoundingInterval>();
+        public IEnumerable<RoundingType> RoundingTypes => Enum.GetValues<RoundingType>();
+        public IEnumerable<GroupingType> GroupingTypes => Enum.GetValues<GroupingType>();
+        public IEnumerable<WorksheetOption> WorksheetOptions => Enum.GetValues<WorksheetOption>();
+        public IEnumerable<AutoFilterOption> AutoFilterOptions => Enum.GetValues<AutoFilterOption>();
 
         public RelayCommand ExportCommand { get; }
         public RelayCommand GoBack { get; }
@@ -69,7 +68,7 @@ namespace QBTracker.ViewModels
         {
             var sfd = new SaveFileDialog();
             sfd.Filter = "Excel Files | *.xlsx";
-            sfd.InitialDirectory = ExportSettings.ExportFolder 
+            sfd.InitialDirectory = ExportSettings.ExportFolder
                                    ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             sfd.FileName = ExportSettings.ExportFileName;
 
@@ -88,24 +87,28 @@ namespace QBTracker.ViewModels
             {
                 using (var p = new ExcelPackage())
                 {
-                    //A workbook must have at least one cell, so lets add one... 
-                    var ws = p.Workbook.Worksheets.Add("TimeSheet");
-                    //To set values in the spreadsheet use the Cells indexer.
-                    ws.Cells["A1"].Value = "Date";
-                    ws.Cells["A1"].Style.Font.Bold = true;
-                    ws.Cells["B1"].Value = "Project";
-                    ws.Cells["B1"].Style.Font.Bold = true;
-                    ws.Cells["C1"].Value = "Task";
-                    ws.Cells["C1"].Style.Font.Bold = true;
-                    ws.Cells["D1"].Value = "Hours";
-                    ws.Cells["D1"].Style.Font.Bold = true;
-                    ws.Cells["E1"].Value = "Notes";
-                    ws.Cells["E1"].Style.Font.Bold = true;
-                    var date = StartDate;
-                    int row = 2;
-                    while (date <= EndDate)
+                    foreach (var exportGroup in GroupByWorkseetSheet())
                     {
-                        foreach (var exportRecord in Group(mainVm.Repository.GetTimeRecords(date)))
+                        //A workbook must have at least one cell, so lets add one... 
+                        var ws = p.Workbook.Worksheets.Add(exportGroup.Key);
+                        //To set values in the spreadsheet use the Cells indexer.
+                        ws.Cells["A1"].Value = "Date";
+                        ws.Cells["A1"].Style.Font.Bold = true;
+                        ws.Cells["B1"].Value = "Project";
+                        ws.Cells["B1"].Style.Font.Bold = true;
+                        ws.Cells["C1"].Value = "Task";
+                        ws.Cells["C1"].Style.Font.Bold = true;
+                        ws.Cells["D1"].Value = "Hours";
+                        ws.Cells["D1"].Style.Font.Bold = true;
+                        ws.Cells["E1"].Value = "Notes";
+                        ws.Cells["E1"].Style.Font.Bold = true;
+                        var date = StartDate;
+                        int row = 2;
+
+                        if (ExportSettings.AutoFilter == AutoFilterOption.AutoFilter)
+                            ws.Cells["A1:E1"].AutoFilter = true;
+
+                        foreach (var exportRecord in exportGroup)
                         {
                             ws.Cells[$"A{row}"].Value = date;
                             ws.Cells[$"A{row}"].Style.Numberformat.Format = "mm-dd-yy"; // In Excel speak this means Date field that will be displayed with Region format
@@ -116,9 +119,8 @@ namespace QBTracker.ViewModels
                             ws.Cells[$"E{row}"].Value = exportRecord.Notes;
                             row++;
                         }
-                        date = date.AddDays(1);
+                        ws.Cells[ws.Dimension.Address].AutoFitColumns();
                     }
-                    ws.Cells[ws.Dimension.Address].AutoFitColumns();
                     //Save the new workbook. We haven't specified the filename so use the Save as method.
                     p.SaveAs(new FileInfo(file));
                     Process.Start(new ProcessStartInfo(file) { Verb = "OPEN", UseShellExecute = true });
@@ -126,17 +128,46 @@ namespace QBTracker.ViewModels
             }
             catch (Exception ex)
             {
-                DialogHost.Show(new ErrorDialog() {DataContext = ex.Message});
+                DialogHost.Show(new ErrorDialog() { DataContext = ex.Message });
             }
         }
 
-        private IEnumerable<ExportRecord> Group(IEnumerable<TimeRecord> timeRecords)
+        private IEnumerable<IGrouping<string, ExportRecord>> GroupByWorkseetSheet()
+        {
+            var timeRecords = GetTimeRecords();
+            return ExportSettings.WorksheetOption switch
+            {
+                WorksheetOption.WorksheetPerMonth => timeRecords
+                    .OrderByDescending(x => x.Date.Year)
+                    .ThenByDescending(x => x.Date.Month)
+                    .GroupBy(x => x.Date.ToString("MMMM yyyy")),
+                WorksheetOption.WorksheetPerYear => timeRecords
+                    .OrderByDescending(x => x.Date.Year)
+                    .GroupBy(x => x.Date.ToString("yyyy")),
+                WorksheetOption.SingleWorksheet => timeRecords.GroupBy(x => "TimeSheet"),
+                _ => timeRecords.GroupBy(x => "TimeSheet")
+            };
+        }
+
+        private IEnumerable<ExportRecord> GetTimeRecords()
+        {
+            for (DateTime date = StartDate; date <= EndDate; date = date.AddDays(1))
+            {
+                foreach (var record in GroupRecords(mainVm.Repository.GetTimeRecords(date), date))
+                {
+                    yield return record;
+                }
+            }
+        }
+
+        private IEnumerable<ExportRecord> GroupRecords(IEnumerable<TimeRecord> timeRecords, DateTime date)
         {
             timeRecords = timeRecords.Where(x => x.EndTime != null);
             return ExportSettings.GroupingType switch
             {
                 GroupingType.NoGrouping => timeRecords.Select(x => new ExportRecord
                 {
+                    Date = date,
                     ProjectName = x.ProjectName,
                     TaskName = x.TaskName,
                     Notes = x.Notes,
@@ -146,6 +177,7 @@ namespace QBTracker.ViewModels
                        .GroupBy(x => (x.ProjectName, x.TaskName))
                        .Select(g => new ExportRecord
                        {
+                           Date = date,
                            ProjectName = g.Key.ProjectName,
                            TaskName = g.Key.TaskName,
                            DurationHours = Round(g.Sum(x => (x.EndTime.Value - x.StartTime).TotalHours)),
@@ -155,6 +187,7 @@ namespace QBTracker.ViewModels
                     .GroupBy(x => (x.ProjectName, x.TaskName))
                     .Select(g => new ExportRecord
                     {
+                        Date = date,
                         ProjectName = g.Key.ProjectName,
                         TaskName = g.Key.TaskName,
                         DurationHours = g.Sum(x => Round((x.EndTime.Value - x.StartTime).TotalHours)),
@@ -195,6 +228,7 @@ namespace QBTracker.ViewModels
 
         public class ExportRecord
         {
+            public DateTime Date { get; set; }
             public string ProjectName { get; set; }
             public string TaskName { get; set; }
             public string Notes { get; set; }

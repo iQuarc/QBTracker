@@ -44,7 +44,7 @@ namespace QBTracker.ViewModels
             DateStepBack = new RelayCommand(ExecuteDateStepBack);
             DateStepForward = new RelayCommand(ExecuteDateStepForward);
             SelectToday = new RelayCommand(_ => SelectedDate = DateTime.Today, _ => SelectedDate != DateTime.Today);
-            ExportCommand = new RelayCommand(_ => SelectedTransitionIndex = Pages.ExportToExcel);
+            ExportCommand = new RelayCommand(_ => ExportToExcel());
             SettingsCommand = new RelayCommand(_ => SelectedTransitionIndex = Pages.Settings);
             QuickAdd = new RelayCommand(ExecuteQuickAdd, _ => SelectedProjectId.HasValue && SelectedTaskId.HasValue);
             ExportViewModel = new ExportViewModel(this);
@@ -72,6 +72,11 @@ namespace QBTracker.ViewModels
         public string Title => $"QBTracker {Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}";
 
 
+        private void ExportToExcel()
+        {
+            this.SelectedTransitionIndex = Pages.ExportToExcel;
+            this.ExportViewModel.EndDate = DateTime.Today;
+        }
 
         private void TimerOnTick(object sender, EventArgs e)
         {

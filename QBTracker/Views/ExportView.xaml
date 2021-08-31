@@ -13,11 +13,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
             <RowDefinition Height="60" />
-            <RowDefinition Height="42" />
-            <RowDefinition Height="42" />
-            <RowDefinition Height="42" />
-            <RowDefinition Height="42" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150" />
@@ -67,36 +64,84 @@
                     materialDesign:HintAssist.Hint="End date"
                     SelectedDate="{Binding EndDate}"
                     Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-        <TextBlock Text="Rounding Interval:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="10" HorizontalAlignment="Right" />
-        <ComboBox Grid.Row="2" 
-                  Grid.Column="1" 
-                  Margin="10, 0" 
-                  VerticalAlignment="Center" 
-                  materialDesign:HintAssist.Hint="Interval"
-                  SelectedValuePath="Value"
-                  DisplayMemberPath="Description"
-                  ItemsSource="{Binding RoundingIntervals, Converter={StaticResource EnumHumanizerConverter}}" 
-                  SelectedValue="{Binding ExportSettings.RoundingInterval}"/>
-        <TextBlock Text="Rounding Method:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10" HorizontalAlignment="Right" />
-        <ComboBox Grid.Row="3" 
-                  Grid.Column="1" 
-                  Margin="10, 0" 
-                  VerticalAlignment="Center" 
-                  materialDesign:HintAssist.Hint="Method"
-                  SelectedValuePath="Value"
-                  DisplayMemberPath="Description"
-                  ItemsSource="{Binding RoundingTypes, Converter={StaticResource EnumHumanizerConverter}}" 
-                  SelectedValue="{Binding ExportSettings.RoundingType}"/>
-        <TextBlock Text="Task Grouping:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="10" HorizontalAlignment="Right" />
-        <ComboBox Grid.Row="4" 
-                  Grid.Column="1" 
-                  Margin="10, 0" 
-                  VerticalAlignment="Center" 
-                  materialDesign:HintAssist.Hint="Grouping"
-                  SelectedValuePath="Value"
-                  DisplayMemberPath="Description"
-                  ItemsSource="{Binding GroupingTypes, Converter={StaticResource EnumHumanizerConverter}}" 
-                  SelectedValue="{Binding ExportSettings.GroupingType}"/>
-
+        <materialDesign:Card Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5">
+            <StackPanel>
+                <Expander Header="Rounding and Groupping">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="42" />
+                            <RowDefinition Height="42" />
+                            <RowDefinition Height="42" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Rounding Interval:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="10" HorizontalAlignment="Right" />
+                        <ComboBox Grid.Row="0" 
+                                  Grid.Column="1" 
+                                  Margin="10, 0" 
+                                  VerticalAlignment="Center" 
+                                  materialDesign:HintAssist.Hint="Interval"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Description"
+                                  ItemsSource="{Binding RoundingIntervals, Converter={StaticResource EnumHumanizerConverter}}" 
+                                  SelectedValue="{Binding ExportSettings.RoundingInterval}"/>
+                        <TextBlock Text="Rounding Method:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="10" HorizontalAlignment="Right" />
+                        <ComboBox Grid.Row="1" 
+                                  Grid.Column="1" 
+                                  Margin="10, 0" 
+                                  VerticalAlignment="Center" 
+                                  materialDesign:HintAssist.Hint="Method"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Description"
+                                  ItemsSource="{Binding RoundingTypes, Converter={StaticResource EnumHumanizerConverter}}" 
+                                  SelectedValue="{Binding ExportSettings.RoundingType}"/>
+                        <TextBlock Text="Task Grouping:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="10" HorizontalAlignment="Right" />
+                        <ComboBox Grid.Row="2" 
+                                  Grid.Column="1" 
+                                  Margin="10, 0" 
+                                  VerticalAlignment="Center" 
+                                  materialDesign:HintAssist.Hint="Grouping"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Description"
+                                  ItemsSource="{Binding GroupingTypes, Converter={StaticResource EnumHumanizerConverter}}" 
+                                  SelectedValue="{Binding ExportSettings.GroupingType}"/>
+                    </Grid>
+                </Expander>
+                <Expander Header="Excell options">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="42" />
+                            <RowDefinition Height="42" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Worksheet options:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="10" HorizontalAlignment="Right" />
+                        <ComboBox Grid.Row="0" 
+                                  Grid.Column="1" 
+                                  Margin="10, 0" 
+                                  VerticalAlignment="Center" 
+                                  materialDesign:HintAssist.Hint="Interval"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Description"
+                                  ItemsSource="{Binding WorksheetOptions, Converter={StaticResource EnumHumanizerConverter}}" 
+                                  SelectedValue="{Binding ExportSettings.WorksheetOption}"/>
+                        <TextBlock Text="Auto Filter:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="10" HorizontalAlignment="Right" />
+                        <ComboBox Grid.Row="1" 
+                                  Grid.Column="1" 
+                                  Margin="10, 0" 
+                                  VerticalAlignment="Center" 
+                                  materialDesign:HintAssist.Hint="Method"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Description"
+                                  ItemsSource="{Binding AutoFilterOptions, Converter={StaticResource EnumHumanizerConverter}}" 
+                                  SelectedValue="{Binding ExportSettings.AutoFilter}"/>
+                    </Grid>
+                </Expander>
+            </StackPanel>
+        </materialDesign:Card>
     </Grid>
 </UserControl>

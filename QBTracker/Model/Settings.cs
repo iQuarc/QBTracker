@@ -14,6 +14,8 @@ namespace QBTracker.Model
         public PrimaryColor? PrimaryColor { get; set; }
         public SecondaryColor? SecondaryColor { get; set; }
         public bool StartWithWindows { get; set; }
+        public WorksheetOption WorksheetOption { get; set; }
+        public AutoFilterOption AutoFilter { get; set; }
     }
 
     public enum RoundingInterval
@@ -34,5 +36,18 @@ namespace QBTracker.Model
         NoGrouping = 0,
         GroupBeforeRound,
         GroupAfterRound,
+    }
+
+    public enum WorksheetOption
+    {
+        SingleWorksheet = 0,
+        WorksheetPerMonth,
+        WorksheetPerYear
+    }
+
+    public enum AutoFilterOption 
+    {
+        None = 0,
+        AutoFilter
     }
 }
