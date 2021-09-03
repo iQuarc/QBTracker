@@ -114,6 +114,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="42" />
                             <RowDefinition Height="42" />
+                            <RowDefinition Height="42" />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="150" />
@@ -139,6 +140,16 @@
                                   DisplayMemberPath="Description"
                                   ItemsSource="{Binding AutoFilterOptions, Converter={StaticResource EnumHumanizerConverter}}" 
                                   SelectedValue="{Binding ExportSettings.AutoFilter}"/>
+                        <TextBlock Text="Summary:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="10" HorizontalAlignment="Right" />
+                        <ComboBox Grid.Row="2" 
+                                  Grid.Column="1" 
+                                  Margin="10, 0" 
+                                  VerticalAlignment="Center" 
+                                  materialDesign:HintAssist.Hint="Method"
+                                  SelectedValuePath="Value"
+                                  DisplayMemberPath="Description"
+                                  ItemsSource="{Binding SummaryTypes, Converter={StaticResource EnumHumanizerConverter}}" 
+                                  SelectedValue="{Binding ExportSettings.Summary}"/>
                     </Grid>
                 </Expander>
             </StackPanel>

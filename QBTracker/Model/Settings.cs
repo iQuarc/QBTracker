@@ -16,6 +16,7 @@ namespace QBTracker.Model
         public bool StartWithWindows { get; set; }
         public WorksheetOption WorksheetOption { get; set; }
         public AutoFilterOption AutoFilter { get; set; }
+        public SummaryType Summary { get; set; }
     }
 
     public enum RoundingInterval
@@ -49,5 +50,11 @@ namespace QBTracker.Model
     {
         None = 0,
         AutoFilter
+    }
+
+    public enum SummaryType 
+    {
+        None = 0,
+        Monthly
     }
 }

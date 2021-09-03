@@ -16,6 +16,8 @@ using QBTracker.Model;
 using QBTracker.Util;
 using QBTracker.Views;
 
+using static QBTracker.ViewModels.ExportViewModel;
+
 namespace QBTracker.ViewModels
 {
     public class ExportViewModel : ValidatableModel
@@ -59,6 +61,7 @@ namespace QBTracker.ViewModels
         public IEnumerable<GroupingType> GroupingTypes => Enum.GetValues<GroupingType>();
         public IEnumerable<WorksheetOption> WorksheetOptions => Enum.GetValues<WorksheetOption>();
         public IEnumerable<AutoFilterOption> AutoFilterOptions => Enum.GetValues<AutoFilterOption>();
+        public IEnumerable<SummaryType> SummaryTypes => Enum.GetValues<SummaryType>();
 
         public RelayCommand ExportCommand { get; }
         public RelayCommand GoBack { get; }
@@ -87,7 +90,9 @@ namespace QBTracker.ViewModels
             {
                 using (var p = new ExcelPackage())
                 {
-                    foreach (var exportGroup in GroupByWorkseetSheet())
+                    var timeRecords = GetTimeRecords()
+                        .ToList();
+                    foreach (var exportGroup in GroupByWorkseetSheet(timeRecords))
                     {
                         //A workbook must have at least one cell, so lets add one... 
                         var ws = p.Workbook.Worksheets.Add(exportGroup.Key);
@@ -110,7 +115,7 @@ namespace QBTracker.ViewModels
 
                         foreach (var exportRecord in exportGroup)
                         {
-                            ws.Cells[$"A{row}"].Value = date;
+                            ws.Cells[$"A{row}"].Value = exportRecord.Date;
                             ws.Cells[$"A{row}"].Style.Numberformat.Format = "mm-dd-yy"; // In Excel speak this means Date field that will be displayed with Region format
                             ws.Cells[$"B{row}"].Value = exportRecord.ProjectName;
                             ws.Cells[$"C{row}"].Value = exportRecord.TaskName;
@@ -119,6 +124,75 @@ namespace QBTracker.ViewModels
                             ws.Cells[$"E{row}"].Value = exportRecord.Notes;
                             row++;
                         }
+                        ws.Cells[ws.Dimension.Address].AutoFitColumns();
+                    }
+
+                    if (ExportSettings.Summary == SummaryType.Monthly)
+                    {
+                        var ws = p.Workbook.Worksheets.Add("Summary");
+                        p.Workbook.Worksheets.MoveToStart("Summary");
+
+                        var monthly = timeRecords
+                                        .OrderBy(x => x.Date.Year)
+                                        .OrderBy(x => x.Date.Month)
+                                        .GroupBy(x => x.Date.ToString("MMMM yyyy"));
+                        var projects = timeRecords
+                                        .Select(x => x.ProjectName)
+                                        .Distinct()
+                                        .ToList();
+
+                        ws.Cells["A1"].Value = "Month";
+                        ws.Cells["A1"].Style.Font.Bold = true;
+                        int idx = 1;
+                        var pc = new Dictionary<string, string>();
+                        foreach (var project in projects)
+                        {
+                            var col = GenerateSequence(idx++);
+                            ws.Cells[$"{col}1"].Value = project;
+                            ws.Cells[$"{col}1"].Style.Font.Bold = true;
+                            pc[project] = col;
+                        }
+                        var total = GenerateSequence(idx);
+                        ws.Cells[$"{total}1"].Value = "Montly Total";
+                        ws.Cells[$"{total}1"].Style.Font.Bold = true;
+                        if (ExportSettings.AutoFilter == AutoFilterOption.AutoFilter)
+                            ws.Cells[$"A1:{total}1"].AutoFilter = true;
+
+                        var row = 2;
+                        foreach (var item in monthly)
+                        {
+                            ws.Cells[$"A{row}"].Value = item.Key;
+                            var projectGoups = item
+                                .GroupBy(x => x.ProjectName)
+                                .Select(g => new { Project = g.Key, Hours = g.Sum(x => x.DurationHours) });
+                            foreach (var group in projectGoups)
+                            {
+                                ws.Cells[$"{pc[group.Project]}{row}"].Value = group.Hours;
+                                ws.Cells[$"{pc[group.Project]}{row}"].Style.Numberformat.Format = "0.##";
+                            }
+                            ws.Cells[$"{total}{row}"].Value = projectGoups.Sum(x => x.Hours);
+                            ws.Cells[$"{total}{row}"].Style.Numberformat.Format = "0.##";
+                            row++;
+                        }
+
+                        double grandTotal = 0;
+
+                        ws.Cells[$"A{row}"].Value = "Totals";
+                        ws.Cells[$"A{row}"].Style.Font.Bold = true;
+
+                        foreach (var project in projects)
+                        {
+                            var sum = timeRecords.Where(x => x.ProjectName == project).Sum(x => x.DurationHours);
+                            ws.Cells[$"{pc[project]}{row}"].Value = sum;
+                            ws.Cells[$"{pc[project]}{row}"].Style.Numberformat.Format = "0.##";
+                            ws.Cells[$"A{row}"].Style.Font.Bold = true;
+                            grandTotal += sum;
+                        }
+
+                        ws.Cells[$"{total}{row}"].Value = grandTotal;
+                        ws.Cells[$"{total}{row}"].Style.Numberformat.Format = "0.##";
+                        ws.Cells[$"{total}{row}"].Style.Font.Bold = true;
+
                         ws.Cells[ws.Dimension.Address].AutoFitColumns();
                     }
                     //Save the new workbook. We haven't specified the filename so use the Save as method.
@@ -132,9 +206,8 @@ namespace QBTracker.ViewModels
             }
         }
 
-        private IEnumerable<IGrouping<string, ExportRecord>> GroupByWorkseetSheet()
+        private IEnumerable<IGrouping<string, ExportRecord>> GroupByWorkseetSheet(IEnumerable<ExportRecord> timeRecords)
         {
-            var timeRecords = GetTimeRecords();
             return ExportSettings.WorksheetOption switch
             {
                 WorksheetOption.WorksheetPerMonth => timeRecords
@@ -233,6 +306,23 @@ namespace QBTracker.ViewModels
             public string TaskName { get; set; }
             public string Notes { get; set; }
             public double DurationHours { get; set; }
+        }
+
+        private string GenerateSequence(int num)
+        {
+            string str = "";
+            char achar;
+            int mod;
+            while (true)
+            {
+                mod = (num % 26) + 65;
+                num = (int)(num / 26);
+                achar = (char)mod;
+                str = achar + str;
+                if (num > 0) num--;
+                else if (num == 0) break;
+            }
+            return str;
         }
     }
 }
