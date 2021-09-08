@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading;
 using System.Windows;
+
 using MaterialDesignThemes.Wpf;
+
 using QBTracker.DataAccess;
 
 namespace QBTracker
@@ -12,11 +14,13 @@ namespace QBTracker
     /// </summary>
     public partial class App : Application
     {
+#if !DEBUG
         private Mutex mutex;
+#endif
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            #if !DEBUG
+#if !DEBUG
             const string mutexName = @"Global\QBTracker";
 
             mutex = new Mutex(true, mutexName, out var createdNew);
@@ -34,13 +38,15 @@ namespace QBTracker
                     bundle.SecondaryColor = settings.SecondaryColor.Value;
                 }
             }
-            #endif
+#endif
             base.OnStartup(e);
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
+#if !DEBUG
             mutex.ReleaseMutex();
+#endif
         }
     }
 }

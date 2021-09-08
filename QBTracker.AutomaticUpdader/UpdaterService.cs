@@ -139,6 +139,21 @@ namespace QBTracker.AutomaticUpdader
             return false;
         }
 
+        public void ExtractUpdater(Assembly assembly)
+        {
+            try
+            {
+                var names = assembly.GetManifestResourceNames();
+                using var stream = assembly.GetManifestResourceStream("QBTracker.Embeded.QBTrackerAutomaticUpdader.exe");
+                using var fs = File.Create(Path.Combine(TempAssembliesFolder, "QBTracker.AutomaticUpdader.exe"));
+                stream.CopyTo(fs);
+            }
+            catch (Exception ex)
+            {
+                LogMessage(ex.Message);
+            }
+        }
+
         public void LogMessage(string message)
         {
             liteRepository.Insert(new LogEntry
@@ -222,6 +237,7 @@ namespace QBTracker.AutomaticUpdader
 
         public void StartUpdater()
         {
+            this.ExtractUpdater(Assembly.GetCallingAssembly());
             var p = Process.Start(new ProcessStartInfo(Path.Combine(TempAssembliesFolder, "QBTracker.AutomaticUpdader.exe"), "--updateAndRestart")
             {
                 UseShellExecute = false,

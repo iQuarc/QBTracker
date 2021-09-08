@@ -11,12 +11,9 @@
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-    <ValidateExecutableReferencesMatchSelfContained>false</ValidateExecutableReferencesMatchSelfContained>
+    <ValidateExecutableReferencesMatchSelfContained>true</ValidateExecutableReferencesMatchSelfContained>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Images\pngfuel.ico" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="4.5.3.3" />
@@ -50,6 +47,14 @@
     <Page Update="Views\TaskView.xaml">
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Embeded\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\QBTracker.AutomaticUpdader\bin\Release\net5.0-windows\win-x64\publish\QBTrackerAutomaticUpdader.exe" Link="Embeded\QBTrackerAutomaticUpdader.exe" />
   </ItemGroup>
 
 </Project>
