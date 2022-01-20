@@ -7,9 +7,9 @@
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Margin" Value="2"/>
-        <Setter Property="Width" Value="48" />
-        <Setter Property="Height" Value="48" />
+         <Setter Property="Margin" Value="2"/>
+        <Setter Property="Width" Value="28"/>
+        <Setter Property="Height" Value="28"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
@@ -88,6 +88,7 @@
                                 <VisualState x:Name="Inactive" />
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
+
                         <Ellipse x:Name="TodayBackground"
                                  Fill="{DynamicResource PrimaryHueLightBrush}"
                                  Opacity="0" />
@@ -97,6 +98,7 @@
                         <Border BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Background="{TemplateBinding Background}" />
+
                         <Ellipse x:Name="HighlightBackground"
                                  Fill="{DynamicResource PrimaryHueDarkBrush}"
                                  Opacity="0" />
@@ -139,7 +141,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type CalendarDayButton}">
-                    <Grid>
+                    <Grid x:Name="MainButtonGrid">
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualStateGroup.Transitions>
@@ -164,7 +166,7 @@
                                 <VisualState x:Name="Unselected"/>
                                 <VisualState x:Name="Selected">
                                     <Storyboard>
-                                        <DoubleAnimation Duration="0" To=".75" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SelectedBackground"/>
+                                        <DoubleAnimation Duration="0" To=".45" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SelectedBackground"/>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground)" Storyboard.TargetName="NormalText">
                                             <DiscreteObjectKeyFrame Value="{DynamicResource PrimaryHueMidForegroundBrush}" KeyTime="0" />
                                         </ObjectAnimationUsingKeyFrames>
@@ -235,6 +237,21 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
+
+                        <Rectangle x:Name="DayFillRatio" 
+                                   HorizontalAlignment="Left" 
+                                   VerticalAlignment="Bottom" 
+                                   Width="6"
+                                   Fill="{DynamicResource SecondaryHueDarkBrush}">
+                        <Rectangle.Height>
+                            <MultiBinding Converter="{StaticResource DayFillConverter}">
+                                    <Binding Path=""></Binding>
+                                    <Binding Path="ActualHeight" ElementName="MainButtonGrid"></Binding>
+                                    <Binding Path="TimeUpdated" Source="{StaticResource Repository}"></Binding>
+                            </MultiBinding>
+                        </Rectangle.Height>
+                        </Rectangle>
+
                         <Ellipse x:Name="TodayBackground"
                                  Fill="Transparent"
                                  Opacity="0" 

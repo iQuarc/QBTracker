@@ -45,7 +45,9 @@
                             SelectedDate="{Binding SelectedDate}"
                             Width="100"
                             materialDesign:HintAssist.Hint="Pick Date"
-                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}" VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignFloatingHintDatePicker}"
+                            CalendarStyle="{StaticResource MaterialDesignCalendarPortrait}"
+                            VerticalAlignment="Center"
                             HorizontalAlignment="Center" />
                     <Button Grid.Column="3"
                         Style="{StaticResource MaterialDesignIconButton}"

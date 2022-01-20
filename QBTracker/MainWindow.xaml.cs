@@ -28,7 +28,7 @@ namespace QBTracker
             Top = desktopWorkingArea.Bottom - Height;
         }
 
-        private void MainWindow_OnClosed(object? sender, EventArgs e)
+        private void MainWindow_OnClosed(object sender, EventArgs e)
         {
             var vm = this.DataContext as MainWindowViewModel;
             vm.Repository.Dispose();
@@ -81,7 +81,7 @@ namespace QBTracker
             }
         }
 
-        private void MainWindow_OnStateChanged(object? sender, EventArgs e)
+        private void MainWindow_OnStateChanged(object sender, EventArgs e)
         {
             switch (this.WindowState)
             {

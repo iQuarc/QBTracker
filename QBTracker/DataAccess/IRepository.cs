@@ -17,12 +17,13 @@ namespace QBTracker.DataAccess
         void AddTask(Task task);
         void UpdateTask(Task task);
         List<TimeRecord> GetTimeRecords(DateTime date);
-        TimeRecord GetLastTimeRecord();
+        TimeRecord GetRunningTimeRecord();
         void AddTimeRecord(TimeRecord record);
         void UpdateTimeRecord(TimeRecord record);
         void DeleteTimeRecord(int timeRecordId);
         Settings GetSettings();
         void UpdateSettings();
         ILiteRepository GetLiteRepository();
+        double GetHours(DateTime date);
     }
 }

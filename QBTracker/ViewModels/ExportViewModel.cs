@@ -266,6 +266,7 @@ namespace QBTracker.ViewModels
                         DurationHours = g.Sum(x => Round((x.EndTime.Value - x.StartTime).TotalHours)),
                         Notes = string.Join(Environment.NewLine, g.Select(x => x.Notes))
                     }),
+                    _ => throw new NotSupportedException(),
             };
         }
 

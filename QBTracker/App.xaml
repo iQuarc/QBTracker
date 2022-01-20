@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:QBTracker"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:converters="clr-namespace:QBTracker.Converters"
+             xmlns:dataAccess="clr-namespace:QBTracker.DataAccess"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>

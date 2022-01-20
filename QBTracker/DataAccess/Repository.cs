@@ -4,14 +4,19 @@ using QBTracker.Model;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using QBTracker.Annotations;
 
 namespace QBTracker.DataAccess
 {
-    public class Repository : IRepository
+    public class Repository : IRepository, INotifyPropertyChanged
     {
         private Settings settingsCache;
+        private int timeUpdated;
 
         public Repository()
         {
@@ -87,9 +92,10 @@ namespace QBTracker.DataAccess
                 .ToList();
         }
 
-        public TimeRecord GetLastTimeRecord()
+        public TimeRecord GetRunningTimeRecord()
         {
             return Db.Query<TimeRecord>("TimeRecords")
+                .Where(x => x.EndTime == null)
                 .OrderByDescending(x => x.StartTime)
                 .FirstOrDefault();
         }
@@ -97,16 +103,19 @@ namespace QBTracker.DataAccess
         public void AddTimeRecord(TimeRecord record)
         {
             Db.Insert(record, "TimeRecords");
+            TimeUpdated += 1;
         }
 
         public void UpdateTimeRecord(TimeRecord record)
         {
             Db.Update(record, "TimeRecords");
+            TimeUpdated += 1;
         }
 
         public void DeleteTimeRecord(int timeRecordId)
         {
             Db.Delete<TimeRecord>(timeRecordId, "TimeRecords");
+            TimeUpdated += 1;
         }
 
         public Settings GetSettings()
@@ -135,6 +144,12 @@ namespace QBTracker.DataAccess
             return Db;
         }
 
+        public double GetHours(DateTime date)
+        {
+            var rec = GetTimeRecords(date);
+            return rec.Sum(x => Math.Abs(((x.EndTime ?? DateTime.Now) - x.StartTime).TotalHours));
+        }
+
         public void Dispose()
         {
             Db?.Dispose();
@@ -149,6 +164,17 @@ namespace QBTracker.DataAccess
             timeRecords.EnsureIndex(x => x.StartTime);
         }
 
+        public int TimeUpdated
+        {
+            get => timeUpdated;
+            set
+            {
+                if (value == timeUpdated) return;
+                timeUpdated = value;
+                OnPropertyChanged();
+            }
+        }
+
         private void CheckDbVersion()
         {
             //if (Db.Database.UserVersion == 0)
@@ -156,6 +182,14 @@ namespace QBTracker.DataAccess
             //    // Schema migration goes here
             //    Db.Database.UserVersion = 1;
             //}
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -36,7 +36,7 @@ namespace QBTracker.ViewModels
 
         public MainWindowViewModel()
         {
-            Repository = new Repository();
+            Repository = (IRepository)Application.Current.Resources["Repository"];
             CreateNewProject = new RelayCommand(ExecuteCreateNewProject);
             CreateNewTask = new RelayCommand(ExecuteCreateNewTask, _ => SelectedProjectId != null);
             StartStopRecording = new RelayCommand(ExecuteStartStopRecording,
@@ -51,7 +51,7 @@ namespace QBTracker.ViewModels
             SettingsViewModel = new SettingsViewModel(this);
             LoadProjects();
             SelectedDate = DateTime.Today;
-            var tr = Repository.GetLastTimeRecord();
+            var tr = Repository.GetRunningTimeRecord();
 
             timer = new DispatcherTimer();
             timer.Tick += TimerOnTick;

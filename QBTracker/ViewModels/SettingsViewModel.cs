@@ -181,17 +181,20 @@ namespace QBTracker.ViewModels
 
         private void RegisterInStartup(bool isChecked)
         {
-            var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
-            var processModule = Process.GetCurrentProcess().MainModule;
-            if (registryKey == null || processModule == null)
-                return;
-            if (isChecked)
+            if (OperatingSystem.IsWindows())
             {
-                registryKey.SetValue("QBTracker", processModule.FileName);
-            }
-            else
-            {
-                registryKey.DeleteValue("QBTracker", false);
+                var registryKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
+                var processModule = Process.GetCurrentProcess().MainModule;
+                if (registryKey == null || processModule == null)
+                    return;
+                if (isChecked)
+                {
+                    registryKey.SetValue("QBTracker", processModule.FileName);
+                }
+                else
+                {
+                    registryKey.DeleteValue("QBTracker", false);
+                }
             }
         }
 
