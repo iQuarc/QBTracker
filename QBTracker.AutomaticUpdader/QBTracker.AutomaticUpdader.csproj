@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <OutputType>exe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <AssemblyVersion>0.0.6.0</AssemblyVersion>
+    <AssemblyVersion>0.0.7.0</AssemblyVersion>
     <Authors>Catalin Pop</Authors>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
