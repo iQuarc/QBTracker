@@ -16,6 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\pngfuel-rec.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EPPlus" Version="4.5.3.3" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf.NetCore" Version="1.0.18" />
     <PackageReference Include="Humanizer.Core" Version="2.8.26" />
@@ -28,6 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\pngfuel-rec.ico" />
     <Resource Include="Images\pngfuel.ico" />
   </ItemGroup>
 

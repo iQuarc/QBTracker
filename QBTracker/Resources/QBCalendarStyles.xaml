@@ -410,6 +410,7 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Border Grid.ColumnSpan="3" Grid.Row="0" Background="{DynamicResource PrimaryHueMidBrush}" />
                                 <Button x:Name="PART_HeaderButton"
@@ -436,7 +437,23 @@
                                 </TextBlock>
                                 <Button x:Name="PART_NextButton" Grid.Row="1" Grid.Column="2" Focusable="False" HorizontalAlignment="Right" Height="36" Template="{StaticResource NextButtonTemplate}" Width="32"
                                             Margin="0 0 6 0" Foreground="{TemplateBinding Foreground}" />
-
+                                <TextBlock x:Name="CurrentMonthTimeAggregateTextBlock"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Margin="4, 0, 4, 4"
+                                           FontSize="14"
+                                           Grid.Row="3" Grid.Column="1"
+                                           FontWeight="Light"
+                                           Foreground="{DynamicResource SecondaryHueDarkBrush}">
+                                    <TextBlock.RenderTransform>
+                                        <TranslateTransform X="0" Y="0"/>
+                                </TextBlock.RenderTransform>
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource MonthTimeConverter}">
+                                            <Binding Path="DisplayDate" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Calendar}}"></Binding>
+                                            <Binding Path="TimeUpdated" Source="{StaticResource Repository}"></Binding>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <Grid x:Name="MonthViewWrapperGrid"
                                       Grid.ColumnSpan="3"
                                       Grid.Row="2"
@@ -467,6 +484,7 @@
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>

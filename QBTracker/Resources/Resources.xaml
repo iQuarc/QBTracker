@@ -9,4 +9,5 @@
     <converters:EnumHumanizerConverter x:Key="EnumHumanizerConverter" />
     <converters:NotNullToBoolConverter x:Key="NotNullToBoolConverter" />
     <converters:DayFillConverter x:Key="DayFillConverter" />
+    <converters:MonthTimeConverter x:Key="MonthTimeConverter" />
 </ResourceDictionary>

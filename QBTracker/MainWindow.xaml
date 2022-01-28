@@ -41,7 +41,7 @@
         <CommandBinding Command="{x:Static SystemCommands.CloseWindowCommand}" Executed="CloseWindowCommand_OnExecuted"></CommandBinding>
     </Window.CommandBindings>
     <Grid>
-        <tb:TaskbarIcon 
+        <tb:TaskbarIcon
         Visibility="Visible" VerticalAlignment="Top" HorizontalAlignment="Left"
         ToolTip="{Binding VersionString, Mode=OneTime}"
         IconSource="/Images/pngfuel.ico"
@@ -51,8 +51,42 @@
         DoubleClickCommand="{x:Static SystemCommands.RestoreWindowCommand}"
         DoubleClickCommandTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
         LeftClickCommand="{x:Static SystemCommands.RestoreWindowCommand}"
-        LeftClickCommandTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-    />
+        LeftClickCommandTarget="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+            <tb:TaskbarIcon.Style>
+                <Style TargetType="tb:TaskbarIcon">
+                    <Style.Resources>
+                        <ImageSource x:Key="RecordingIco">pack://application:,,,/Images/pngfuel-rec.ico</ImageSource>
+                        <ImageSource x:Key="RegularIco">pack://application:,,,/Images/pngfuel.ico</ImageSource>
+                    </Style.Resources>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsRecording}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <BeginStoryboard.Storyboard>
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="IconSource">
+                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{StaticResource RecordingIco}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard.Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <BeginStoryboard.Storyboard>
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="IconSource">
+                                                <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{StaticResource RegularIco}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard.Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </tb:TaskbarIcon.Style>
+        </tb:TaskbarIcon>
         <materialDesign:DialogHost VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <materialDesign:Transitioner x:Name="Transitioner" SelectedIndex="{Binding SelectedTransitionIndex}" AutoApplyTransitionOrigins="True" >
                 <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">

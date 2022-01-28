@@ -7,13 +7,15 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using Humanizer;
+using Humanizer.Localisation;
 using QBTracker.DataAccess;
 
 namespace QBTracker.Converters
 {
-    internal class DayFillConverter : IMultiValueConverter
+    internal class MonthTimeConverter : IMultiValueConverter
     {
-        public DayFillConverter()
+        public MonthTimeConverter()
         {
             this.Repository = (IRepository)Application.Current.Resources["Repository"];
         }
@@ -23,13 +25,13 @@ namespace QBTracker.Converters
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             var date = (DateTime)values[0];
-            var percent = Math.Min(Repository.GetDayAggregatedDayTime(date).TotalHours, 8d) / 8d;
-            return percent * System.Convert.ToDouble(values[1]);
+            var timeAggregate = Repository.GetDayAggregatedMonthTime(date);
+            return timeAggregate.Humanize(2, maxUnit:TimeUnit.Hour, minUnit: TimeUnit.Minute);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

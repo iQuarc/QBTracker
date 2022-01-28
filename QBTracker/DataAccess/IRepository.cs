@@ -16,14 +16,16 @@ namespace QBTracker.DataAccess
         Task GetTaskById(int id);
         void AddTask(Task task);
         void UpdateTask(Task task);
-        List<TimeRecord> GetTimeRecords(DateTime date);
+        List<TimeRecord> GetTimeRecords(DateTime date, IReadOnlyCollection<int> projectIds = null);
         TimeRecord GetRunningTimeRecord();
         void AddTimeRecord(TimeRecord record);
         void UpdateTimeRecord(TimeRecord record);
-        void DeleteTimeRecord(int timeRecordId);
+        void DeleteTimeRecord(TimeRecord record);
         Settings GetSettings();
         void UpdateSettings();
         ILiteRepository GetLiteRepository();
-        double GetHours(DateTime date);
+        TimeSpan GetDayAggregatedDayTime(DateTime date);
+        TimeSpan GetDayAggregatedMonthTime(DateTime date);
+        string GetProjectInfo(int projectId);
     }
 }

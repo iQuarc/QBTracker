@@ -29,11 +29,26 @@ namespace QBTracker.ViewModels
         public ExportViewModel(MainWindowViewModel mainVm)
         {
             this.mainVm = mainVm;
-            this.ExportCommand = new RelayCommand(ExecuteExport);
+            this.ExportCommand = new RelayCommand(ExecuteExport, _ => ExportProjects.Any(x => x.IsSelected));
             this.GoBack = new RelayCommand(_ => mainVm.GoBack());
             this.ExportSettings = mainVm.Repository.GetSettings();
             this.StartDate = new DateTime(DateTime.Today.Year, 1, 1);
             this.EndDate = DateTime.Today;
+        }
+
+        public void Activated()
+        {
+            this.EndDate = DateTime.Today;
+            this.ExportProjects.Clear();
+            this.ExportProjects.AddRange(
+            this.mainVm.Repository.GetProjects()
+                .Select(x => new ExportProject
+                {
+                    IsSelected = true,
+                    Id = x.Id,
+                    ProjectName = x.Name,
+                    Description = mainVm.Repository.GetProjectInfo(x.Id),
+                }).ToList());
         }
 
         public DateTime StartDate
@@ -62,6 +77,7 @@ namespace QBTracker.ViewModels
         public IEnumerable<WorksheetOption> WorksheetOptions => Enum.GetValues<WorksheetOption>();
         public IEnumerable<AutoFilterOption> AutoFilterOptions => Enum.GetValues<AutoFilterOption>();
         public IEnumerable<SummaryType> SummaryTypes => Enum.GetValues<SummaryType>();
+        public ObservableRangeCollection<ExportProject> ExportProjects { get; } = new();
 
         public RelayCommand ExportCommand { get; }
         public RelayCommand GoBack { get; }
@@ -226,7 +242,8 @@ namespace QBTracker.ViewModels
         {
             for (DateTime date = StartDate; date <= EndDate; date = date.AddDays(1))
             {
-                foreach (var record in GroupRecords(mainVm.Repository.GetTimeRecords(date), date))
+                var pIds = this.ExportProjects.Where(x => x.IsSelected).Select(x => x.Id).ToList();
+                foreach (var record in GroupRecords(mainVm.Repository.GetTimeRecords(date, pIds), date))
                 {
                     yield return record;
                 }
@@ -325,5 +342,13 @@ namespace QBTracker.ViewModels
             }
             return str;
         }
+    }
+
+    public class ExportProject
+    {
+        public bool IsSelected { get; set; }
+        public int Id { get; set; }
+        public string ProjectName { get; set; }
+        public string Description { get; set; }
     }
 }

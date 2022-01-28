@@ -82,14 +82,19 @@ namespace QBTracker.DataAccess
             Db.Update(task, "Tasks");
         }
 
-        public List<TimeRecord> GetTimeRecords(DateTime date)
+        public List<TimeRecord> GetTimeRecords(DateTime date, IReadOnlyCollection<int> projectIds = null)
         {
             var start = date.Date;
             var end = start.AddDays(1).AddTicks(-1);
-            return Db.Query<TimeRecord>("TimeRecords")
-                .Where(x => x.StartTime >= start && x.StartTime <= end)
-                .OrderBy(x => x.StartTime)
-                .ToList();
+
+            var q = Db.Query<TimeRecord>("TimeRecords")
+                .Where(x => x.StartTime >= start && x.StartTime <= end);
+
+            if (projectIds != null)
+                q = q.Where(x => projectIds.Contains(x.ProjectId));
+
+            return q.OrderBy(x => x.StartTime)
+            .ToList();
         }
 
         public TimeRecord GetRunningTimeRecord()
@@ -103,19 +108,25 @@ namespace QBTracker.DataAccess
         public void AddTimeRecord(TimeRecord record)
         {
             Db.Insert(record, "TimeRecords");
-            TimeUpdated += 1;
+            UpdateAggregatedTime(record.StartTime);
+            TimeUpdated++;
         }
 
         public void UpdateTimeRecord(TimeRecord record)
         {
+            var old = Db.SingleOrDefault<TimeRecord>(x => x.Id == record.Id, "TimeRecords");
+            if (old != null && old.StartTime.Day != record.StartTime.Day)
+                UpdateAggregatedTime(old.StartTime);
             Db.Update(record, "TimeRecords");
-            TimeUpdated += 1;
+            UpdateAggregatedTime(record.StartTime);
+            TimeUpdated++;
         }
 
-        public void DeleteTimeRecord(int timeRecordId)
+        public void DeleteTimeRecord(TimeRecord record)
         {
-            Db.Delete<TimeRecord>(timeRecordId, "TimeRecords");
-            TimeUpdated += 1;
+            Db.Delete<TimeRecord>(record.Id, "TimeRecords");
+            UpdateAggregatedTime(record.StartTime);
+            TimeUpdated++;
         }
 
         public Settings GetSettings()
@@ -144,15 +155,66 @@ namespace QBTracker.DataAccess
             return Db;
         }
 
-        public double GetHours(DateTime date)
+        public TimeSpan GetDayAggregatedDayTime(DateTime date)
         {
             var rec = GetTimeRecords(date);
-            return rec.Sum(x => Math.Abs(((x.EndTime ?? DateTime.Now) - x.StartTime).TotalHours));
+            return rec.Select(x => (x.EndTime ?? DateTime.Now) - x.StartTime).Aggregate(TimeSpan.Zero, (acc, x) => acc + x);
+        }
+
+        public TimeSpan GetDayAggregatedMonthTime(DateTime date)
+        {
+            return GetMonthAggregate(date).AggregateTime;
+        }
+
+        public string GetProjectInfo(int projectId)
+        {
+            return $"Tasks: {Db.Query<Task>("Tasks").Where(x => x.ProjectId == projectId && !x.IsDeleted).Count()}";
         }
 
         public void Dispose()
         {
             Db?.Dispose();
+        }
+
+        private void UpdateAggregatedTime(DateTime day)
+        {
+            var aggregate = GetMonthAggregate(day);
+
+            aggregate.DayAggregate[day.Day] = GetDayAggregatedDayTime(day);
+            aggregate.AggregateTime = TimeSpan.FromTicks(aggregate.DayAggregate.Sum(x => x.Ticks));
+            Db.Upsert(aggregate, "TimeAggregates");
+        }
+
+        private TimeAggregate GetMonthAggregate(DateTime day)
+        {
+            var aggregate = Db.FirstOrDefault<TimeAggregate>(x => x.Year == day.Year && x.Month == day.Month, "TimeAggregates");
+            if (aggregate == null)
+            {
+                aggregate = new TimeAggregate
+                {
+                    Year = day.Year,
+                    Month = day.Month
+                };
+                var firstDay = new DateTime(day.Year, day.Month, 1);
+                var lastDay = firstDay.AddMonths(1).AddTicks(-1);
+                var dailyAggregates = Db.Query<TimeRecord>("TimeRecords")
+                    .Where(x => x.StartTime >= firstDay && x.StartTime <= lastDay)
+                    .ToList()
+                    .GroupBy(x => x.StartTime.Day)
+                    .Select(x => new
+                    {
+                        Day = x.Key,
+                        Time = x.Select(x => (x.EndTime ?? DateTime.Now) - x.StartTime)
+                            .Aggregate(TimeSpan.Zero, (acc, x) => acc + x)
+                    });
+                foreach (var dailyAggregate in dailyAggregates)
+                {
+                    aggregate.DayAggregate[dailyAggregate.Day] = dailyAggregate.Time;
+                }
+                aggregate.AggregateTime = TimeSpan.FromTicks(aggregate.DayAggregate.Sum(x => x.Ticks));
+            }
+
+            return aggregate;
         }
 
         private void EnsureIndexes()
@@ -162,6 +224,9 @@ namespace QBTracker.DataAccess
 
             var timeRecords = Db.Database.GetCollection<TimeRecord>("TimeRecords");
             timeRecords.EnsureIndex(x => x.StartTime);
+
+            var timeAggregates = Db.Database.GetCollection<TimeAggregate>("TimeAggregates");
+            timeAggregates.EnsureIndex(x => new { x.Year, x.Month }, true);
         }
 
         public int TimeUpdated

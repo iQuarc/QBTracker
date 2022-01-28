@@ -179,7 +179,7 @@ namespace QBTracker.ViewModels
                 DataContext = "Are you sure?"
             }))
             {
-                this.mainVm.Repository.DeleteTimeRecord(this.TimeRecord.Id);
+                this.mainVm.Repository.DeleteTimeRecord(this.TimeRecord);
                 this.mainVm.TimeRecords.Remove(this);
                 this.mainVm.GoBack();
             }

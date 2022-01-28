@@ -75,7 +75,7 @@ namespace QBTracker.ViewModels
         private void ExportToExcel()
         {
             this.SelectedTransitionIndex = Pages.ExportToExcel;
-            this.ExportViewModel.EndDate = DateTime.Today;
+            this.ExportViewModel.Activated();
         }
 
         private void TimerOnTick(object sender, EventArgs e)
