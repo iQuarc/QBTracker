@@ -180,7 +180,7 @@ namespace QBTracker.DataAccess
         {
             var aggregate = GetMonthAggregate(day);
 
-            aggregate.DayAggregate[day.Day] = GetDayAggregatedDayTime(day);
+            aggregate.DayAggregate[day.Day-1] = GetDayAggregatedDayTime(day);
             aggregate.AggregateTime = TimeSpan.FromTicks(aggregate.DayAggregate.Sum(x => x.Ticks));
             Db.Upsert(aggregate, "TimeAggregates");
         }
@@ -209,7 +209,7 @@ namespace QBTracker.DataAccess
                     });
                 foreach (var dailyAggregate in dailyAggregates)
                 {
-                    aggregate.DayAggregate[dailyAggregate.Day] = dailyAggregate.Time;
+                    aggregate.DayAggregate[dailyAggregate.Day-1] = dailyAggregate.Time;
                 }
                 aggregate.AggregateTime = TimeSpan.FromTicks(aggregate.DayAggregate.Sum(x => x.Ticks));
             }
