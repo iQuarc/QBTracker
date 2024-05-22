@@ -85,6 +85,7 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Rectangle Grid.Column="0" Fill="{DynamicResource SecondaryHueLightBrush}" Stroke="{x:Null}" Visibility="{Binding IsRecordingTime, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                <Rectangle Grid.Column="0" Fill="{DynamicResource RedWarning}" Stroke="{x:Null}" Visibility="{Binding IsError, Converter={StaticResource BoolToVisibilityConverter}}" />
                                 <Grid Grid.Column="1" Margin="8">
                                     <VisualStateManager.VisualStateGroups>
                                         <VisualStateGroup Name="CommonStates">
@@ -127,7 +128,7 @@
                                             HorizontalAlignment="Stretch"
                                             Orientation="Horizontal"
                                             Margin="8 0 0 0">
-                                        <TextBlock FontWeight="Bold" Text="{Binding StarTime, StringFormat={}{0:HH:mm}}" />
+                                        <TextBlock FontWeight="Bold" Text="{Binding StartTime, StringFormat={}{0:HH:mm}}" />
                                         <TextBlock Margin="5 0 0 0" FontWeight="Light"
                                                Text="{Binding Duration, StringFormat={}{0:h\\h\\ m\\m}}" />
                                     </StackPanel>

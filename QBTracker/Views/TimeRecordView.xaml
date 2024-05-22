@@ -119,8 +119,23 @@
                    Grid.Column="1" VerticalAlignment="Center" Margin="10"
                    Foreground="{DynamicResource SecondaryHueLightBrush}" />
         <TextBlock Text="Start time" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10" />
-        <conrol:DateTimePicker Grid.Row="3" Grid.Column="1" Width="220" Height="32" DateValue="{Binding StarTime}"
+        <conrol:DateTimePicker Grid.Row="3" Grid.Column="1" Width="220" Height="32" DateValue="{Binding StartTime}"
                                HorizontalAlignment="Left" VerticalAlignment="Center" />
+        <Button
+                Grid.Row="3"
+                Grid.Column="1"
+                Margin="10"
+                Height="26"
+                Width="26"
+                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                HorizontalAlignment="Right"
+                ToolTip="{Binding SnapTooltip}"
+                Command="{Binding SnapToPrevious}">
+            <materialDesign:PackIcon
+                    Kind="ArrowCollapseUp"
+                    Height="20"
+                    Width="20" HorizontalAlignment="Center" />
+        </Button>
         <TextBlock Text="End time" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="10" />
         <conrol:DateTimePicker Grid.Row="4" Grid.Column="1" Width="220" Height="32" DateValue="{Binding EndTime}"
                                HorizontalAlignment="Left" VerticalAlignment="Center"

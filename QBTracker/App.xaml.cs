@@ -26,7 +26,7 @@ namespace QBTracker
             mutex = new Mutex(true, mutexName, out var createdNew);
             if (!createdNew)
                 Environment.Exit(0);
-
+#endif
             using (var repository = new Repository())
             {
                 var settings = repository.GetSettings();
@@ -38,7 +38,6 @@ namespace QBTracker
                     bundle.SecondaryColor = settings.SecondaryColor.Value;
                 }
             }
-#endif
             base.OnStartup(e);
         }
 

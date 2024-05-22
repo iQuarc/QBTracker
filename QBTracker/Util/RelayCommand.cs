@@ -19,10 +19,24 @@ namespace QBTracker.Util
             return _canExecute?.Invoke(parameter) ?? true;
         }
 
+        public void RaiseCanExecuteChanged()
+        {
+            localHandler?.Invoke(this, EventArgs.Empty);
+        }
+
+        public EventHandler localHandler;
         public event EventHandler CanExecuteChanged
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            add
+            {
+                CommandManager.RequerySuggested += value;
+                localHandler += value;
+            }
+            remove
+            {
+                CommandManager.RequerySuggested -= value;
+                localHandler -= value;
+            }
         }
 
         public void Execute(object parameter)

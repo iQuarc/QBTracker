@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <OutputType>exe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <AssemblyVersion>0.0.7.0</AssemblyVersion>
+    <AssemblyVersion>0.0.8.0</AssemblyVersion>
     <Authors>Catalin Pop</Authors>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="LiteDB" Version="5.0.13" />
+    <PackageReference Include="LiteDB" Version="5.0.19" />
     <PackageReference Include="Microsoft.SyndicationFeed.ReaderWriter" Version="1.0.2" />
   </ItemGroup>
 

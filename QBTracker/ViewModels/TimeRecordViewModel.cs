@@ -28,7 +28,7 @@ namespace QBTracker.ViewModels
             DeleteCommand = new RelayCommand(ExecuteDelete);
             EditCommand = new RelayCommand(ExecuteEdit);
             GoBack = new RelayCommand(ExecuteGoBack);
-
+            SnapToPrevious = new RelayCommand(ExecuteSnapToPrevious, CanExecuteSnapToPrevious);
             if (!EndTime.HasValue)
             {
 
@@ -39,7 +39,7 @@ namespace QBTracker.ViewModels
 
         public MainWindowViewModel MainVm => mainVm;
 
-        public DateTime StarTime
+        public DateTime StartTime
         {
             get => TimeRecord.StartTime.ToLocalTime();
             set
@@ -49,12 +49,15 @@ namespace QBTracker.ViewModels
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(nameof(Duration));
                 NotifyOfPropertyChange(nameof(DurationText));
+                NotifyOfPropertyChange(nameof(SnapTooltip));
+                NotifyOfPropertyChange(nameof(SnapToPrevious));
+                SnapToPrevious.RaiseCanExecuteChanged();
             }
         }
 
         public DateTime? EndTime
         {
-            get => TimeRecord.EndTime != null ? TimeRecord.EndTime.Value.ToLocalTime() : (DateTime?) null;
+            get => TimeRecord.EndTime?.ToLocalTime();
             set
             {
                 if (value == null)
@@ -72,13 +75,31 @@ namespace QBTracker.ViewModels
 
         public bool IsEndTimeEnabled => EndTime != null;
         public bool IsRecordingTime => EndTime == null;
+        public bool IsError => EndTime != null && EndTime < StartTime;
 
         public RelayCommand GoBack { get; }
+        public RelayCommand SnapToPrevious { get; }
+
         private void ExecuteGoBack(object o)
         {
             tasks = null;
             mainVm.GoBack();
         }
+
+        private void ExecuteSnapToPrevious(object o)
+        {
+            this.StartTime = PreviousRecord.EndTime.Value.ToLocalTime();
+        }
+
+        private bool CanExecuteSnapToPrevious(object o)
+        {          
+            return PreviousRecord != null && PreviousRecord?.EndTime != TimeRecord.StartTime;
+        }
+
+        private TimeRecord? PreviousRecord =>
+            mainVm.TimeRecords
+                .Where(x => x.TimeRecord != this.TimeRecord && x.TimeRecord.StartTime < this.TimeRecord.StartTime && x.TimeRecord.EndTime.HasValue)
+                .MaxBy(x => x.TimeRecord.StartTime)?.TimeRecord;
 
         public int? SelectedProjectId
         {
@@ -134,21 +155,32 @@ namespace QBTracker.ViewModels
 
         public string DurationText => EndTime.HasValue ? Duration.ToString(@"h\h\ m\m") : "...";
         public TimeSpan Duration => EndTime.HasValue
-            ? (EndTime.Value - StarTime)
-            : (DateTime.Now - StarTime);
+            ? (EndTime.Value - StartTime)
+            : (DateTime.Now - StartTime);
 
         public string ToolTip
         {
             get
             {
                 if (EndTime == null)
-                    if (StarTime.Date == DateTime.Today)
-                        return $"St: {StarTime:HH:mm}";
+                    if (StartTime.Date == DateTime.Today)
+                        return $"St: {StartTime:HH:mm}";
                     else
-                        return $"St: {StarTime:F}";
-                if (StarTime.Date == DateTime.Today && EndTime.Value.Date == DateTime.Today)
-                    return $"St: {StarTime:HH:mm} - Et: {EndTime:HH:mm}";
-                return $"St: {StarTime:F} - Et: {EndTime:F}";
+                        return $"St: {StartTime:F}";
+                if (StartTime.Date == DateTime.Today && EndTime.Value.Date == DateTime.Today)
+                    return $"St: {StartTime:HH:mm} - Et: {EndTime:HH:mm}";
+                return $"St: {StartTime:F} - Et: {EndTime:F}";
+            }
+        }
+
+        public string SnapTooltip
+        {
+            get
+            {
+                var rec = PreviousRecord;
+                if (rec != null)
+                    return $"Snap to previous: {rec.EndTime?.ToLocalTime():HH:mm}";
+                return "Snap to previous";
             }
         }
 
@@ -181,6 +213,8 @@ namespace QBTracker.ViewModels
             {
                 this.mainVm.Repository.DeleteTimeRecord(this.TimeRecord);
                 this.mainVm.TimeRecords.Remove(this);
+                if (!this.EndTime.HasValue)
+                    this.mainVm.StartStopRecording.Execute(null);
                 this.mainVm.GoBack();
             }
         }

@@ -10,4 +10,5 @@
     <converters:NotNullToBoolConverter x:Key="NotNullToBoolConverter" />
     <converters:DayFillConverter x:Key="DayFillConverter" />
     <converters:MonthTimeConverter x:Key="MonthTimeConverter" />
+    <SolidColorBrush x:Key="RedWarning">Red</SolidColorBrush>
 </ResourceDictionary>

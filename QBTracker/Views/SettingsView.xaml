@@ -8,6 +8,7 @@
              xmlns:viewModels="clr-namespace:QBTracker.ViewModels"
              xmlns:converters="clr-namespace:QBTracker.Converters"
              mc:Ignorable="d"
+             d:Background="White"
              d:DesignHeight="694" d:DesignWidth="410">
     <Grid>
         <Grid.RowDefinitions>
@@ -86,7 +87,7 @@
                           Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
                           IsChecked="{Binding AutomaticallyStart}" />
         </Grid>
-        <TextBox Grid.Row="3" Grid.Column="0" Margin="10" Visibility="Visible"
+        <TextBox Grid.Row="3" Grid.Column="0" Margin="10"
                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                  Text="{Binding Debug, Mode=OneWay}"
                  IsReadOnly="True"
@@ -97,6 +98,12 @@
                  MinHeight="200"
                  materialDesign:HintAssist.Hint="Debug"
                  VerticalScrollBarVisibility="Auto"
-                 HorizontalScrollBarVisibility="Auto" />
+                 HorizontalScrollBarVisibility="Auto"
+                 Visibility="{Binding ShowDebugInfo, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <Button Grid.Row="4" 
+                Margin="10, 10" 
+                HorizontalAlignment="Left" 
+                Visibility="{Binding ShowDebugInfo, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{Binding ClearAggregates}">Clear Aggregates</Button>
     </Grid>
 </UserControl>

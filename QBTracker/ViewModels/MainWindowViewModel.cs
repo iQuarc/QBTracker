@@ -268,7 +268,7 @@ namespace QBTracker.ViewModels
                 var task = Repository.GetTaskById(SelectedTaskId.Value);
                 var timeRecord = new TimeRecord
                 {
-                    StartTime = DateTime.UtcNow,
+                    StartTime = DateTime.Now.ToUniversalTime(),
                     ProjectName = project.Name,
                     ProjectId = project.Id,
                     TaskName = task.Name,

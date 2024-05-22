@@ -26,6 +26,7 @@ namespace QBTracker.DataAccess
         ILiteRepository GetLiteRepository();
         TimeSpan GetDayAggregatedDayTime(DateTime date);
         TimeSpan GetDayAggregatedMonthTime(DateTime date);
+        void ClearAggregates();
         string GetProjectInfo(int projectId);
     }
 }

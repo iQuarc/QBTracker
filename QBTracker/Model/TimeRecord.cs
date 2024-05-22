@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace QBTracker.Model
 {
+    [DebuggerDisplay("{TaskName} - {StartTime} : {EndTime}")]
     public class TimeRecord
     {
         public int Id { get; set; }

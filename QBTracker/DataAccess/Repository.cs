@@ -93,8 +93,14 @@ namespace QBTracker.DataAccess
             if (projectIds != null)
                 q = q.Where(x => projectIds.Contains(x.ProjectId));
 
-            return q.OrderBy(x => x.StartTime)
+            var records = q.OrderBy(x => x.StartTime)
             .ToList();
+            foreach (var record in records)
+            {
+                record.StartTime = record.StartTime.ToUniversalTime();
+                record.EndTime = record.EndTime?.ToUniversalTime();
+            }
+            return records;
         }
 
         public TimeRecord GetRunningTimeRecord()
@@ -215,6 +221,11 @@ namespace QBTracker.DataAccess
             }
 
             return aggregate;
+        }
+
+        public void ClearAggregates()
+        {
+            Db.Database.GetCollection<TimeAggregate>("TimeAggregates").DeleteAll();
         }
 
         private void EnsureIndexes()

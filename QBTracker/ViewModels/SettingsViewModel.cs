@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -27,6 +28,8 @@ namespace QBTracker.ViewModels
         private bool updateAvailable;
         private string downloadMessage = "Update";
         private DispatcherTimer updateTimer;
+        private bool showDebugInfo;
+
         public UpdaterService UpdaterService { get; }
         public SettingsViewModel(MainWindowViewModel mainVm)
         {
@@ -36,6 +39,7 @@ namespace QBTracker.ViewModels
             UpdaterService = new UpdaterService(this.mainVm.Repository.GetLiteRepository());
             GoBack = new RelayCommand(_ => mainVm.GoBack());
             DownloadUpdate = new RelayCommand(ExecuteDownloadUpdate);
+            ClearAggregates = new RelayCommand(ExecuteClearAggregates);
         }
 
         public Settings Settings { get; }
@@ -57,6 +61,20 @@ namespace QBTracker.ViewModels
             {
                 IsDownloading = false;
                 this.DownloadMessage = "Update";
+            }
+        }
+
+        private void ExecuteClearAggregates(object o)
+        {
+            mainVm.Repository.ClearAggregates();
+        }
+
+        public bool ShowDebugInfo
+        {
+            get => showDebugInfo; set
+            {
+                showDebugInfo = value;
+                NotifyOfPropertyChange();
             }
         }
 
@@ -134,6 +152,7 @@ namespace QBTracker.ViewModels
         public BundledTheme BundledTheme { get; }
         public RelayCommand GoBack { get; }
         public RelayCommand DownloadUpdate { get; }
+        public RelayCommand ClearAggregates { get; }
 
         public async Task<bool> CheckForUpdateSequence(bool force = false)
         {

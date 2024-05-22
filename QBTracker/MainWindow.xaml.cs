@@ -79,6 +79,12 @@ namespace QBTracker
                 var vm = this.DataContext as MainWindowViewModel;
                 await vm.SettingsViewModel.CheckForUpdateSequence(true);
             }
+
+            if (e.Key == Key.F12 && Keyboard.Modifiers == ModifierKeys.Shift)
+            {
+                var vm = this.DataContext as MainWindowViewModel;
+                vm.SettingsViewModel.ShowDebugInfo = !vm.SettingsViewModel.ShowDebugInfo;
+            }
         }
 
         private void MainWindow_OnStateChanged(object sender, EventArgs e)
