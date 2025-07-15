@@ -16,7 +16,7 @@ Download from [Releases](https://github.com/iQuarc/QBTracker/releases). Single E
 
 Libraries used:
 
-- [Material Design in XAML](http://materialdesigninxaml.net/)
+- [Material Design in XAML](https://github.com/MaterialDesignInXAML)
 - [Lite DB](https://www.litedb.org/)
 - [EPPlus 4.5.3.3](https://www.nuget.org/packages/EPPlus/4.5.3.3)
 - [Hardcodet.NotifyIcon.Wpf.NetCore](https://www.nuget.org/packages/Hardcodet.NotifyIcon.Wpf.NetCore/)
