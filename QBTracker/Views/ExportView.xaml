@@ -55,12 +55,14 @@
         <DatePicker Grid.Row="1" Grid.Column="0" Margin="10,0,0,0"
                     Width="140"
                     HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
                     materialDesign:HintAssist.Hint="Start date"
                     SelectedDate="{Binding StartDate}"
                     Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
         <DatePicker Grid.Row="1" Grid.Column="1" Margin="10,0,10,0"
                     Width="140"
                     HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
                     materialDesign:HintAssist.Hint="End date"
                     SelectedDate="{Binding EndDate}"
                     Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
