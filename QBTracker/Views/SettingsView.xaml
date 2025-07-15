@@ -84,7 +84,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Margin="10" VerticalAlignment="Center">Automatically start QBTracker with Windows</TextBlock>
             <ToggleButton Grid.Column="1" Margin="0,10,10,10"
-                          Style="{StaticResource MaterialDesignSwitchAccentToggleButton}"
+                          Style="{StaticResource MaterialDesignSwitchSecondaryToggleButton}"
                           IsChecked="{Binding AutomaticallyStart}" />
         </Grid>
         <TextBox Grid.Row="3" Grid.Column="0" Margin="10"
@@ -99,11 +99,11 @@
                  materialDesign:HintAssist.Hint="Debug"
                  VerticalScrollBarVisibility="Auto"
                  HorizontalScrollBarVisibility="Auto"
-                 Visibility="{Binding ShowDebugInfo, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                 Visibility="{Binding ShowDebugInfo, Converter={StaticResource BoolToVisibilityConverter}}"/>
         <Button Grid.Row="4" 
                 Margin="10, 10" 
                 HorizontalAlignment="Left" 
-                Visibility="{Binding ShowDebugInfo, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Visibility="{Binding ShowDebugInfo, Converter={StaticResource BoolToVisibilityConverter}}"
                 Command="{Binding ClearAggregates}">Clear Aggregates</Button>
     </Grid>
 </UserControl>

@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:QBTracker.Views"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:viewModels="clr-namespace:QBTracker.ViewModels"
-             xmlns:conrol="clr-namespace:QBTracker.Conrol"
              mc:Ignorable="d"
              d:DesignHeight="694" d:DesignWidth="410">
     <Grid>
@@ -139,7 +138,7 @@
                                         Margin="2"
                                         Width="20"
                                         Height="20"
-                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                         ToolTip="Edit"
                                         Command="{Binding EditCommand}"
                                         Opacity="1">
@@ -188,7 +187,7 @@
                 Margin="10"
                 Height="24"
                 Width="24"
-                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
                 HorizontalAlignment="Right"
                 ToolTip="Add or edit Project"
                 Command="{Binding CreateNewProject}">
@@ -215,7 +214,7 @@
                 Margin="10"
                 Height="24"
                 Width="24"
-                Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
                 HorizontalAlignment="Right"
                 ToolTip="Add or edit Task"
                 Command="{Binding CreateNewTask}">
@@ -275,7 +274,7 @@
                             </Span>
                         </TextBlock>
                         <Button Grid.Column="1" Margin="10,0"
-                                Style ="{StaticResource MaterialDesignRaisedAccentButton}"
+                                Style ="{StaticResource MaterialDesignRaisedSecondaryButton}"
                                 Width="120" 
                                 Height="25"
                                 Command="{Binding SettingsViewModel.DownloadUpdate}"

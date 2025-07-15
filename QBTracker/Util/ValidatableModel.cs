@@ -6,14 +6,14 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace QBTracker.Util
 {
     public class ValidatableModel : INotifyDataErrorInfo, INotifyPropertyChanged
     {
-        private readonly ConcurrentDictionary<string, List<string>> errors =
-            new ConcurrentDictionary<string, List<string>>();
+        private readonly ConcurrentDictionary<string, List<string>> errors = new();
 
         private readonly ConcurrentDictionary<string, byte> touchedProperties = new ConcurrentDictionary<string, byte>();
 
@@ -29,8 +29,8 @@ namespace QBTracker.Util
             }
         }
 
-        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+        public event PropertyChangedEventHandler?              PropertyChanged;
 
         protected void AddError(string key, string message)
         {
@@ -44,10 +44,11 @@ namespace QBTracker.Util
             ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
 
-        public virtual IEnumerable GetErrors(string propertyName)
+        public virtual IEnumerable GetErrors(string? propertyName)
         {
+           propertyName ??= "";
             errors.TryGetValue(propertyName, out var errorsForName);
-            return errorsForName;
+            return errorsForName ?? [];
         }
 
         public virtual bool HasErrors
@@ -70,7 +71,7 @@ namespace QBTracker.Util
             return Task.Run(() => ValidateCore(true));
         }
 
-        private readonly object _lock = new object();
+        private readonly Lock _lock = new();
         public virtual void Validate()
         {
             ValidateCore(false);

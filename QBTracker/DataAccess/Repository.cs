@@ -15,7 +15,7 @@ namespace QBTracker.DataAccess
 {
     public class Repository : IRepository, INotifyPropertyChanged
     {
-        private Settings settingsCache;
+        private Settings? settingsCache;
         private int timeUpdated;
 
         public Repository()
@@ -27,7 +27,7 @@ namespace QBTracker.DataAccess
             var file = Path.Combine(appDAta, @"QBTracker\QBData.db"); 
 #endif
             if (!Directory.Exists(Path.GetDirectoryName(file)))
-                Directory.CreateDirectory(Path.GetDirectoryName(file));
+                Directory.CreateDirectory(Path.GetDirectoryName(file)!);
             Db = new LiteRepository(file);
             CheckDbVersion();
             EnsureIndexes();
@@ -82,7 +82,7 @@ namespace QBTracker.DataAccess
             Db.Update(task, "Tasks");
         }
 
-        public List<TimeRecord> GetTimeRecords(DateTime date, IReadOnlyCollection<int> projectIds = null)
+        public List<TimeRecord> GetTimeRecords(DateTime date, IReadOnlyCollection<int>? projectIds = null)
         {
             var start = date.Date;
             var end = start.AddDays(1).AddTicks(-1);
@@ -133,6 +133,11 @@ namespace QBTracker.DataAccess
             Db.Delete<TimeRecord>(record.Id, "TimeRecords");
             UpdateAggregatedTime(record.StartTime);
             TimeUpdated++;
+        }
+
+        public void AddLogEntry(LogEntry entry)
+        {
+           Db.Insert(entry);
         }
 
         public Settings GetSettings()
@@ -260,7 +265,7 @@ namespace QBTracker.DataAccess
             //}
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -3,20 +3,14 @@ using System.Windows.Input;
 
 namespace QBTracker.Util
 {
-    public class RelayCommand : ICommand
+    public class RelayCommand(Action<object?> execute, Func<object?, bool>? canExecute = null)
+       : ICommand
     {
-        readonly Action<object> _execute = null;
-        readonly Func<object, bool> _canExecute = null;
+        readonly Action<object?> _execute = execute ?? throw new ArgumentNullException(nameof(execute));
 
-        public RelayCommand(Action<object> execute, Func<object, bool> canExecute = null)
+        public bool CanExecute(object? parameter)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
-        }
-
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute?.Invoke(parameter) ?? true;
+            return canExecute?.Invoke(parameter) ?? true;
         }
 
         public void RaiseCanExecuteChanged()
@@ -24,8 +18,8 @@ namespace QBTracker.Util
             localHandler?.Invoke(this, EventArgs.Empty);
         }
 
-        public EventHandler localHandler;
-        public event EventHandler CanExecuteChanged
+        private EventHandler? localHandler;
+        public event EventHandler? CanExecuteChanged
         {
             add
             {
@@ -39,7 +33,7 @@ namespace QBTracker.Util
             }
         }
 
-        public void Execute(object parameter)
+        public void Execute(object? parameter)
         {
             _execute(parameter);
         }

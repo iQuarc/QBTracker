@@ -45,7 +45,7 @@
                         Margin="10"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
-                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
                         ToolTip="Export to Excel"
                         Command="{Binding ExportCommand}">
                     <materialDesign:PackIcon Kind="TableExport" Width="22" Height="22" />
@@ -152,7 +152,7 @@
                                   SelectedValue="{Binding ExportSettings.Summary}"/>
                     </Grid>
                 </Expander>
-                <Expander Header="Projects">
+                <Expander Header="{Binding ProjectsTitle, Mode=OneWay}">
                     <ItemsControl
                         ItemsSource="{Binding ExportProjects}"
                         Grid.IsSharedSizeScope="True"

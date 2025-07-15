@@ -47,7 +47,7 @@
             materialDesign:HintAssist.HelperText="Insert your task name here" />
         <Button
             Grid.Row="2"
-            Style="{StaticResource MaterialDesignFlatAccentBgButton}"
+            Style="{StaticResource MaterialDesignFlatSecondaryButton}"
             VerticalAlignment="Center" HorizontalAlignment="Right"
             ToolTip="Add Task"
             Margin="10"
@@ -78,7 +78,7 @@
                                 <TextBlock Text="{Binding Stats}" />
                             </StackPanel>
                             <Button Grid.Column="1" Margin="1" Width="20" Height="20"
-                                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                    Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
                                     ToolTip="Delete Task"
                                     Command="{Binding DeleteCommand}">
                                 <materialDesign:PackIcon

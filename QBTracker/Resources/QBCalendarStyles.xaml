@@ -333,7 +333,7 @@
                                 </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
-                        <materialDesign:Card UniformCornerRadius="2"  Background="{TemplateBinding Background}" materialDesign:ShadowAssist.ShadowDepth="Depth0">
+                        <materialDesign:Card UniformCornerRadius="2"  Background="{TemplateBinding Background}" materialDesign:ElevationAssist.Elevation ="Dp0">
                             <Grid>
                                 <Grid.Resources>
                                     <ControlTemplate x:Key="PreviousButtonTemplate" TargetType="{x:Type Button}">
