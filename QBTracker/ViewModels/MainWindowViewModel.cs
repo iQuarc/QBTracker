@@ -321,7 +321,7 @@ namespace QBTracker.ViewModels
             .Select(x => new ProjectViewModel(x, this)));
       }
 
-      private void LoadTasks()
+      public void LoadTasks()
       {
          Tasks.Clear();
          if (SelectedProjectId.HasValue)

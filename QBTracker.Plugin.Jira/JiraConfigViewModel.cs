@@ -8,9 +8,8 @@ namespace QBTracker.Plugin.Jira
    public class JiraConfigViewModel : INotifyPropertyChanged
    {
       private readonly IPluginConfigRepository configRepository;
-      private readonly JiraConfig config;
-      private string? statusMessage;
-      private bool isTesting;
+      private readonly JiraConfig              config;
+      private          bool                    isTesting;
 
       public JiraConfigViewModel(IPluginConfigRepository configRepository)
       {
@@ -52,8 +51,12 @@ namespace QBTracker.Plugin.Jira
 
       public string? StatusMessage
       {
-         get => statusMessage;
-         set { statusMessage = value; OnPropertyChanged(); }
+         get;
+         set
+         {
+            field = value;
+            OnPropertyChanged();
+         }
       }
 
       public bool IsNotTesting => !isTesting;

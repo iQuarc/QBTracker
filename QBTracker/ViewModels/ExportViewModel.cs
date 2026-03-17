@@ -15,8 +15,6 @@ namespace QBTracker.ViewModels
    public class ExportViewModel : ValidatableModel
    {
       private readonly MainWindowViewModel mainVm;
-      private          DateTime            startDate;
-      private          DateTime            endDate;
 
       public ExportViewModel(MainWindowViewModel mainVm)
       {
@@ -54,20 +52,20 @@ namespace QBTracker.ViewModels
 
       public DateTime StartDate
       {
-         get => startDate;
+         get;
          set
          {
-            startDate = value;
+            field = value;
             NotifyOfPropertyChange();
          }
       }
 
       public DateTime EndDate
       {
-         get => endDate;
+         get;
          set
          {
-            endDate = value;
+            field = value;
             NotifyOfPropertyChange();
          }
       }

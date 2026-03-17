@@ -7,9 +7,6 @@ namespace QBTracker.ViewModels
     public class QuickAddViewModel : ValidatableModel
     {
         private const int MinutesPerInterval = 15;
-        private int? _selectedProjectId;
-        private int? _selectedTaskId;
-        private int selectedIntervals;
 
         public QuickAddViewModel(MainWindowViewModel mainVm)
         {
@@ -29,39 +26,38 @@ namespace QBTracker.ViewModels
         [Required, Display(Name = "Project")]
         public int? SelectedProjectId
         {
-            get => _selectedProjectId;
-            set
-            {
-                _selectedProjectId = value;
-                NotifyOfPropertyChange();
-                NotifyOfPropertyChange(nameof(CanSave));
-                LoadTasks();
-                if (SelectedProjectId != null)
-                {
-                    var project = MainVm.Repository.GetProjectById(SelectedProjectId.Value);
-                    this.TimeRecord.ProjectId = SelectedProjectId.Value;
-                    this.TimeRecord.ProjectName = project.Name;
-                }
-            }
+           get;
+           set
+           {
+              field = value;
+              NotifyOfPropertyChange();
+              NotifyOfPropertyChange(nameof(CanSave));
+              LoadTasks();
+              if (SelectedProjectId != null)
+              {
+                 var project = MainVm.Repository.GetProjectById(SelectedProjectId.Value);
+                 this.TimeRecord.ProjectId   = SelectedProjectId.Value;
+                 this.TimeRecord.ProjectName = project.Name;
+              }
+           }
         }
 
         [Required, Display(Name = "Task")]
         public int? SelectedTaskId
         {
-            get => _selectedTaskId;
-            set
-            {
-                
-                _selectedTaskId = value;
-                NotifyOfPropertyChange();
-                NotifyOfPropertyChange(nameof(CanSave));
-                if (SelectedTaskId != null)
-                {
-                    var task = MainVm.Repository.GetTaskById(SelectedTaskId.Value);
-                    this.TimeRecord.TaskId = SelectedTaskId.Value;
-                    this.TimeRecord.TaskName = task.Name;
-                }
-            }
+           get;
+           set
+           {
+              field = value;
+              NotifyOfPropertyChange();
+              NotifyOfPropertyChange(nameof(CanSave));
+              if (SelectedTaskId != null)
+              {
+                 var task = MainVm.Repository.GetTaskById(SelectedTaskId.Value);
+                 this.TimeRecord.TaskId   = SelectedTaskId.Value;
+                 this.TimeRecord.TaskName = task.Name;
+              }
+           }
         }
 
         [Required, Display(Name = "Start time")]
@@ -120,15 +116,15 @@ namespace QBTracker.ViewModels
 
         public int SelectedIntervals
         {
-            get => selectedIntervals;
-            set
-            {
-                if (selectedIntervals == value)
-                    return;
-                selectedIntervals = value;
-                NotifyOfPropertyChange();
-                CalcEndTime();
-            }
+           get;
+           set
+           {
+              if (field == value)
+                 return;
+              field = value;
+              NotifyOfPropertyChange();
+              CalcEndTime();
+           }
         }
 
         public bool CanSave => 

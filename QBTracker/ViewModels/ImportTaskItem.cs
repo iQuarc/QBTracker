@@ -5,8 +5,6 @@ namespace QBTracker.ViewModels
 {
    public class ImportTaskItem : INotifyPropertyChanged
    {
-      private bool isSelected = true;
-
       public ImportTaskItem(string name)
       {
          Name = name;
@@ -16,14 +14,14 @@ namespace QBTracker.ViewModels
 
       public bool IsSelected
       {
-         get => isSelected;
+         get;
          set
          {
-            if (isSelected == value) return;
-            isSelected = value;
+            if (field == value) return;
+            field = value;
             OnPropertyChanged();
          }
-      }
+      } = true;
 
       public event PropertyChangedEventHandler? PropertyChanged;
 

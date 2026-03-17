@@ -16,14 +16,8 @@ namespace QBTracker.ViewModels
    public class SettingsViewModel : ValidatableModel
    {
       private readonly MainWindowViewModel  mainVm;
-      private          float                downloadingProgress;
-      private          bool                 isDownloading;
-      private          bool                 updateAvailable;
-      private          string               downloadMessage = "Update";
       private          DispatcherTimer      updateTimer;
-      private          bool                 showDebugInfo;
       private          IPluginTaskProvider? selectedPlugin;
-      private          object?              pluginConfigView;
 
       public UpdaterService UpdaterService { get; }
       public PluginService  PluginService  { get; }
@@ -71,10 +65,10 @@ namespace QBTracker.ViewModels
 
       public object? PluginConfigView
       {
-         get => pluginConfigView;
+         get;
          private set
          {
-            pluginConfigView = value;
+            field = value;
             NotifyOfPropertyChange();
          }
       }
@@ -135,30 +129,30 @@ namespace QBTracker.ViewModels
 
       public bool ShowDebugInfo
       {
-         get => showDebugInfo;
+         get;
          set
          {
-            showDebugInfo = value;
+            field = value;
             NotifyOfPropertyChange();
          }
       }
 
       public float DownloadingProgress
       {
-         get => downloadingProgress;
+         get;
          set
          {
-            downloadingProgress = value;
+            field = value;
             NotifyOfPropertyChange();
          }
       }
 
       public bool IsDownloading
       {
-         get => isDownloading;
+         get;
          set
          {
-            isDownloading = value;
+            field = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(nameof(CanDownload));
          }
@@ -166,13 +160,13 @@ namespace QBTracker.ViewModels
 
       public string DownloadMessage
       {
-         get => downloadMessage;
+         get;
          set
          {
-            downloadMessage = value;
+            field = value;
             NotifyOfPropertyChange();
          }
-      }
+      } = "Update";
 
       public bool CanDownload => !IsDownloading && UpdateAvailable;
 
@@ -242,10 +236,10 @@ namespace QBTracker.ViewModels
 
       public bool UpdateAvailable
       {
-         get => updateAvailable;
+         get;
          set
          {
-            updateAvailable = value;
+            field = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(nameof(CanDownload));
             NotifyOfPropertyChange(nameof(UpdateVersion));

@@ -106,6 +106,8 @@ namespace QBTracker.ViewModels
                mainVm.Repository.AddTask(newTask);
                Tasks.Insert(0, new TaskViewModel(newTask, mainVm));
             }
+
+            mainVm.LoadTasks();
          }
          catch (Exception ex)
          {

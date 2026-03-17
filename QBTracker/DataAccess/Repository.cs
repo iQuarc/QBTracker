@@ -10,7 +10,6 @@ namespace QBTracker.DataAccess
    public class Repository : IRepository, INotifyPropertyChanged, ILogger
    {
       private Settings? settingsCache;
-      private int       timeUpdated;
 
       private readonly string appDataFolder;
 
@@ -249,11 +248,11 @@ namespace QBTracker.DataAccess
 
       public int TimeUpdated
       {
-         get => timeUpdated;
+         get;
          set
          {
-            if (value == timeUpdated) return;
-            timeUpdated = value;
+            if (value == field) return;
+            field = value;
             OnPropertyChanged();
          }
       }
