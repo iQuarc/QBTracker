@@ -13,6 +13,12 @@ Download from [Releases](https://github.com/iQuarc/QBTracker/releases). Single E
 
 ![QBTracker Screen Capture](https://github.com/iQuarc/QBTracker/blob/master/Assets/Capture.PNG?raw=true)
 
+Jira Plugin:
+ - Import Task from Jira using PAT (Personal Access Token)
+
+![QBTracker Jira Configuration](https://github.com/iQuarc/QBTracker/blob/master/Assets/JiraConfig.PNG?raw=true)
+![QBTracker Jira Task Import](https://github.com/iQuarc/QBTracker/blob/master/Assets/JiraImport.PNG?raw=true)
+
 
 Libraries used:
 
