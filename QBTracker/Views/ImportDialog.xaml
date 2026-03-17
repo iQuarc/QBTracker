@@ -19,14 +19,22 @@
                     Content="Select All" Command="{Binding SelectAllCommand}" Padding="4,0" />
             <Button Style="{StaticResource MaterialDesignFlatButton}"
                     Content="Select None" Command="{Binding SelectNoneCommand}" Padding="4,0" />
+            <TextBlock Text="Grouped" VerticalAlignment="Center" Margin="4, 0" />
+            <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                          IsChecked="{Binding GroupImport}"
+                          ToolTip="Group selected items into a single task"
+                          Margin="16,0,0,0" Width="Auto" Height="Auto" Padding="4,2">
+                
+            </ToggleButton>
         </StackPanel>
         <ScrollViewer Grid.Row="2" MaxHeight="320" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Items}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <CheckBox IsChecked="{Binding IsSelected}"
-                                  Content="{Binding Name}"
-                                  Margin="0,2" />
+                                  Margin="0,2">
+                            <TextBlock><Run Text="{Binding Key, Mode=OneWay}" />: <Run Text="{Binding Name, Mode=OneWay}" /></TextBlock>
+                        </CheckBox>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

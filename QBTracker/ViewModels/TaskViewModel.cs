@@ -79,7 +79,7 @@ namespace QBTracker.ViewModels
                .Select(t => t.Name)
                .ToHashSet();
 
-            var newTaskNames = taskNames.Where(n => !existingTasks.Contains(n)).ToList();
+            var newTaskNames = taskNames.Where(n => !existingTasks.Any(t => t != null && t.Contains(n.Key))).ToList();
             if (newTaskNames.Count == 0)
             {
                await DialogHost.Show(new ConfirmDialog
@@ -95,16 +95,30 @@ namespace QBTracker.ViewModels
             if (result is not true)
                return;
 
-            var selected = dialogVm.SelectedNames.ToList();
-            foreach (var taskName in selected)
+            var selected = dialogVm.Selected.ToList();
+            if (dialogVm.GroupImport)
             {
+               var groupedName = string.Join(", ", selected.Select(x => x.Key));
                var newTask = new Task
                {
-                  Name = taskName,
+                  Name = groupedName,
                   ProjectId = Task.ProjectId
                };
                mainVm.Repository.AddTask(newTask);
                Tasks.Insert(0, new TaskViewModel(newTask, mainVm));
+            }
+            else
+            {
+               foreach (var taskName in selected.Select(x => $"{x.Key}: {x.Name}"))
+               {
+                  var newTask = new Task
+                  {
+                     Name = taskName,
+                     ProjectId = Task.ProjectId
+                  };
+                  mainVm.Repository.AddTask(newTask);
+                  Tasks.Insert(0, new TaskViewModel(newTask, mainVm));
+               }
             }
 
             mainVm.LoadTasks();

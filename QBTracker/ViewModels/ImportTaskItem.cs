@@ -3,14 +3,12 @@ using System.Runtime.CompilerServices;
 
 namespace QBTracker.ViewModels
 {
-   public class ImportTaskItem : INotifyPropertyChanged
+   public class ImportTaskItem(string key, string name) : INotifyPropertyChanged
    {
-      public ImportTaskItem(string name)
-      {
-         Name = name;
-      }
 
-      public string Name { get; }
+      public string Key  { get; } = key;
+
+      public string Name { get; } = name;
 
       public bool IsSelected
       {

@@ -2,8 +2,8 @@
 {
    public interface IPluginTaskProvider
    {
-      string Name { get; }
-      object GetConfigurationView(IPluginConfigRepository configRepository);
-      Task<IEnumerable<string>> GetTasksAsync(IPluginConfigRepository configRepository);
+      string                                       Name { get; }
+      object                                       GetConfigurationView(IPluginConfigRepository configRepository);
+      Task<IEnumerable<(string Key, string Name)>> GetTasksAsync(IPluginConfigRepository        configRepository);
    }
 }

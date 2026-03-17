@@ -34,6 +34,14 @@
                            HorizontalAlignment="Center">
                     Manage tasks
                 </TextBlock>
+                <Button Margin="10"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                        ToolTip="{Binding ImportButtonText}"
+                        Command="{Binding Import}">
+                    <materialDesign:PackIcon Kind="Import" />
+                </Button>
             </Grid>
         </Border>
         <TextBox
@@ -45,14 +53,6 @@
             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
             materialDesign:HintAssist.Hint="New Task Name"
             materialDesign:HintAssist.HelperText="Insert your task name here" />
-        <Button
-            Grid.Row="2"
-            Style="{StaticResource MaterialDesignFlatSecondaryButton}"
-            VerticalAlignment="Center" HorizontalAlignment="Left"
-            ToolTip="{Binding ImportButtonText}"
-            Margin="10"
-            Command="{Binding Import}"
-            Content="{Binding ImportButtonText}" />
         <Button
             Grid.Row="2"
             Style="{StaticResource MaterialDesignFlatSecondaryButton}"
