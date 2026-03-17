@@ -15,6 +15,7 @@
             <RowDefinition Height="60" />
             <RowDefinition Height="80" />
             <RowDefinition Height="60" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Grid.Column="0" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 0 0 1">
@@ -87,7 +88,25 @@
                           Style="{StaticResource MaterialDesignSwitchSecondaryToggleButton}"
                           IsChecked="{Binding AutomaticallyStart}" />
         </Grid>
-        <TextBox Grid.Row="3" Grid.Column="0" Margin="10"
+        <!-- Plugins Section -->
+        <StackPanel Grid.Row="3" Margin="10,4">
+            <TextBlock Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,4">Plugins</TextBlock>
+            <ComboBox
+                materialDesign:HintAssist.IsFloating="True"
+                materialDesign:HintAssist.Hint="Task Provider Plugin"
+                materialDesign:ComboBoxAssist.ShowSelectedItem="True"
+                ItemsSource="{Binding AvailablePlugins}"
+                DisplayMemberPath="Name"
+                SelectedItem="{Binding SelectedPlugin}"
+                Margin="0,4"
+                IsEnabled="{Binding HasProjectSelected}" />
+            <TextBlock Text="Select a project first to configure plugins."
+                       Margin="0,4"
+                       Foreground="{DynamicResource MaterialDesignBodyLight}"
+                       Visibility="{Binding HasNoProjectSelected, Converter={StaticResource BoolToVisibilityConverter}}" />
+            <ContentControl Content="{Binding PluginConfigView}" Margin="0,4" />
+        </StackPanel>
+        <TextBox Grid.Row="4" Grid.Column="0" Margin="10"
                  Style="{StaticResource MaterialDesignOutlinedTextBox}"
                  Text="{Binding Debug, Mode=OneWay}"
                  IsReadOnly="True"

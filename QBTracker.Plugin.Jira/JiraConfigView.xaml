@@ -1,0 +1,49 @@
+<UserControl x:Class="QBTracker.Plugin.Jira.JiraConfigView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Margin="0,8">
+    <StackPanel>
+        <TextBox
+            Margin="0,4"
+            Text="{Binding JiraUrl, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+            materialDesign:HintAssist.Hint="Jira URL (e.g. https://myorg.atlassian.net)" />
+        <TextBox
+            Margin="0,4"
+            Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+            materialDesign:HintAssist.Hint="Email" />
+        <PasswordBox 
+            Margin="0,4"
+            materialDesign:PasswordBoxAssist.Password="{Binding ApiToken, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+            Style="{StaticResource MaterialDesignFloatingHintRevealPasswordBox}"
+            materialDesign:HintAssist.Hint="API Token" />
+        <TextBox
+            Margin="0,4"
+            Text="{Binding ProjectKey, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+            materialDesign:HintAssist.Hint="Jira Project Key (e.g. PROJ)" />
+        <TextBox
+            Margin="0,4"
+            Text="{Binding StatusFilter, UpdateSourceTrigger=PropertyChanged}"
+            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+            materialDesign:HintAssist.Hint="Status Filter (e.g. To Do, In Progress) Comma separated" />
+        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+            <Button
+                Style="{StaticResource MaterialDesignFlatSecondaryButton}"
+                Command="{Binding SaveCommand}"
+                Content="Save" Margin="0,0,8,0" />
+            <Button
+                Style="{StaticResource MaterialDesignFlatButton}"
+                Command="{Binding TestConnectionCommand}"
+                IsEnabled="{Binding IsNotTesting}"
+                Content="Test Connection" />
+        </StackPanel>
+        <TextBlock
+            Margin="0,4"
+            Text="{Binding StatusMessage}"
+            TextWrapping="Wrap"
+            Foreground="{DynamicResource MaterialDesignBody}" />
+    </StackPanel>
+</UserControl>

@@ -72,14 +72,16 @@
             <materialDesign:TimePicker
                 Is24Hours="True"
                 SelectedTime="{Binding StartTime}"
-                Grid.Column="1"
-                Width="100"/>
+                Grid.Column="1" 
+                Width="100"
+                VerticalAlignment="Center"/>
             <TextBlock Text="End time" Grid.Column="2" VerticalAlignment="Center" Margin="10" />
             <materialDesign:TimePicker
                 Is24Hours="True"
                 SelectedTime="{Binding EndTime}"
                 Grid.Column="3"
-                Width="100"/>
+                Width="100"
+                VerticalAlignment="Center"/>
         </Grid>
         <Slider
             Grid.Row="3"

@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace QBTracker.Plugin.Contracts
+﻿namespace QBTracker.Plugin.Contracts
 {
-    internal interface IPluginTaskProvider
-    {
-        public object GetConfiguraitonView(IPluginConfigRepository configRepository);
-        public IEnumerable<string> GetTasks(IPluginConfigRepository configRepository);
-    }
+   public interface IPluginTaskProvider
+   {
+      string Name { get; }
+      object GetConfigurationView(IPluginConfigRepository configRepository);
+      Task<IEnumerable<string>> GetTasksAsync(IPluginConfigRepository configRepository);
+   }
 }

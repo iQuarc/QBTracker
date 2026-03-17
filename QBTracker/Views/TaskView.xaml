@@ -8,7 +8,7 @@
              xmlns:viewModels="clr-namespace:QBTracker.ViewModels"
              xmlns:util="clr-namespace:QBTracker.Util"
              mc:Ignorable="d"
-             d:DesignHeight="694" d:DesignWidth="410"
+             d:DesignHeight="694" d:DesignWidth="410" d:Background="Gray"
              FocusManager.FocusedElement="{Binding ElementName=TaskBox}">
     <Grid>
         <Grid.RowDefinitions>
@@ -45,6 +45,14 @@
             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
             materialDesign:HintAssist.Hint="New Task Name"
             materialDesign:HintAssist.HelperText="Insert your task name here" />
+        <Button
+            Grid.Row="2"
+            Style="{StaticResource MaterialDesignFlatSecondaryButton}"
+            VerticalAlignment="Center" HorizontalAlignment="Left"
+            ToolTip="{Binding ImportButtonText}"
+            Margin="10"
+            Command="{Binding Import}"
+            Content="{Binding ImportButtonText}" />
         <Button
             Grid.Row="2"
             Style="{StaticResource MaterialDesignFlatSecondaryButton}"

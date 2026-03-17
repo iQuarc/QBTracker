@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace QBTracker.Model
+﻿namespace QBTracker.Model
 {
     public class Project
     {

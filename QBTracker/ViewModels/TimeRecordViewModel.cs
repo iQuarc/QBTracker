@@ -1,16 +1,8 @@
-﻿using Humanizer;
-
-using MaterialDesignThemes.Wpf;
+﻿using MaterialDesignThemes.Wpf;
 
 using QBTracker.Model;
 using QBTracker.Util;
 using QBTracker.Views;
-
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows.Threading;
-using QBTracker.DataAccess;
 
 namespace QBTracker.ViewModels
 {

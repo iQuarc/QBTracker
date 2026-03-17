@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace QBTracker.AutomaticUpdader
+﻿namespace QBTracker.AutomaticUpdader
 {
     public class LogEntry
     {

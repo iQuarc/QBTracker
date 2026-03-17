@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Windows;
-
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Math;
-
-using QBTracker.DataAccess;
+﻿using System.ComponentModel.DataAnnotations;
 using QBTracker.Model;
 using QBTracker.Util;
 

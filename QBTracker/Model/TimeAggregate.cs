@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace QBTracker.Model;
+﻿namespace QBTracker.Model;
 
 public class TimeAggregate
 {

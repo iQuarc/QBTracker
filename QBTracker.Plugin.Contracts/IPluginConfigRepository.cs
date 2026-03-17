@@ -1,8 +1,8 @@
 ﻿namespace QBTracker.Plugin.Contracts
 {
-    internal interface IPluginConfigRepository
+    public interface IPluginConfigRepository
     {
-        object GetProjectConfiguration();
-        void SaveProjectConfiguration(object configurationObject);
+        T? GetConfiguration<T>() where T : class, new();
+        void SaveConfiguration<T>(T configuration) where T : class;
     }
 }

@@ -3,6 +3,7 @@
                     xmlns:converters="clr-namespace:QBTracker.Converters"
                     xmlns:dataAccess="clr-namespace:QBTracker.DataAccess">
     <dataAccess:Repository x:Key="Repository" />
+    <dataAccess:PluginService x:Key="PluginService" />
     <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <converters:InverterConverter x:Key="InverterConverter" />
     <converters:MaterialColorConverter x:Key="MaterialColorConverter" />

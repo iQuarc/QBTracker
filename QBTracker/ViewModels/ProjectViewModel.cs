@@ -1,11 +1,8 @@
-﻿using System;
-using MaterialDesignThemes.Wpf;
+﻿using MaterialDesignThemes.Wpf;
 
 using QBTracker.Model;
 using QBTracker.Util;
 using QBTracker.Views;
-
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 

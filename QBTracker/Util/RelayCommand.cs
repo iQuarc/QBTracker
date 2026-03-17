@@ -1,5 +1,6 @@
-﻿using System;
+﻿using System.Windows;
 using System.Windows.Input;
+using QBTracker.DataAccess;
 
 namespace QBTracker.Util
 {
@@ -10,7 +11,15 @@ namespace QBTracker.Util
 
         public bool CanExecute(object? parameter)
         {
-            return canExecute?.Invoke(parameter) ?? true;
+            try
+            {
+                return canExecute?.Invoke(parameter) ?? true;
+            }
+            catch (Exception ex)
+            {
+                LogError(ex);
+                return false;
+            }
         }
 
         public void RaiseCanExecuteChanged()
@@ -35,7 +44,20 @@ namespace QBTracker.Util
 
         public void Execute(object? parameter)
         {
-            _execute(parameter);
+            try
+            {
+                _execute(parameter);
+            }
+            catch (Exception ex)
+            {
+                LogError(ex);
+            }
+        }
+
+        private static void LogError(Exception ex)
+        {
+            if (Application.Current?.Resources["Repository"] is ILogger logger)
+                logger.Error($"RelayCommand error: {ex}");
         }
     }
 }

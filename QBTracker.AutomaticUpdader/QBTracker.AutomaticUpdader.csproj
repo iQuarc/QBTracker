@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <OutputType>exe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <AssemblyVersion>0.0.9.0</AssemblyVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyVersion>0.0.10.0</AssemblyVersion>
     <Authors>Catalin Pop</Authors>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>

@@ -14,6 +14,7 @@ namespace QBTracker.Model
       public PrimaryColor? PrimaryColor { get; set; }
       public SecondaryColor? SecondaryColor { get; set; }
       public bool StartWithWindows { get; set; }
+      public string? SelectedPluginName { get; set; }
       public WorksheetOption WorksheetOption { get; set; }
       public AutoFilterOption AutoFilter { get; set; }
       public SummaryType Summary { get; set; }
