@@ -56,6 +56,15 @@
         <Button
             Grid.Row="2"
             Style="{StaticResource MaterialDesignFlatSecondaryButton}"
+            VerticalAlignment="Center" HorizontalAlignment="Left"
+            ToolTip="Clear Tasks"
+            Margin="10"
+            Command="{Binding ClearCommand}">
+            Clear
+        </Button>
+        <Button
+            Grid.Row="2"
+            Style="{StaticResource MaterialDesignFlatSecondaryButton}"
             VerticalAlignment="Center" HorizontalAlignment="Right"
             ToolTip="Add Task"
             Margin="10"

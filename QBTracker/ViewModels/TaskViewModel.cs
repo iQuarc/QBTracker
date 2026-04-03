@@ -1,5 +1,7 @@
-﻿using MaterialDesignThemes.Wpf;
+﻿using LiteDB;
+using MaterialDesignThemes.Wpf;
 using QBTracker.DataAccess;
+using QBTracker.Model;
 using QBTracker.Util;
 using QBTracker.Views;
 using System.ComponentModel;
@@ -23,6 +25,7 @@ namespace QBTracker.ViewModels
          mainVm        = mainWindowViewModel;
          Save          = new RelayCommand(ExecuteSave, CanExecuteSave);
          Import        = new AsyncRelayCommand(ExecuteImport, CanExecuteImport);
+         ClearCommand  = new AsyncRelayCommand(ExecuteClear);
          GoBack        = new RelayCommand(ExecuteGoBack);
          DeleteCommand = new AsyncRelayCommand(ExecuteDelete);
          Task          = task;
@@ -173,10 +176,56 @@ namespace QBTracker.ViewModels
          }
       }
 
-      public RelayCommand          Save     { get; }
-      public AsyncRelayCommand     Import   { get; }
-      public Action                OnSave   { get; set; }
-      public Action<TaskViewModel> OnRemove { get; set; }
+      public RelayCommand          Save         { get; }
+      public AsyncRelayCommand     Import       { get; }
+      public AsyncRelayCommand     ClearCommand { get; }
+      public Action                OnSave       { get; set; }
+      public Action<TaskViewModel> OnRemove     { get; set; }
+
+      private async ValueTask ExecuteClear(object? obj)
+      {
+         var dialogVm = new ClearTasksDialogViewModel();
+         var result = await DialogHost.Show(new ClearTasksDialog { DataContext = dialogVm });
+
+         if (result is not true) return;
+
+         var allTasks = mainVm.Repository.GetTasks(Task.ProjectId);
+
+         var topTaskIds = allTasks
+            .Take(dialogVm.KeepTopCount)
+            .Select(t => t.Id)
+            .ToHashSet();
+
+         var cutoffDate = DateTime.UtcNow.Date.AddDays(-dialogVm.KeepDays);
+         var recentlyUsedTaskIds = mainVm.Repository.GetLiteRepository()
+            .Query<TimeRecord>("TimeRecords")
+            .Where(x => x.StartTime >= cutoffDate)
+            .ToList()
+            .Select(x => x.TaskId)
+            .ToHashSet();
+
+         var tasksToDelete = allTasks
+            .Where(t => !topTaskIds.Contains(t.Id) && !recentlyUsedTaskIds.Contains(t.Id))
+            .ToList();
+
+         if (tasksToDelete.Count == 0)
+         {
+            await DialogHost.Show(new ConfirmDialog
+            {
+               DataContext = "No tasks to clear."
+            });
+            return;
+         }
+
+         foreach (var task in tasksToDelete)
+         {
+            task.IsDeleted = true;
+            mainVm.Repository.UpdateTask(task);
+         }
+
+         LoadTasks();
+         mainVm.LoadTasks();
+      }
 
       private void ExecuteSave(object? o)
       {
