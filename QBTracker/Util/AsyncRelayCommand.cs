@@ -1,4 +1,8 @@
+using System.Windows;
+using QBTracker.DataAccess;
 using System.Windows.Input;
+using MaterialDesignThemes.Wpf;
+using QBTracker.Views;
 
 namespace QBTracker.Util
 {
@@ -39,10 +43,21 @@ namespace QBTracker.Util
          {
             await _executeAsync(parameter);
          }
-         catch
+         catch (Exception ex)
          {
-            // Suppress any exceptions thrown from async void methods
+            LogError(ex);
+            await DialogHost.Show(new ConfirmDialog
+            {
+               DataContext = $"Error: {ex.Message}"
+            });
          }
+      }
+
+
+      private static void LogError(Exception ex)
+      {
+         if (Application.Current?.Resources["Repository"] is ILogger logger)
+            logger.Error($"RelayCommand error: {ex}");
       }
    }
 }

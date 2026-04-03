@@ -79,7 +79,7 @@ namespace QBTracker.ViewModels
                .Select(t => t.Name)
                .ToHashSet();
 
-            var newTaskNames = taskNames.Where(n => !existingTasks.Any(t => t != null && t.Contains(n.Key))).ToList();
+            var newTaskNames = taskNames.Where(n => !existingTasks.Any(t => t != null && t.Contains(n.Key) && t.Contains(n.Name))).ToList();
             if (newTaskNames.Count == 0)
             {
                await DialogHost.Show(new ConfirmDialog

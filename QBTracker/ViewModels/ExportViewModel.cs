@@ -84,18 +84,25 @@ namespace QBTracker.ViewModels
 
       private void ExecuteExport(object? o)
       {
-         var sfd = new SaveFileDialog();
-         sfd.Filter = "Excel Files | *.xlsx";
-         sfd.InitialDirectory = ExportSettings.ExportFolder
-                                ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-         sfd.FileName = ExportSettings.ExportFileName ?? "";
-
-         if (sfd.ShowDialog() == true)
+         try
          {
-            ExportData(sfd.FileName);
-            ExportSettings.ExportFolder   = Path.GetDirectoryName(sfd.FileName);
-            ExportSettings.ExportFileName = Path.GetFileName(sfd.FileName);
-            mainVm.Repository.UpdateSettings();
+            var sfd = new SaveFileDialog();
+            sfd.Filter = "Excel Files | *.xlsx";
+            sfd.InitialDirectory = ExportSettings.ExportFolder
+                                   ?? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            sfd.FileName = ExportSettings.ExportFileName ?? "";
+
+            if (sfd.ShowDialog() == true)
+            {
+               ExportData(sfd.FileName);
+               ExportSettings.ExportFolder = Path.GetDirectoryName(sfd.FileName);
+               ExportSettings.ExportFileName = Path.GetFileName(sfd.FileName);
+               mainVm.Repository.UpdateSettings();
+            }
+         }
+         catch (Exception ex)
+         {
+
          }
       }
 

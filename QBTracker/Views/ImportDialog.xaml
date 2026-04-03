@@ -22,6 +22,7 @@
             <TextBlock Text="Grouped" VerticalAlignment="Center" Margin="4, 0" />
             <ToggleButton Style="{StaticResource MaterialDesignSwitchToggleButton}"
                           IsChecked="{Binding GroupImport}"
+                          IsEnabled="{Binding IsGroupImportEnabled}"
                           ToolTip="Group selected items into a single task"
                           Margin="16,0,0,0" Width="Auto" Height="Auto" Padding="4,2">
                 
