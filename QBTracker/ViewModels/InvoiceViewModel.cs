@@ -243,6 +243,7 @@ namespace QBTracker.ViewModels
             {
                Description = $"{date:dd MMM yyyy} - {record.TaskName}",
                GroupingKey = record.TaskName,
+               WorkDate = date,
                Hours = (decimal)(record.EndTime!.Value - record.StartTime).TotalHours,
                HourlyRate = hourlyRate
             }));

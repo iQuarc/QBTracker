@@ -36,6 +36,7 @@ namespace QBTracker.Invoice
    {
       public string  Description { get; set; } = string.Empty;
       public string  GroupingKey { get; set; } = string.Empty;
+      public DateTime WorkDate   { get; set; }
       public decimal Hours       { get; set; }
       public decimal HourlyRate  { get; set; }
       public decimal Amount      => Hours * HourlyRate;
@@ -141,7 +142,7 @@ namespace QBTracker.Invoice
          decimal grandTotal = 0m;
          foreach (var project in projects)
          {
-            var lineItems = AggregateLineItems(project.LineItems, data.GroupingType, data.RoundingInterval, data.RoundingType)
+            var lineItems = AggregateLineItems(project, data.GroupingType, data.RoundingInterval, data.RoundingType)
                .ToList();
 
             worksheet.Cell(row, 2).Style.Font.Bold = true;
@@ -236,55 +237,40 @@ namespace QBTracker.Invoice
       }
 
       private static IEnumerable<InvoiceLineItem> AggregateLineItems(
-         IEnumerable<InvoiceLineItem> lineItems,
+         ProjectData project,
          GroupingType groupingType,
          RoundingInterval roundingInterval,
          RoundingType roundingType)
       {
-         var items = lineItems.ToList();
-         return groupingType switch
-         {
-            GroupingType.NoGrouping => items.Select(item => CreateRoundedItem(
-               item.Description,
-               item.Hours,
-               item.HourlyRate,
-               roundingInterval,
-               roundingType)),
-            GroupingType.GroupBeforeRound => items
-               .GroupBy(item => (item.GroupingKey, item.HourlyRate))
-               .Select(group => CreateRoundedItem(
-                  group.Key.GroupingKey,
-                  group.Sum(item => item.Hours),
-                  group.Key.HourlyRate,
-                  roundingInterval,
-                  roundingType)),
-            GroupingType.GroupAfterRound => items
-               .GroupBy(item => (item.GroupingKey, item.HourlyRate))
-               .Select(group => new InvoiceLineItem
+         var items = project.LineItems.ToList();
+         return items
+            .GroupBy(item => GetWeekStart(item.WorkDate))
+            .OrderBy(group => group.Key)
+            .Select(group =>
+            {
+               var weekStart = group.Key < project.PeriodFrom.Date ? project.PeriodFrom.Date : group.Key;
+               var weekEnd = group.Key.AddDays(6) > project.PeriodTo.Date ? project.PeriodTo.Date : group.Key.AddDays(6);
+               var description = $"{weekStart:d MMM yyyy} - {weekEnd:d MMM yyyy}";
+               var hourlyRate = group.First().HourlyRate;
+               var hours = groupingType == GroupingType.GroupBeforeRound
+                  ? (decimal)Round((double)group.Sum(item => item.Hours), roundingInterval, roundingType)
+                  : group.Sum(item => (decimal)Round((double)item.Hours, roundingInterval, roundingType));
+
+               return new InvoiceLineItem
                {
-                  Description = group.Key.GroupingKey,
-                  GroupingKey = group.Key.GroupingKey,
-                  Hours = group.Sum(item => (decimal)Round((double)item.Hours, roundingInterval, roundingType)),
-                  HourlyRate = group.Key.HourlyRate
-               }),
-            _ => throw new NotSupportedException()
-         };
+                  Description = description,
+                  GroupingKey = project.ProjectName,
+                  WorkDate = group.Key,
+                  Hours = hours,
+                  HourlyRate = hourlyRate
+               };
+            });
       }
 
-      private static InvoiceLineItem CreateRoundedItem(
-         string description,
-         decimal hours,
-         decimal hourlyRate,
-         RoundingInterval roundingInterval,
-         RoundingType roundingType)
+      private static DateTime GetWeekStart(DateTime date)
       {
-         return new InvoiceLineItem
-         {
-            Description = description,
-            GroupingKey = description,
-            Hours = (decimal)Round((double)hours, roundingInterval, roundingType),
-            HourlyRate = hourlyRate
-         };
+         var offset = ((int)date.DayOfWeek + 6) % 7;
+         return date.Date.AddDays(-offset);
       }
 
       private static double Round(in double hours, RoundingInterval roundingInterval, RoundingType roundingType)
