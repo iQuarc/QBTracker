@@ -8,5 +8,7 @@
         public const int EditTimeRecord = 3;
         public const int ExportToExcel = 4;
         public const int Settings = 5;
+        public const int GenerateInvoice = 6;
+        public const int InvoiceConfiguration = 7;
     }
 }

@@ -107,6 +107,12 @@
                 <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
                     <views:SettingsView DataContext="{Binding SettingsViewModel}" />
                 </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                    <views:InvoiceView DataContext="{Binding InvoiceViewModel}" />
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide OpeningEffect="{materialDesign:TransitionEffect FadeIn}">
+                    <views:InvoiceConfigurationView DataContext="{Binding InvoiceConfigurationViewModel}" />
+                </materialDesign:TransitionerSlide>
             </materialDesign:Transitioner>
         </materialDesign:DialogHost>
     </Grid>

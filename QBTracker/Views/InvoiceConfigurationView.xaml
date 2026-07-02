@@ -1,0 +1,107 @@
+<UserControl x:Class="QBTracker.Views.InvoiceConfigurationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="694" d:DesignWidth="410">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 0 0 1">
+                <Grid>
+                    <Button
+                        Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
+                        Command="{Binding GoBack}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        IsCancel="True"
+                        Margin="10">
+                        <materialDesign:PackIcon Kind="StepBackward" />
+                    </Button>
+                    <TextBlock Margin="60,0"
+                               Foreground="{StaticResource MaterialDesignBody}"
+                               Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center">
+                        Invoice Configuration
+                    </TextBlock>
+                </Grid>
+            </Border>
+            <StackPanel Grid.Row="1" Margin="10">
+                <materialDesign:Card Margin="0,0,0,10" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Output and numbering" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8" />
+                        <TextBox Text="{Binding OutputFolder, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Default output folder"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox Margin="0,8,0,0"
+                                 Text="{Binding NextInvoiceNumber, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Next invoice number"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox Margin="0,8,0,0"
+                                 Text="{Binding Currency, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Currency symbol"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox Margin="0,8,0,0"
+                                 Text="{Binding DefaultHourlyRate, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Default hourly rate"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    </StackPanel>
+                </materialDesign:Card>
+                <materialDesign:Card Margin="0,0,0,10" Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Seller" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8" />
+                        <TextBox Text="{Binding SellerName, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Seller name"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox Margin="0,8,0,0"
+                                 Text="{Binding SellerAddress1, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Seller address line 1"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox Margin="0,8,0,0"
+                                 Text="{Binding SellerAddress2, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Seller address line 2"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox Margin="0,8,0,0"
+                                 Text="{Binding SellerPhone, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Seller phone"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox Margin="0,8,0,0"
+                                 Text="{Binding SellerEmail, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Seller email"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    </StackPanel>
+                </materialDesign:Card>
+                <materialDesign:Card Padding="12">
+                    <StackPanel>
+                        <TextBlock Text="Client" Style="{StaticResource MaterialDesignSubtitle1TextBlock}" Margin="0,0,0,8" />
+                        <TextBox Text="{Binding ClientLegalName, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Client legal name"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox Margin="0,8,0,0"
+                                 Text="{Binding ClientShortName, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Client short name"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox Margin="0,8,0,0"
+                                 Text="{Binding ClientAddress1, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Client address line 1"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox Margin="0,8,0,0"
+                                 Text="{Binding ClientAddress2, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Client address line 2"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox Margin="0,8,0,0"
+                                 Text="{Binding Note, UpdateSourceTrigger=LostFocus}"
+                                 materialDesign:HintAssist.Hint="Invoice note"
+                                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                    </StackPanel>
+                </materialDesign:Card>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

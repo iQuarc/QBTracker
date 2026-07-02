@@ -18,16 +18,17 @@
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Grid.Column="0" BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0 0 0 1">
                 <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                     <Grid.ColumnDefinitions>
+                         <ColumnDefinition Width="Auto" />
+                         <ColumnDefinition Width="Auto" />
+                         <ColumnDefinition Width="Auto" />
+                         <ColumnDefinition Width="Auto" />
+                         <ColumnDefinition Width="Auto" />
+                         <ColumnDefinition Width="*" />
+                         <ColumnDefinition Width="Auto" />
+                         <ColumnDefinition Width="Auto" />
+                         <ColumnDefinition Width="Auto" />
+                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0"
                         Style="{StaticResource MaterialDesignIconButton}"
                         ToolTip="Select today"
@@ -54,17 +55,23 @@
                         Command="{Binding DateStepForward}">
                         <materialDesign:PackIcon Kind="StepForward" />
                     </Button>
-                    <Button Grid.Column="6"
-                            Style="{StaticResource MaterialDesignIconButton}"
-                            ToolTip="Export to Excel"
-                            Command="{Binding ExportCommand}" HorizontalAlignment="Right">
-                        <materialDesign:PackIcon Kind="TableExport" />
-                    </Button>
-                    <Button Grid.Column="7"
-                        Style="{StaticResource MaterialDesignIconButton}"
-                        ToolTip="Settings"
-                        Command="{Binding SettingsCommand}" HorizontalAlignment="Right">
-                        <materialDesign:PackIcon Kind="Settings" />
+                     <Button Grid.Column="6"
+                             Style="{StaticResource MaterialDesignIconButton}"
+                             ToolTip="Generate Invoice"
+                             Command="{Binding InvoiceCommand}" HorizontalAlignment="Right">
+                         <materialDesign:PackIcon Kind="InvoiceTextCheckOutline" />
+                     </Button>
+                     <Button Grid.Column="7"
+                             Style="{StaticResource MaterialDesignIconButton}"
+                             ToolTip="Export to Excel"
+                             Command="{Binding ExportCommand}" HorizontalAlignment="Right">
+                         <materialDesign:PackIcon Kind="TableExport" />
+                     </Button>
+                     <Button Grid.Column="8"
+                         Style="{StaticResource MaterialDesignIconButton}"
+                         ToolTip="Settings"
+                         Command="{Binding SettingsCommand}" HorizontalAlignment="Right">
+                         <materialDesign:PackIcon Kind="Settings" />
                     </Button>
                 </Grid>
         </Border>

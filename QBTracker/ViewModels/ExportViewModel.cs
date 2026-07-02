@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
+using ClosedXML.Excel;
 using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
-using OfficeOpenXml;
 using QBTracker.Model;
 using QBTracker.Util;
 using QBTracker.Views;
@@ -110,49 +110,47 @@ namespace QBTracker.ViewModels
       {
          try
          {
-            using var p = new ExcelPackage();
+            using var workbook = new XLWorkbook();
             var timeRecords = GetTimeRecords()
                .ToList();
             foreach (var exportGroup in GroupByWorkSheet(timeRecords))
             {
-               //A workbook must have at least one cell, so let's add one... 
-               var ws = p.Workbook.Worksheets.Add(exportGroup.Key);
-               //To set values in the spreadsheet use the Cells indexer.
-               ws.Cells["A1"].Value           = "Date";
-               ws.Cells["A1"].Style.Font.Bold = true;
-               ws.Cells["B1"].Value           = "Project";
-               ws.Cells["B1"].Style.Font.Bold = true;
-               ws.Cells["C1"].Value           = "Task";
-               ws.Cells["C1"].Style.Font.Bold = true;
-               ws.Cells["D1"].Value           = "Hours";
-               ws.Cells["D1"].Style.Font.Bold = true;
-               ws.Cells["E1"].Value           = "Notes";
-               ws.Cells["E1"].Style.Font.Bold = true;
+               var ws = workbook.Worksheets.Add(exportGroup.Key);
+               ws.Cell("A1").Value           = "Date";
+               ws.Cell("A1").Style.Font.Bold = true;
+               ws.Cell("B1").Value           = "Project";
+               ws.Cell("B1").Style.Font.Bold = true;
+               ws.Cell("C1").Value           = "Task";
+               ws.Cell("C1").Style.Font.Bold = true;
+               ws.Cell("D1").Value           = "Hours";
+               ws.Cell("D1").Style.Font.Bold = true;
+               ws.Cell("E1").Value           = "Notes";
+               ws.Cell("E1").Style.Font.Bold = true;
                int row = 2;
 
                if (ExportSettings.AutoFilter == AutoFilterOption.AutoFilter)
-                  ws.Cells["A1:E1"].AutoFilter = true;
+                  ws.Range("A1:E1").SetAutoFilter();
 
                foreach (var exportRecord in exportGroup)
                {
-                  ws.Cells[$"A{row}"].Value = exportRecord.Date;
-                  ws.Cells[$"A{row}"].Style.Numberformat.Format =
+                  ws.Cell($"A{row}").Value = exportRecord.Date;
+                  ws.Cell($"A{row}").Style.DateFormat.Format =
                      "mm-dd-yy"; // In Excel speak this means Date field that will be displayed with Region format
-                  ws.Cells[$"B{row}"].Value                     = exportRecord.ProjectName;
-                  ws.Cells[$"C{row}"].Value                     = exportRecord.TaskName;
-                  ws.Cells[$"D{row}"].Value                     = exportRecord.DurationHours;
-                  ws.Cells[$"D{row}"].Style.Numberformat.Format = "0.##";
-                  ws.Cells[$"E{row}"].Value                     = exportRecord.Notes;
+                  ws.Cell($"B{row}").Value                     = exportRecord.ProjectName;
+                  ws.Cell($"C{row}").Value                     = exportRecord.TaskName;
+                  ws.Cell($"D{row}").Value                     = exportRecord.DurationHours;
+                  ws.Cell($"D{row}").Style.NumberFormat.Format = "0.##";
+                  ws.Cell($"E{row}").Value                     = exportRecord.Notes;
                   row++;
                }
 
-               ws.Cells[ws.Dimension.Address].AutoFitColumns();
+               ws.ColumnsUsed().AdjustToContents();
             }
 
             if (ExportSettings.Summary == SummaryType.Monthly)
             {
-               var ws = p.Workbook.Worksheets.Add("Summary");
-               p.Workbook.Worksheets.MoveToStart("Summary");
+               var ws = workbook.Worksheets.Add("Summary");
+               ws.Position = 1;
 
                var monthly = timeRecords
                   .OrderBy(x => x.Date.Year)
@@ -163,65 +161,64 @@ namespace QBTracker.ViewModels
                   .Distinct()
                   .ToList();
 
-               ws.Cells["A1"].Value           = "Month";
-               ws.Cells["A1"].Style.Font.Bold = true;
+               ws.Cell("A1").Value           = "Month";
+               ws.Cell("A1").Style.Font.Bold = true;
                int idx = 1;
                var pc  = new Dictionary<string, string>();
                foreach (var project in projects)
                {
                   var col = GenerateSequence(idx++);
-                  ws.Cells[$"{col}1"].Value           = project;
-                  ws.Cells[$"{col}1"].Style.Font.Bold = true;
+                  ws.Cell($"{col}1").Value           = project;
+                  ws.Cell($"{col}1").Style.Font.Bold = true;
                   pc[project]                         = col;
                }
 
                var total = GenerateSequence(idx);
-               ws.Cells[$"{total}1"].Value           = "Monthly Total";
-               ws.Cells[$"{total}1"].Style.Font.Bold = true;
+               ws.Cell($"{total}1").Value           = "Monthly Total";
+               ws.Cell($"{total}1").Style.Font.Bold = true;
                if (ExportSettings.AutoFilter == AutoFilterOption.AutoFilter)
-                  ws.Cells[$"A1:{total}1"].AutoFilter = true;
+                  ws.Range($"A1:{total}1").SetAutoFilter();
 
                var row = 2;
                foreach (var item in monthly)
                {
-                  ws.Cells[$"A{row}"].Value = item.Key;
+                  ws.Cell($"A{row}").Value = item.Key;
                   var projectGroups = item
                      .GroupBy(x => x.ProjectName)
                      .Select(g => new { Project = g.Key, Hours = g.Sum(x => x.DurationHours) });
                   foreach (var group in projectGroups)
                   {
-                     ws.Cells[$"{pc[group.Project]}{row}"].Value                     = group.Hours;
-                     ws.Cells[$"{pc[group.Project]}{row}"].Style.Numberformat.Format = "0.##";
+                     ws.Cell($"{pc[group.Project]}{row}").Value                     = group.Hours;
+                     ws.Cell($"{pc[group.Project]}{row}").Style.NumberFormat.Format = "0.##";
                   }
 
-                  ws.Cells[$"{total}{row}"].Value                     = projectGroups.Sum(x => x.Hours);
-                  ws.Cells[$"{total}{row}"].Style.Numberformat.Format = "0.##";
+                  ws.Cell($"{total}{row}").Value                     = projectGroups.Sum(x => x.Hours);
+                  ws.Cell($"{total}{row}").Style.NumberFormat.Format = "0.##";
                   row++;
                }
 
                double grandTotal = 0;
 
-               ws.Cells[$"A{row}"].Value           = "Totals";
-               ws.Cells[$"A{row}"].Style.Font.Bold = true;
+               ws.Cell($"A{row}").Value           = "Totals";
+               ws.Cell($"A{row}").Style.Font.Bold = true;
 
                foreach (var project in projects)
                {
                   var sum = timeRecords.Where(x => x.ProjectName == project).Sum(x => x.DurationHours);
-                  ws.Cells[$"{pc[project]}{row}"].Value                     =  sum;
-                  ws.Cells[$"{pc[project]}{row}"].Style.Numberformat.Format =  "0.##";
-                  ws.Cells[$"A{row}"].Style.Font.Bold                       =  true;
-                  grandTotal                                                += sum;
+                  ws.Cell($"{pc[project]}{row}").Value                     =  sum;
+                  ws.Cell($"{pc[project]}{row}").Style.NumberFormat.Format =  "0.##";
+                  ws.Cell($"A{row}").Style.Font.Bold                       =  true;
+                  grandTotal                                               += sum;
                }
 
-               ws.Cells[$"{total}{row}"].Value                     = grandTotal;
-               ws.Cells[$"{total}{row}"].Style.Numberformat.Format = "0.##";
-               ws.Cells[$"{total}{row}"].Style.Font.Bold           = true;
+               ws.Cell($"{total}{row}").Value                     = grandTotal;
+               ws.Cell($"{total}{row}").Style.NumberFormat.Format = "0.##";
+               ws.Cell($"{total}{row}").Style.Font.Bold           = true;
 
-               ws.Cells[ws.Dimension.Address].AutoFitColumns();
+               ws.ColumnsUsed().AdjustToContents();
             }
 
-            //Save the new workbook. We haven't specified the filename so use the Save as method.
-            p.SaveAs(new FileInfo(file));
+            workbook.SaveAs(file);
             Process.Start(new ProcessStartInfo(file) { Verb = "OPEN", UseShellExecute = true });
          }
          catch (Exception ex)

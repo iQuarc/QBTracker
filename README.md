@@ -19,10 +19,13 @@ Jira Plugin:
 ![QBTracker Jira Configuration](https://github.com/iQuarc/QBTracker/blob/master/Assets/JiraConfig.PNG?raw=true)
 ![QBTracker Jira Task Import](https://github.com/iQuarc/QBTracker/blob/master/Assets/JiraImport.PNG?raw=true)
 
+Generate simple Invoice:
+ 
+![QBTracker Generate Invoice](https://github.com/iQuarc/QBTracker/blob/master/Assets/GenerateInvoice.PNG?raw=true)
 
 Libraries used:
 
 - [Material Design in XAML](https://github.com/MaterialDesignInXAML)
 - [Lite DB](https://www.litedb.org/)
-- [EPPlus 4.5.3.3](https://www.nuget.org/packages/EPPlus/4.5.3.3)
+- [ClosedXML](https://www.nuget.org/packages/ClosedXML/)
 - [Hardcodet.NotifyIcon.Wpf.NetCore](https://www.nuget.org/packages/Hardcodet.NotifyIcon.Wpf.NetCore/)

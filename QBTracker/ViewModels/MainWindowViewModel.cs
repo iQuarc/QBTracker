@@ -40,10 +40,13 @@ namespace QBTracker.ViewModels
          DateStepForward   = new RelayCommand(ExecuteDateStepForward);
          SelectToday       = new RelayCommand(_ => SelectedDate = DateTime.Today, _ => SelectedDate != DateTime.Today);
          ExportCommand     = new RelayCommand(_ => ExportToExcel());
+         InvoiceCommand    = new RelayCommand(_ => OpenInvoiceGenerator());
          SettingsCommand   = new RelayCommand(_ => SelectedTransitionIndex = Pages.Settings);
          QuickAdd          = new AsyncRelayCommand(ExecuteQuickAdd, _ => SelectedProjectId.HasValue && SelectedTaskId.HasValue);
          ExportViewModel   = new ExportViewModel(this);
          SettingsViewModel = new SettingsViewModel(this);
+         InvoiceViewModel = new InvoiceViewModel(this);
+         InvoiceConfigurationViewModel = new InvoiceConfigurationViewModel(this);
          LoadProjects();
          SelectedDate = DateTime.Today;
          var tr = Repository.GetRunningTimeRecord();
@@ -70,7 +73,11 @@ namespace QBTracker.ViewModels
       private void ExportToExcel()
       {
          this.SelectedTransitionIndex = Pages.ExportToExcel;
-         this.ExportViewModel.Activated();
+      }
+
+      private void OpenInvoiceGenerator()
+      {
+         SelectedTransitionIndex = Pages.GenerateInvoice;
       }
 
       private void TimerOnTick(object sender, EventArgs e)
@@ -89,6 +96,7 @@ namespace QBTracker.ViewModels
             navigationHistory.Push(selectedTransitionIndex);
             selectedTransitionIndex = value;
             NotifyOfPropertyChange();
+            ActivatePage(value);
          }
       }
 
@@ -189,6 +197,7 @@ namespace QBTracker.ViewModels
       public RelayCommand      DateStepForward    { get; }
       public RelayCommand      SelectToday        { get; }
       public RelayCommand      ExportCommand      { get; }
+      public RelayCommand      InvoiceCommand     { get; }
       public RelayCommand      SettingsCommand    { get; }
       public AsyncRelayCommand QuickAdd           { get; }
 
@@ -204,6 +213,8 @@ namespace QBTracker.ViewModels
 
       public ExportViewModel   ExportViewModel   { get; }
       public SettingsViewModel SettingsViewModel { get; }
+      public InvoiceViewModel InvoiceViewModel { get; }
+      public InvoiceConfigurationViewModel InvoiceConfigurationViewModel { get; }
 
       private void ExecuteDateStepBack(object obj)
       {
@@ -222,8 +233,26 @@ namespace QBTracker.ViewModels
          else
             selectedTransitionIndex = Pages.MainView;
          NotifyOfPropertyChange(nameof(SelectedTransitionIndex));
-         if (SelectedTransitionIndex == Pages.MainView)
-            LoadTimeRecords();
+         ActivatePage(selectedTransitionIndex);
+      }
+
+      private void ActivatePage(int page)
+      {
+         switch (page)
+         {
+            case Pages.MainView:
+               LoadTimeRecords();
+               break;
+            case Pages.ExportToExcel:
+               ExportViewModel.Activated();
+               break;
+            case Pages.GenerateInvoice:
+               InvoiceViewModel.Activated();
+               break;
+            case Pages.InvoiceConfiguration:
+               InvoiceConfigurationViewModel.Activated();
+               break;
+         }
       }
 
       private void ExecuteCreateNewProject(object obj)
