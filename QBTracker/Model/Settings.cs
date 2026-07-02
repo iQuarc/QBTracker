@@ -30,7 +30,7 @@ namespace QBTracker.Model
       public string           InvoiceClientShortName   { get; set; } = "";
       public string           InvoiceNote              { get; set; } = "";
       public string           InvoiceCurrency          { get; set; } = "$";
-      public decimal          InvoiceDefaultHourlyRate { get; set; } = 93m;
+      public decimal          InvoiceDefaultHourlyRate { get; set; } = 1m;
       public int              NextInvoiceNumber        { get; set; } = 1;
    }
 

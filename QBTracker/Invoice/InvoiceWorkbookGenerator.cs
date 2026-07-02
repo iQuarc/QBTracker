@@ -1,4 +1,5 @@
 using ClosedXML.Excel;
+using QBTracker.Model;
 
 namespace QBTracker.Invoice
 {
@@ -17,6 +18,9 @@ namespace QBTracker.Invoice
       public DateTime InvoiceDate     { get; set; } = DateTime.Today;
       public string   Note            { get; set; } = string.Empty;
       public string   Currency        { get; set; } = "$";
+      public GroupingType GroupingType { get; set; }
+      public RoundingInterval RoundingInterval { get; set; }
+      public RoundingType RoundingType { get; set; }
       public IReadOnlyCollection<ProjectData> Projects { get; set; } = [];
    }
 
@@ -31,6 +35,7 @@ namespace QBTracker.Invoice
    public class InvoiceLineItem
    {
       public string  Description { get; set; } = string.Empty;
+      public string  GroupingKey { get; set; } = string.Empty;
       public decimal Hours       { get; set; }
       public decimal HourlyRate  { get; set; }
       public decimal Amount      => Hours * HourlyRate;
@@ -136,7 +141,8 @@ namespace QBTracker.Invoice
          decimal grandTotal = 0m;
          foreach (var project in projects)
          {
-            var lineItems = project.LineItems.ToList();
+            var lineItems = AggregateLineItems(project.LineItems, data.GroupingType, data.RoundingInterval, data.RoundingType)
+               .ToList();
 
             worksheet.Cell(row, 2).Style.Font.Bold = true;
             worksheet.Cell(row, 2).Value           = "Project";
@@ -168,8 +174,8 @@ namespace QBTracker.Invoice
             foreach (var item in lineItems)
             {
                worksheet.Cell(row, 2).Value                     = item.Description;
-               worksheet.Cell(row, 3).Value                     = item.Hours;
-               worksheet.Cell(row, 3).Style.NumberFormat.Format = "0.0";
+               worksheet.Cell(row, 3).Value                     = (double)item.Hours;
+               worksheet.Cell(row, 3).Style.NumberFormat.Format = "0.##";
 
                worksheet.Cell(row, 4).Value                     = item.HourlyRate;
                worksheet.Cell(row, 4).Style.NumberFormat.Format = $"\"{data.Currency}\"#,##0.00";
@@ -227,6 +233,89 @@ namespace QBTracker.Invoice
          worksheet.Columns("B:I").AdjustToContents(4, 60);
 
          workbook.SaveAs(filePath);
+      }
+
+      private static IEnumerable<InvoiceLineItem> AggregateLineItems(
+         IEnumerable<InvoiceLineItem> lineItems,
+         GroupingType groupingType,
+         RoundingInterval roundingInterval,
+         RoundingType roundingType)
+      {
+         var items = lineItems.ToList();
+         return groupingType switch
+         {
+            GroupingType.NoGrouping => items.Select(item => CreateRoundedItem(
+               item.Description,
+               item.Hours,
+               item.HourlyRate,
+               roundingInterval,
+               roundingType)),
+            GroupingType.GroupBeforeRound => items
+               .GroupBy(item => (item.GroupingKey, item.HourlyRate))
+               .Select(group => CreateRoundedItem(
+                  group.Key.GroupingKey,
+                  group.Sum(item => item.Hours),
+                  group.Key.HourlyRate,
+                  roundingInterval,
+                  roundingType)),
+            GroupingType.GroupAfterRound => items
+               .GroupBy(item => (item.GroupingKey, item.HourlyRate))
+               .Select(group => new InvoiceLineItem
+               {
+                  Description = group.Key.GroupingKey,
+                  GroupingKey = group.Key.GroupingKey,
+                  Hours = group.Sum(item => (decimal)Round((double)item.Hours, roundingInterval, roundingType)),
+                  HourlyRate = group.Key.HourlyRate
+               }),
+            _ => throw new NotSupportedException()
+         };
+      }
+
+      private static InvoiceLineItem CreateRoundedItem(
+         string description,
+         decimal hours,
+         decimal hourlyRate,
+         RoundingInterval roundingInterval,
+         RoundingType roundingType)
+      {
+         return new InvoiceLineItem
+         {
+            Description = description,
+            GroupingKey = description,
+            Hours = (decimal)Round((double)hours, roundingInterval, roundingType),
+            HourlyRate = hourlyRate
+         };
+      }
+
+      private static double Round(in double hours, RoundingInterval roundingInterval, RoundingType roundingType)
+      {
+         if (roundingInterval == RoundingInterval.RoundTo15Min)
+            return roundingType == RoundingType.MidPointRounding
+               ? RoundF(hours, 4)
+               : CeilingF(hours, 4);
+
+         if (roundingInterval == RoundingInterval.RoundTo30Min)
+            return roundingType == RoundingType.MidPointRounding
+               ? RoundF(hours, 2)
+               : CeilingF(hours, 2);
+
+         return hours;
+
+         static double RoundF(in double value, double factor)
+         {
+            var rounded = Math.Round(value * factor, MidpointRounding.AwayFromZero) / factor;
+            if (Math.Abs(rounded) < 0.001)
+               return 1 / factor;
+            return rounded;
+         }
+
+         static double CeilingF(in double value, double factor)
+         {
+            var rounded = Math.Ceiling(value * factor) / factor;
+            if (Math.Abs(rounded) < 0.001)
+               return 1 / factor;
+            return rounded;
+         }
       }
    }
 }

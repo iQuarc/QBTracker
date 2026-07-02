@@ -145,27 +145,22 @@ namespace QBTracker.ViewModels
                SellerEmail     = InvoiceSettings.InvoiceSellerEmail,
                ClientLegalName = InvoiceSettings.InvoiceClientLegalName,
                ClientAddress1  = InvoiceSettings.InvoiceClientAddress1,
-               ClientAddress2  = InvoiceSettings.InvoiceClientAddress2,
-               ClientShortName = InvoiceSettings.InvoiceClientShortName,
-               Note            = InvoiceSettings.InvoiceNote,
-               Currency        = string.IsNullOrWhiteSpace(InvoiceSettings.InvoiceCurrency) ? "$" : InvoiceSettings.InvoiceCurrency,
-               Projects = selectedProjects
-                  .Select(x => new ProjectData
-                  {
-                     ProjectName = x.ProjectName,
-                     PeriodFrom = StartDate,
-                     PeriodTo = EndDate,
-                     LineItems =
-                     [
-                        new InvoiceLineItem
-                        {
-                           Description = $"{StartDate:dd MMM yyyy} - {EndDate:dd MMM yyyy}",
-                           Hours = x.Hours,
-                           HourlyRate = x.HourlyRate
-                        }
-                     ]
-                  })
-                  .ToArray()
+                ClientAddress2  = InvoiceSettings.InvoiceClientAddress2,
+                ClientShortName = InvoiceSettings.InvoiceClientShortName,
+                Note            = InvoiceSettings.InvoiceNote,
+                Currency        = string.IsNullOrWhiteSpace(InvoiceSettings.InvoiceCurrency) ? "$" : InvoiceSettings.InvoiceCurrency,
+                GroupingType = InvoiceSettings.GroupingType,
+                RoundingInterval = InvoiceSettings.RoundingInterval,
+                RoundingType = InvoiceSettings.RoundingType,
+                Projects = selectedProjects
+                   .Select(x => new ProjectData
+                   {
+                      ProjectName = x.ProjectName,
+                      PeriodFrom = StartDate,
+                      PeriodTo = EndDate,
+                      LineItems = GetInvoiceLineItemsForProject(x.Id, x.HourlyRate)
+                   })
+                   .ToArray()
             };
 
             InvoiceWorkbookGenerator.CreateInvoice(invoiceData, saveFileDialog.FileName);
@@ -235,6 +230,25 @@ namespace QBTracker.ViewModels
          }
 
          return decimal.Round(hours, 2, MidpointRounding.AwayFromZero);
+      }
+
+      private InvoiceLineItem[] GetInvoiceLineItemsForProject(int projectId, decimal hourlyRate)
+      {
+         var lineItems = new List<InvoiceLineItem>();
+         for (var date = StartDate.Date; date <= EndDate.Date; date = date.AddDays(1))
+         {
+            var records = mainVm.Repository.GetTimeRecords(date, [projectId])
+               .Where(x => x.EndTime != null);
+            lineItems.AddRange(records.Select(record => new InvoiceLineItem
+            {
+               Description = $"{date:dd MMM yyyy} - {record.TaskName}",
+               GroupingKey = record.TaskName,
+               Hours = (decimal)(record.EndTime!.Value - record.StartTime).TotalHours,
+               HourlyRate = hourlyRate
+            }));
+         }
+
+         return lineItems.ToArray();
       }
 
       private string GetSuggestedFileName(int invoiceNumber)
